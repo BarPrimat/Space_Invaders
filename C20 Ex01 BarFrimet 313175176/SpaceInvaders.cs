@@ -18,7 +18,7 @@ namespace C20_Ex01_BarFrimet_313175176
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
             Background background = new Background(this, SpritesDefinition.Background);
-            SpaceShip spaceInvaders = new SpaceShip(this, SpritesDefinition.SpaceShip);
+            Spaceship spaceInvaders = new Spaceship(this, SpritesDefinition.Spaceship);
         }
 
         protected override void Initialize()
@@ -36,16 +36,16 @@ namespace C20_Ex01_BarFrimet_313175176
             // TODO: use this.Content to load your game content here
         }
 
-        protected override void Update(GameTime gameTime)
+        protected override void Update(GameTime i_GameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
             // TODO: Add your update logic here
-            base.Update(gameTime);
+            base.Update(i_GameTime);
         }
 
-        protected override void Draw(GameTime gameTime)
+        protected override void Draw(GameTime i_GameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
@@ -54,7 +54,7 @@ namespace C20_Ex01_BarFrimet_313175176
 
             m_SpriteBatch.End();
 
-            base.Draw(gameTime);
+            base.Draw(i_GameTime);
         }
     }
 }

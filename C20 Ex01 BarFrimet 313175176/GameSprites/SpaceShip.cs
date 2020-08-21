@@ -7,21 +7,23 @@ using Microsoft.Xna.Framework.Input;
 
 namespace GameSprites
 {
-    public class SpaceShip : Sprite
+    public class Spaceship : Sprite
     {
-        private static readonly Color sr_SpaceShipTint = Color.White;
-        private static InputManager m_InputManager;
-        private float m_ShipDirection = 1f;
+        private static readonly Color sr_SpaceshipTint = Color.White;
+        private const float k_SpaceshipSpeed = 130;
+        private readonly InputManager r_InputManager;
 
-        public SpaceShip(Game i_Game, string i_TexturePath)
-            : base(i_Game, i_TexturePath, sr_SpaceShipTint)
+        public Spaceship(Game i_Game, string i_TexturePath)
+            : base(i_Game, i_TexturePath, sr_SpaceshipTint)
         {
+            r_InputManager = new InputManager();
         }
+
+        public static float SpaceshipSpeed => k_SpaceshipSpeed;
 
         public override void Initialize()
         {
             base.Initialize();
-            m_InputManager = new InputManager();
             InitPosition();
         }
 
@@ -41,64 +43,25 @@ namespace GameSprites
             this.m_Position = new Vector2(x, y);
         }
 
-        MouseState m_PrevMouseState;
         public override void Update(GameTime i_GameTime)
         {
-            /*
-            // get the current input devices state:
-            GamePadState currGamePadState = GamePad.GetState(PlayerIndex.One);
-            KeyboardState currKeyboardState = Keyboard.GetState();
-
-            // move the ship using the GamePad left thumb stick and set viberation according to movement:
-            Vector2 position = this.Position;
-
-            position.X += currGamePadState.ThumbSticks.Left.X * 120 * (float) i_GameTime.ElapsedGameTime.TotalSeconds;
-            GamePad.SetVibration(PlayerIndex.One, 0, Math.Abs(currGamePadState.ThumbSticks.Left.X));
-
-            // move the ship using the mouse:
-            position.X = m_InputManager.GetMousePositionDelta().X;
-
-            // clam the position between screen boundries:
-            position.X = MathHelper.Clamp(position.X, 0, this.GraphicsDevice.Viewport.Width - this.Texture.Width);
-
-            // if we hit the wall, lets change direction:
-            if (position.X == 0 || position.X == this.GraphicsDevice.Viewport.Width - this.Texture.Width)
-            {
-                m_ShipDirection *= -1f;
-            }
-
-            this.Position = position;
-            base.Update(i_GameTime);
-            //  this.moveUsingKeyboard(i_GameTime);
-            //  this.moveUsingMouse();
-            // this.Position = new Vector2(MathHelper.Clamp(Position.X, 0, GraphicsDevice.Viewport.Width - Texture.Width), Position.Y);
-            */
-            moveSpaceShip(i_GameTime);
+            moveSpaceship(i_GameTime);
         }
 
-        private void moveSpaceShip(GameTime i_GameTime)
+        private void moveSpaceship(GameTime i_GameTime)
         {
-            moveUsingKeyboard(i_GameTime);
-            float newPositionWithBoundary = MathHelper.Clamp(Position.X, 0, GraphicsDevice.Viewport.Width - Texture.Width);
-            this.Position = new Vector2(newPositionWithBoundary, Position.Y);
+            float maxBoundaryWithoutOffset = GraphicsDevice.Viewport.Width - Texture.Width;
+            float keyboardNewXPosition = r_InputManager.KeyboardXPositionToMove(i_GameTime, this.Position.X);
+
+            setupNewPosition(keyboardNewXPosition, maxBoundaryWithoutOffset);
+            float mouseNewXPosition = this.Position.X + r_InputManager.GetMousePositionDelta().X;
+            setupNewPosition(mouseNewXPosition, maxBoundaryWithoutOffset);
         }
 
-        private void moveUsingMouse()
+        private void setupNewPosition(float i_NewXPosition, float i_MaxBoundaryWithoutOffset)
         {
-            this.Position = new Vector2(this.Position.X + m_InputManager.GetMousePositionDelta().X, Position.Y);
+            i_NewXPosition = MathHelper.Clamp(i_NewXPosition, 0, i_MaxBoundaryWithoutOffset);
+            this.Position = new Vector2(i_NewXPosition, Position.Y);
         }
-        private void moveUsingKeyboard(GameTime i_GameTime)
-        {
-            if (SpaceInvaders.s_GameUtils.InputOutputManager.IsUserAskedToMoveLeft())
-            {
-                this.Position = new Vector2(this.Position.X - (k_KeyboardVelocity * (float)i_GameTime.ElapsedGameTime.TotalSeconds), this.Position.Y);
-            }
-            else if (SpaceInvaders.s_GameUtils.InputOutputManager.IsUserAskedToMoveRight())
-            {
-                this.Position = new Vector2(this.Position.X + (k_KeyboardVelocity * (float)i_GameTime.ElapsedGameTime.TotalSeconds), this.Position.Y);
-            }
-        }
-
-
     }
 }
