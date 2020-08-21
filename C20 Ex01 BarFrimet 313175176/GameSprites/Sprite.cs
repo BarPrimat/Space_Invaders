@@ -61,14 +61,12 @@ namespace GameSprites
         public override void Draw(GameTime i_GameTime)
         {
             m_SpriteBatch.Begin();
-
             if (this.Visible)
             {
                 this.SpriteBatch.Draw(m_Texture, m_Position, m_Tint);
             }
 
             base.Draw(i_GameTime);
-
             m_SpriteBatch.End();
         }
 

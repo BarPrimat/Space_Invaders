@@ -20,8 +20,7 @@ namespace GameSprites
         }
 
         public override void InitPosition()
-        {
-            this.Position = sr_BackgroundPosition;
+        { 
         }
     }
 }

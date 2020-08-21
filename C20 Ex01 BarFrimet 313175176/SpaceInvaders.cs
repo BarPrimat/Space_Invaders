@@ -11,6 +11,9 @@ namespace C20_Ex01_BarFrimet_313175176
         private SpriteBatch m_SpriteBatch;
 
         private const string k_GameName = "Space Invaders";
+        private const int k_PreferredBackBufferWidth = 1024;
+        private const int k_PreferredBackBufferHeight = 704;
+
 
         public SpaceInvaders()
         {
@@ -19,6 +22,8 @@ namespace C20_Ex01_BarFrimet_313175176
             IsMouseVisible = true;
             Background background = new Background(this, SpritesDefinition.Background);
             Spaceship spaceInvaders = new Spaceship(this, SpritesDefinition.Spaceship);
+            EnemyArmy enemyArmy = new EnemyArmy(this, SpritesDefinition.Enemy0101);
+
         }
 
         protected override void Initialize()
@@ -26,6 +31,10 @@ namespace C20_Ex01_BarFrimet_313175176
             // TODO: Add your initialization logic here
 
             base.Initialize();
+
+            this.m_Graphics.PreferredBackBufferWidth = k_PreferredBackBufferWidth;
+            this.m_Graphics.PreferredBackBufferHeight = k_PreferredBackBufferHeight;
+            this.m_Graphics.ApplyChanges();
             this.Window.Title = k_GameName;
         }
 

@@ -13,8 +13,7 @@ namespace GameSprites
         private const float k_SpaceshipSpeed = 130;
         private readonly InputManager r_InputManager;
 
-        public Spaceship(Game i_Game, string i_TexturePath)
-            : base(i_Game, i_TexturePath, sr_SpaceshipTint)
+        public Spaceship(Game i_Game, string i_TexturePath) : base(i_Game, i_TexturePath, sr_SpaceshipTint)
         {
             r_InputManager = new InputManager();
         }
@@ -29,10 +28,9 @@ namespace GameSprites
 
         public override void InitPosition()
         {
-            // 1. init the ship position
-            // Get the bottom and center:
-            float x = (float)GraphicsDevice.Viewport.Width;
-            float y = (float)GraphicsDevice.Viewport.Height;
+            // Init the ship position
+            float x = (float) GraphicsDevice.Viewport.Width;
+            float y = (float) GraphicsDevice.Viewport.Height;
 
             // Offset:
             x -= this.Texture.Width;
@@ -40,7 +38,7 @@ namespace GameSprites
 
             // Put it a little bit higher:
             y -= 10;
-            this.m_Position = new Vector2(x, y);
+            this.Position = new Vector2(x, y);
         }
 
         public override void Update(GameTime i_GameTime)
