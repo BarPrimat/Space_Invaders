@@ -4,6 +4,8 @@ using System.Text;
 using C20_Ex01_BarFrimet_313175176;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using static C20_Ex01_BarFrimet_313175176.GameDefinitions;
+
 
 namespace GameSprites
 {
@@ -29,8 +31,8 @@ namespace GameSprites
         public override void InitPosition()
         {
             // Init the ship position
-            float x = (float) GraphicsDevice.Viewport.Width;
-            float y = (float) GraphicsDevice.Viewport.Height;
+            float x = (float) PreferredBackBufferWidth;
+            float y = (float) PreferredBackBufferHeight;
 
             // Offset:
             x -= this.Texture.Width;

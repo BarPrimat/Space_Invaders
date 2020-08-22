@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using static C20_Ex01_BarFrimet_313175176.GameDefinitions;
 
 namespace C20_Ex01_BarFrimet_313175176
 {
@@ -10,19 +11,20 @@ namespace C20_Ex01_BarFrimet_313175176
         private GraphicsDeviceManager m_Graphics;
         private SpriteBatch m_SpriteBatch;
 
-        private const string k_GameName = "Space Invaders";
-        private const int k_PreferredBackBufferWidth = 1024;
-        private const int k_PreferredBackBufferHeight = 704;
-
+        private readonly Background r_Background;
+        private readonly Spaceship r_Spaceship;
+        private readonly EnemyArmy r_EnemyArmy;
+        private readonly MotherShip r_MotherShip;
 
         public SpaceInvaders()
         {
             m_Graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-            Background background = new Background(this, SpritesDefinition.Background);
-            Spaceship spaceInvaders = new Spaceship(this, SpritesDefinition.Spaceship);
-            EnemyArmy enemyArmy = new EnemyArmy(this, SpritesDefinition.Enemy0101);
+            r_Background = new Background(this, SpritesDefinition.BackgroundAsset);
+            r_Spaceship = new Spaceship(this, SpritesDefinition.SpaceshipAsset);
+            r_EnemyArmy = new EnemyArmy(this, SpritesDefinition.Enemy0101Asset);
+            r_MotherShip = new MotherShip(this, SpritesDefinition.MotherSpaceShipAsset, Color.Red);
 
         }
 
@@ -32,10 +34,12 @@ namespace C20_Ex01_BarFrimet_313175176
 
             base.Initialize();
 
-            this.m_Graphics.PreferredBackBufferWidth = k_PreferredBackBufferWidth;
-            this.m_Graphics.PreferredBackBufferHeight = k_PreferredBackBufferHeight;
+            this.m_Graphics.PreferredBackBufferWidth = PreferredBackBufferWidth;
+            this.m_Graphics.PreferredBackBufferHeight = PreferredBackBufferHeight;
             this.m_Graphics.ApplyChanges();
-            this.Window.Title = k_GameName;
+            Mouse.SetPosition((int)this.r_Spaceship.Position.X, GraphicsDevice.Viewport.Height);
+
+            this.Window.Title = GameName;
         }
 
         protected override void LoadContent()
