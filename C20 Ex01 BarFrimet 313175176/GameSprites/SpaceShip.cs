@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using C20_Ex01_BarFrimet_313175176;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using static C20_Ex01_BarFrimet_313175176.GameDefinitions;
 
@@ -14,19 +16,16 @@ namespace GameSprites
         private static readonly Color sr_SpaceshipTint = Color.White;
         private const float k_SpaceshipSpeed = 130;
         private readonly InputManager r_InputManager;
+        private readonly GraphicsDeviceManager r_Graphics;
 
-        public Spaceship(Game i_Game, string i_TexturePath) : base(i_Game, i_TexturePath, sr_SpaceshipTint)
+        public Spaceship(GraphicsDeviceManager i_Graphics, ContentManager i_Content, string i_TexturePath) 
+            : base(i_Graphics, i_Content, i_TexturePath, sr_SpaceshipTint)
         {
             r_InputManager = new InputManager();
+            r_Graphics = i_Graphics;
         }
 
         public static float SpaceshipSpeed => k_SpaceshipSpeed;
-
-        public override void Initialize()
-        {
-            base.Initialize();
-            InitPosition();
-        }
 
         public override void InitPosition()
         {
@@ -50,11 +49,11 @@ namespace GameSprites
 
         private void moveSpaceship(GameTime i_GameTime)
         {
-            float maxBoundaryWithoutOffset = GraphicsDevice.Viewport.Width - Texture.Width;
+            float maxBoundaryWithoutOffset = r_Graphics.GraphicsDevice.Viewport.Width - Texture.Width;
             float keyboardNewXPosition = r_InputManager.KeyboardXPositionToMove(i_GameTime, this.Position.X);
 
             setupNewPosition(keyboardNewXPosition, maxBoundaryWithoutOffset);
-            float mouseNewXPosition = this.Position.X + r_InputManager.GetMousePositionDelta().X;
+           float mouseNewXPosition = this.Position.X + r_InputManager.GetMousePositionDelta().X;
             setupNewPosition(mouseNewXPosition, maxBoundaryWithoutOffset);
         }
 

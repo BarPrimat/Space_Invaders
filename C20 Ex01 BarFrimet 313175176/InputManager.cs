@@ -10,17 +10,14 @@ namespace C20_Ex01_BarFrimet_313175176
     public class InputManager
     {
         private MouseState m_PrevMouseState;
-
+        
         public Vector2 GetMousePositionDelta()
         {
             Vector2 retVal = Vector2.Zero;
             MouseState currentState = Mouse.GetState();
 
-            if (m_PrevMouseState != null)
-            {
-                retVal.X = currentState.X - m_PrevMouseState.X;
-                retVal.Y = currentState.Y - m_PrevMouseState.Y;
-            }
+            retVal.X = currentState.X - m_PrevMouseState.X;
+            retVal.Y = currentState.Y - m_PrevMouseState.Y;
 
             m_PrevMouseState = currentState;
 

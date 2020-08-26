@@ -10,7 +10,7 @@ namespace GameSprites
         private const string k_SpaceshipAsset = @"Sprites\Ship01_32x32";
         private const string k_BackgroundAsset = @"Sprites\BG_Space01_1024x768";
         private const string k_Enemy0101Asset = @"Sprites\Enemy0101_32x32";
-
+        private const string k_LifeAsset = @"Sprites\Ship01_32x32";
 
 
         public static string SpaceshipAsset => k_SpaceshipAsset;
@@ -20,5 +20,7 @@ namespace GameSprites
         public static string MotherSpaceShipAsset => k_MotherSpaceShipAsset;
 
         public static string Enemy0101Asset => k_Enemy0101Asset;
+
+        public static string LifeAsset => k_LifeAsset;
     }
 }
