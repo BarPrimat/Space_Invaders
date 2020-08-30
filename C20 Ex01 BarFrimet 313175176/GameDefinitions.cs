@@ -7,6 +7,11 @@ namespace C20_Ex01_BarFrimet_313175176
 {
     public class GameDefinitions
     {
+        // Game setup definitions
+        private const string k_GameName = "Space Invaders";
+        private const int k_PreferredBackBufferWidth = 1024;
+        private const int k_PreferredBackBufferHeight = 704;
+
         // EnemyArmy definitions
         private const float k_HorizontalSpaceBetweenEnemy = 32 * 0.6f;
         private const float k_VerticalSpaceBetweenEnemy = 32 * 0.6f;
@@ -21,15 +26,25 @@ namespace C20_Ex01_BarFrimet_313175176
         private const float k_EnemyIncreaseSpeedInEach5Dead = 0.03f;
         private const float k_EnemyIncreaseSpeedGoingDown = 0.06f;
 
-        private const string k_GameName = "Space Invaders";
-        private const int k_PreferredBackBufferWidth = 1024;
-        private const int k_PreferredBackBufferHeight = 704;
         // Life definitions
         private const int k_SpaceBetweenLife = 32;
         private const int k_StartLifePositionWidth = 1024;
         private const int k_StartLifePositionHeight = 32;
         private const int k_LifeSize = 32;
         private static readonly Color sr_LifeTint = Color.White;
+
+        // Bullet definitions
+        private const int k_BulletStartSpeedInSec = 140;
+        public static readonly Color sr_EnemyBulletTint = Color.Red;
+        public static readonly Color sr_SpaceshipBulletTint = Color.Blue;
+
+        // SpaceShip definitions
+        private const int k_SpaceshipMaxOfBullet = 2;
+
+
+
+
+
 
 
 
@@ -75,5 +90,13 @@ namespace C20_Ex01_BarFrimet_313175176
         public static int LifeSize => k_LifeSize;
 
         public static Color LifeTint => sr_LifeTint;
+
+        public static int BulletStartSpeedInSec => k_BulletStartSpeedInSec;
+
+        public static Color EnemyBulletTint => sr_EnemyBulletTint;
+
+        public static Color SpaceshipBulletTint => sr_SpaceshipBulletTint;
+
+        public static int SpaceshipMaxOfBullet => k_SpaceshipMaxOfBullet;
     }
 }

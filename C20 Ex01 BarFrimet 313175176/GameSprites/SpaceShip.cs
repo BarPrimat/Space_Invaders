@@ -17,12 +17,14 @@ namespace GameSprites
         private const float k_SpaceshipSpeed = 130;
         private readonly InputManager r_InputManager;
         private readonly GraphicsDeviceManager r_Graphics;
+        private Firearm r_Firearm;
 
         public Spaceship(GraphicsDeviceManager i_Graphics, ContentManager i_Content, string i_TexturePath) 
             : base(i_Graphics, i_Content, i_TexturePath, sr_SpaceshipTint)
         {
             r_InputManager = new InputManager();
             r_Graphics = i_Graphics;
+            r_Firearm = new Firearm(i_Graphics, i_Content, SpaceshipMaxOfBullet, Bullet.eBulletType.SpaceShipBullet);
         }
 
         public static float SpaceshipSpeed => k_SpaceshipSpeed;
@@ -45,6 +47,17 @@ namespace GameSprites
         public override void Update(GameTime i_GameTime)
         {
             moveSpaceship(i_GameTime);
+            if(r_InputManager.UserClickToShoot())
+            {
+                tryToShoot(i_GameTime);
+            }
+        }
+
+        private void tryToShoot(GameTime i_GameTime)
+        {
+            r_Firearm.CreateNewBullet(new Vector2(this.Position.X / 2 + Texture.Width, this.Position.Y));
+            r_Firearm.Update(i_GameTime);
+            //r_Firearm.Draw(i_GameTime, i_SpriteBatch);
         }
 
         private void moveSpaceship(GameTime i_GameTime)
@@ -53,7 +66,7 @@ namespace GameSprites
             float keyboardNewXPosition = r_InputManager.KeyboardXPositionToMove(i_GameTime, this.Position.X);
 
             setupNewPosition(keyboardNewXPosition, maxBoundaryWithoutOffset);
-           float mouseNewXPosition = this.Position.X + r_InputManager.GetMousePositionDelta().X;
+            float mouseNewXPosition = this.Position.X + r_InputManager.GetMousePositionDelta().X;
             setupNewPosition(mouseNewXPosition, maxBoundaryWithoutOffset);
         }
 

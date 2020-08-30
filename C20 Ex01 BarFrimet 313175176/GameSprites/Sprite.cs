@@ -49,6 +49,11 @@ namespace GameSprites
 
         public void SetXPosition(float i_NewXPosition)
         {
+            m_Position.Y = i_NewXPosition;
+        }
+
+        public void SetYPosition(float i_NewXPosition)
+        {
             m_Position.X = i_NewXPosition;
         }
 
