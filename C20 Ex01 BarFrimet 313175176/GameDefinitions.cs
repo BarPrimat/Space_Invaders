@@ -25,7 +25,9 @@ namespace C20_Ex01_BarFrimet_313175176
         private const float k_EnemyStartSpeedInSec = 60;
         private const float k_EnemyIncreaseSpeedInEach5Dead = 0.03f;
         private const float k_EnemyIncreaseSpeedGoingDown = 0.06f;
-        private const float k_EnemyMaxTimeForShoot = 5;
+        private const float k_EnemyMaxTimeForShoot = 3;
+        private const int k_EnemyArmyMaxOfBullet = 5;
+
 
         // Life definitions
         private const int k_SpaceBetweenLife = 32;
@@ -104,5 +106,7 @@ namespace C20_Ex01_BarFrimet_313175176
         public static int NumberOfLifeToStart => k_NumberOfLifeToStart;
 
         public static float EnemyMaxTimeForShoot => k_EnemyMaxTimeForShoot;
+
+        public static int EnemyArmyMaxOfBullet => k_EnemyArmyMaxOfBullet;
     }
 }

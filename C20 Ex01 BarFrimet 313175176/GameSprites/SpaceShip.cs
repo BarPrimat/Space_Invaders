@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using static C20_Ex01_BarFrimet_313175176.GameDefinitions;
+using Enum = C20_Ex01_BarFrimet_313175176.Enum;
 
 
 namespace GameSprites
@@ -16,17 +17,25 @@ namespace GameSprites
         private static readonly Color sr_SpaceshipTint = Color.White;
         private const float k_SpaceshipSpeed = 130;
         private readonly InputManager r_InputManager;
-        private Firearm r_Firearm;
+
+        private static int m_NumberOfSpaceShipBulletInAir = 0;
+        private readonly Firearm r_Firearm;
 
         public Spaceship(Game i_Game, string i_TexturePath) 
             : base (i_Game, i_TexturePath, sr_SpaceshipTint)
         {
             r_InputManager = new InputManager();
-            r_Firearm = new Firearm(i_Game, SpaceshipMaxOfBullet, Bullet.eBulletType.SpaceShipBullet);
+            r_Firearm = new Firearm(i_Game, SpaceshipMaxOfBullet, Enum.eBulletType.SpaceShipBullet);
             SpaceInvaders.ListOfSprites.Add(this);
         }
 
         public static float SpaceshipSpeed => k_SpaceshipSpeed;
+
+        public static int NumberOfSpaceShipBulletInAir
+        {
+            get => m_NumberOfSpaceShipBulletInAir;
+            set => m_NumberOfSpaceShipBulletInAir = value;
+        }
 
         public override void InitPosition()
         {

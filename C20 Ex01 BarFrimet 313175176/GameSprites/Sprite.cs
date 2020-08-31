@@ -71,7 +71,7 @@ namespace GameSprites
             m_SpriteBatch.End();
         }
 
-        public virtual void RemoveComponent()
+        public void RemoveComponent()
         {
             this.Visible = false;
             Game.Components.Remove(this);
