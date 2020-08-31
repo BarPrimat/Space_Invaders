@@ -9,8 +9,6 @@ namespace GameSprites
 {
     public class Life : Sprite
     {
-        private readonly GraphicsDeviceManager r_Graphics;
-        private readonly ContentManager r_ContentManager;
         private static readonly Color sr_LifeTint = Color.White;
 
 

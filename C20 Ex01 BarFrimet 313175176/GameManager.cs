@@ -11,10 +11,11 @@ namespace C20_Ex01_BarFrimet_313175176
         private static readonly List<Bullet> r_ListBullets = new List<Bullet>();
         private static int m_SpaceShipBulletInTheAir = 0;
         private static int m_EnemyBulletInTheAir = 0;
+        private LifeManager m_LifeManager;
 
-        public GameManager(Game game)
-            : base(game)
+        public GameManager(Game i_Game) : base(i_Game)
         {
+            m_LifeManager = new LifeManager(i_Game, SpritesDefinition.LifeAsset, GameDefinitions.NumberOfLifeToStart);
         }
 
 
