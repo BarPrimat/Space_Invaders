@@ -3,36 +3,23 @@ using System.Collections.Generic;
 using System.Text;
 using C20_Ex01_BarFrimet_313175176;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace GameSprites
 {
-    public abstract class Sprite 
+    public abstract class Sprite : DrawableGameComponent
     {
-        private Texture2D m_Texture;
-        private readonly string r_TexturePath;
-        private Vector2 m_Position;
-        private Color m_Tint;
-        private SpriteBatch m_SpriteBatch;
-        private readonly GraphicsDeviceManager r_Graphics;
-        private readonly ContentManager r_ContentManager;
+        protected Texture2D m_Texture;
+        protected readonly string r_TexturePath;
+        protected Vector2 m_Position;
+        protected Color m_Tint;
+        protected SpriteBatch m_SpriteBatch;
 
-        private bool m_Visible = true;
-
-        public Sprite(GraphicsDeviceManager i_Graphics, ContentManager i_Content, string i_TexturePath, Color i_Tint)
+        public Sprite(Game i_Game, string i_TexturePath, Color i_Tint) : base(i_Game)
         {
             r_TexturePath = i_TexturePath;
             m_Tint = i_Tint;
-            r_Graphics = i_Graphics;
-            r_ContentManager = i_Content;
-            m_Position = Vector2.Zero;
-        }
-
-        public void Initialize()
-        {
-            LoadContent();
-            InitPosition();
+            i_Game.Components.Add(this);
         }
 
         public Texture2D Texture
@@ -45,16 +32,6 @@ namespace GameSprites
         {
             get => m_Position;
             set => m_Position = value;
-        }
-
-        public void SetXPosition(float i_NewXPosition)
-        {
-            m_Position.Y = i_NewXPosition;
-        }
-
-        public void SetYPosition(float i_NewXPosition)
-        {
-            m_Position.X = i_NewXPosition;
         }
 
         public Color Tint
@@ -73,28 +50,34 @@ namespace GameSprites
         {
             get => r_TexturePath;
         }
-        public bool Visible
+
+        protected override void LoadContent()
         {
-            get => m_Visible;
-            set => m_Visible = value;
+            m_SpriteBatch = new SpriteBatch(GraphicsDevice);
+            m_Texture = this.Game.Content.Load<Texture2D>(r_TexturePath);
+            this.InitPosition();
+            base.LoadContent();
         }
 
-        public void LoadContent()
+        public override void Draw(GameTime i_GameTime)
         {
-            // m_SpriteBatch = new SpriteBatch(r_Graphics.GraphicsDevice);
-            m_Texture = r_ContentManager.Load<Texture2D>(r_TexturePath);
-        }
-
-        public void Draw(GameTime i_GameTime, SpriteBatch i_SpriteBatch)
-        {
-            if (m_Visible)
+            m_SpriteBatch.Begin();
+            if (this.Visible)
             {
-                i_SpriteBatch.Draw(m_Texture, m_Position, m_Tint);
+                this.SpriteBatch.Draw(m_Texture, m_Position, m_Tint);
             }
+
+            base.Draw(i_GameTime);
+            m_SpriteBatch.End();
+        }
+
+        public virtual void RemoveComponent()
+        {
+            this.Visible = false;
+            Game.Components.Remove(this);
         }
 
         public abstract void InitPosition();
-        public abstract void Update(GameTime i_GameTime);
 
     }
 }

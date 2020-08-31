@@ -14,11 +14,9 @@ namespace GameSprites
         private static readonly Color sr_LifeTint = Color.White;
 
 
-        public Life(GraphicsDeviceManager i_Graphics, ContentManager i_Content, string i_TexturePath)
-            : base(i_Graphics, i_Content, i_TexturePath, sr_LifeTint)
+        public Life(Game i_Game, string i_TexturePath)
+            : base(i_Game, i_TexturePath, sr_LifeTint)
         {
-            r_Graphics = i_Graphics;
-            r_ContentManager = i_Content;
         }
 
         public override void InitPosition()

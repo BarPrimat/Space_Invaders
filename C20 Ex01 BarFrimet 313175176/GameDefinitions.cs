@@ -31,12 +31,13 @@ namespace C20_Ex01_BarFrimet_313175176
         private const int k_StartLifePositionWidth = 1024;
         private const int k_StartLifePositionHeight = 32;
         private const int k_LifeSize = 32;
+        private const int k_NumberOfLifeToStart = 3;
         private static readonly Color sr_LifeTint = Color.White;
 
         // Bullet definitions
         private const int k_BulletStartSpeedInSec = 140;
-        public static readonly Color sr_EnemyBulletTint = Color.Red;
-        public static readonly Color sr_SpaceshipBulletTint = Color.Blue;
+        public static readonly Color sr_EnemyBulletTint = Color.Blue;
+        public static readonly Color sr_SpaceshipBulletTint = Color.Red;
 
         // SpaceShip definitions
         private const int k_SpaceshipMaxOfBullet = 2;
@@ -98,5 +99,7 @@ namespace C20_Ex01_BarFrimet_313175176
         public static Color SpaceshipBulletTint => sr_SpaceshipBulletTint;
 
         public static int SpaceshipMaxOfBullet => k_SpaceshipMaxOfBullet;
+
+        public static int NumberOfLifeToStart => k_NumberOfLifeToStart;
     }
 }

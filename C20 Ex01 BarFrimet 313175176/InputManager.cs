@@ -12,12 +12,6 @@ namespace C20_Ex01_BarFrimet_313175176
         private MouseState m_PrevMouseState;
         private KeyboardState m_PrevKeyboardState;
 
-        public InputManager()
-        {
-            m_PrevKeyboardState = Keyboard.GetState();
-            m_PrevMouseState = Mouse.GetState();
-        }
-
         public Vector2 GetMousePositionDelta()
         {
             Vector2 retVal = Vector2.Zero;
@@ -25,25 +19,24 @@ namespace C20_Ex01_BarFrimet_313175176
 
             retVal.X = currentState.X - m_PrevMouseState.X;
             retVal.Y = currentState.Y - m_PrevMouseState.Y;
-
             m_PrevMouseState = currentState;
 
             return retVal;
         }
 
-        public float KeyboardXPositionToMove(GameTime i_GameTime, float i_PositionX)
+        public float UserTryToMoveWithKeyboard(GameTime i_GameTime, float i_PositionX)
         {
             float newXPosition = i_PositionX;
             KeyboardState currentKeyboardState = Keyboard.GetState();
 
             if (currentKeyboardState.IsKeyDown(Keys.Left))
             {
-                newXPosition -= Spaceship.SpaceshipSpeed * (float) i_GameTime.ElapsedGameTime.TotalSeconds;
+                newXPosition -= Spaceship.SpaceshipSpeed * (float)i_GameTime.ElapsedGameTime.TotalSeconds;
             }
 
             if (currentKeyboardState.IsKeyDown(Keys.Right))
             {
-                newXPosition += Spaceship.SpaceshipSpeed * (float) i_GameTime.ElapsedGameTime.TotalSeconds;
+                newXPosition += Spaceship.SpaceshipSpeed * (float)i_GameTime.ElapsedGameTime.TotalSeconds;
             }
 
             m_PrevKeyboardState = currentKeyboardState;
@@ -51,18 +44,21 @@ namespace C20_Ex01_BarFrimet_313175176
             return newXPosition;
         }
 
-        public bool UserClickToShoot()
+        public bool IsUserClickToShoot()
         {
             KeyboardState currentKeyboardState = Keyboard.GetState();
             MouseState currentMouseState = Mouse.GetState();
             bool isUserClickToShoot = false;
+         //   bool isUserClickToShoot = ((m_PrevKeyboardState.IsKeyDown(Keys.Enter) && currentKeyboardState.IsKeyDown(Keys.Enter))
+         //     || (m_PrevMouseState.LeftButton == ButtonState.Released && currentMouseState.LeftButton == ButtonState.Pressed));
 
-            if ((m_PrevKeyboardState.IsKeyUp(Keys.Enter)))
-                //&& currentKeyboardState.IsKeyDown(Keys.Enter))
-                 //|| (m_PrevMouseState.LeftButton == ButtonState.Released && currentMouseState.LeftButton == ButtonState.Pressed))
+            if ((m_PrevKeyboardState.IsKeyDown(Keys.Enter) && currentKeyboardState.IsKeyDown(Keys.Enter))
+               || (m_PrevMouseState.LeftButton == ButtonState.Released && currentMouseState.LeftButton == ButtonState.Pressed))
             {
                 isUserClickToShoot = !isUserClickToShoot;
             }
+
+           m_PrevMouseState = currentMouseState;
 
             return isUserClickToShoot;
         }

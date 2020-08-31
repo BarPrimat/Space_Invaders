@@ -16,22 +16,24 @@ namespace C20_Ex01_BarFrimet_313175176
         private readonly Spaceship r_Spaceship;
         private readonly EnemyArmy r_EnemyArmy;
         private readonly MotherShip r_MotherShip;
-        private readonly LifeManager r_LifeManager;
+        private static GameManager s_GameManager;
+        private static readonly List<Sprite> r_ListOfSprites = new List<Sprite>();
 
-        private readonly List<Sprite> r_SpritesList = new List<Sprite>();
+
 
         public SpaceInvaders()
         {
             m_Graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            IsMouseVisible = true;
-            r_SpritesList.Add(new Background(m_Graphics, this.Content, SpritesDefinition.BackgroundAsset));
-            r_SpritesList.Add(new Spaceship(m_Graphics, this.Content, SpritesDefinition.SpaceshipAsset));
-            r_SpritesList.Add(new MotherShip(m_Graphics, this.Content, SpritesDefinition.MotherSpaceShipAsset, Color.Red));
-            r_LifeManager = new LifeManager(m_Graphics, this.Content, SpritesDefinition.LifeAsset, 3);
-
-            r_EnemyArmy = new EnemyArmy(m_Graphics, this.Content, SpritesDefinition.Enemy0101Asset);
+            this.IsMouseVisible = true;
+            r_Background = new Background(this, SpritesDefinition.BackgroundAsset);
+            r_Spaceship = new Spaceship(this, SpritesDefinition.SpaceshipAsset);
+            r_EnemyArmy = new EnemyArmy(this, SpritesDefinition.Enemy0101Asset);
+            r_MotherShip = new MotherShip(this, SpritesDefinition.MotherSpaceShipAsset, Color.Red);
+            s_GameManager = new GameManager(this);
         }
+
+        public static List<Sprite> ListOfSprites => r_ListOfSprites;
 
         protected override void Initialize()
         {
@@ -39,17 +41,10 @@ namespace C20_Ex01_BarFrimet_313175176
 
             base.Initialize();
 
-            m_Graphics.PreferredBackBufferWidth = PreferredBackBufferWidth;
-            m_Graphics.PreferredBackBufferHeight = PreferredBackBufferHeight;
-            m_Graphics.ApplyChanges();
-            foreach(Sprite sprite in r_SpritesList)
-            {
-                sprite.Initialize();
-            }
-
-            r_LifeManager.Initialize();
-            r_EnemyArmy.Initialize();
-            Mouse.SetPosition(PreferredBackBufferWidth, GraphicsDevice.Viewport.Height);
+            this.m_Graphics.PreferredBackBufferWidth = PreferredBackBufferWidth;
+            this.m_Graphics.PreferredBackBufferHeight = PreferredBackBufferHeight;
+            this.m_Graphics.ApplyChanges();
+            Mouse.SetPosition((int)this.r_Spaceship.Position.X, GraphicsDevice.Viewport.Height);
 
             this.Window.Title = GameName;
         }
@@ -66,13 +61,6 @@ namespace C20_Ex01_BarFrimet_313175176
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            foreach (Sprite sprite in r_SpritesList)
-            {
-                sprite.Update(i_GameTime);
-            }
-
-            r_EnemyArmy.Update(i_GameTime);
-
             // TODO: Add your update logic here
             base.Update(i_GameTime);
         }
@@ -84,17 +72,7 @@ namespace C20_Ex01_BarFrimet_313175176
             // TODO: Add your drawing code here
             m_SpriteBatch.Begin();
 
-            foreach (Sprite sprite in r_SpritesList)
-            {
-                sprite.Draw(i_GameTime, m_SpriteBatch);
-            }
-
-            r_LifeManager.Draw(i_GameTime, m_SpriteBatch);
-            r_EnemyArmy.Draw(i_GameTime, m_SpriteBatch);
-
             m_SpriteBatch.End();
-
-           // m_SpriteBatch.Draw(i_GameTime);
 
             base.Draw(i_GameTime);
         }

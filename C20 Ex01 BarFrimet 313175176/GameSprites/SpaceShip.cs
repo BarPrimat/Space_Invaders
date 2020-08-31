@@ -16,15 +16,14 @@ namespace GameSprites
         private static readonly Color sr_SpaceshipTint = Color.White;
         private const float k_SpaceshipSpeed = 130;
         private readonly InputManager r_InputManager;
-        private readonly GraphicsDeviceManager r_Graphics;
         private Firearm r_Firearm;
 
-        public Spaceship(GraphicsDeviceManager i_Graphics, ContentManager i_Content, string i_TexturePath) 
-            : base(i_Graphics, i_Content, i_TexturePath, sr_SpaceshipTint)
+        public Spaceship(Game i_Game, string i_TexturePath) 
+            : base (i_Game, i_TexturePath, sr_SpaceshipTint)
         {
             r_InputManager = new InputManager();
-            r_Graphics = i_Graphics;
-            r_Firearm = new Firearm(i_Graphics, i_Content, SpaceshipMaxOfBullet, Bullet.eBulletType.SpaceShipBullet);
+            r_Firearm = new Firearm(i_Game, SpaceshipMaxOfBullet, Bullet.eBulletType.SpaceShipBullet);
+            SpaceInvaders.ListOfSprites.Add(this);
         }
 
         public static float SpaceshipSpeed => k_SpaceshipSpeed;
@@ -47,7 +46,7 @@ namespace GameSprites
         public override void Update(GameTime i_GameTime)
         {
             moveSpaceship(i_GameTime);
-            if(r_InputManager.UserClickToShoot())
+            if(r_InputManager.IsUserClickToShoot())
             {
                 tryToShoot(i_GameTime);
             }
@@ -55,15 +54,15 @@ namespace GameSprites
 
         private void tryToShoot(GameTime i_GameTime)
         {
-            r_Firearm.CreateNewBullet(new Vector2(this.Position.X / 2 + Texture.Width, this.Position.Y));
+            r_Firearm.CreateNewBullet(new Vector2(this.Position.X + Texture.Width / 2, this.Position.Y));
             r_Firearm.Update(i_GameTime);
             //r_Firearm.Draw(i_GameTime, i_SpriteBatch);
         }
 
         private void moveSpaceship(GameTime i_GameTime)
         {
-            float maxBoundaryWithoutOffset = r_Graphics.GraphicsDevice.Viewport.Width - Texture.Width;
-            float keyboardNewXPosition = r_InputManager.KeyboardXPositionToMove(i_GameTime, this.Position.X);
+            float maxBoundaryWithoutOffset = GraphicsDevice.Viewport.Width - Texture.Width;
+            float keyboardNewXPosition = r_InputManager.UserTryToMoveWithKeyboard(i_GameTime, this.Position.X);
 
             setupNewPosition(keyboardNewXPosition, maxBoundaryWithoutOffset);
             float mouseNewXPosition = this.Position.X + r_InputManager.GetMousePositionDelta().X;
