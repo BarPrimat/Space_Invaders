@@ -42,6 +42,11 @@ namespace C20_Ex01_BarFrimet_313175176
             if(sprite is Spaceship)
             {
                 m_CurrentScore += (int) Enum.eScoreValue.LoseLife;
+                if(m_CurrentScore < 0)
+                {
+                    m_CurrentScore = 0;
+                }
+
                 r_LifeManager.RemoveOneLife();
             }
             else if(sprite is Enemy)

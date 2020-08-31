@@ -9,8 +9,8 @@ namespace C20_Ex01_BarFrimet_313175176
     {
         // Game setup definitions
         private const string k_GameName = "Space Invaders";
-        private const int k_PreferredBackBufferWidth = 1024;
-        private const int k_PreferredBackBufferHeight = 704;
+        private const int k_PreferredBackBufferWidth = 700;
+        private const int k_PreferredBackBufferHeight = 500;
 
         // EnemyArmy definitions
         private const float k_HorizontalSpaceBetweenEnemy = 32 * 0.6f;
@@ -25,6 +25,7 @@ namespace C20_Ex01_BarFrimet_313175176
         private const float k_EnemyStartSpeedInSec = 60;
         private const float k_EnemyIncreaseSpeedInEach5Dead = 0.03f;
         private const float k_EnemyIncreaseSpeedGoingDown = 0.06f;
+        private const float k_EnemyMaxTimeForShoot = 5;
 
         // Life definitions
         private const int k_SpaceBetweenLife = 32;
@@ -101,5 +102,7 @@ namespace C20_Ex01_BarFrimet_313175176
         public static int SpaceshipMaxOfBullet => k_SpaceshipMaxOfBullet;
 
         public static int NumberOfLifeToStart => k_NumberOfLifeToStart;
+
+        public static float EnemyMaxTimeForShoot => k_EnemyMaxTimeForShoot;
     }
 }

@@ -22,25 +22,32 @@ namespace GameSprites
         private const float k_TimeUntilNextStepInSec = 0.5f;
         // private const float k_HorizontalJumpInEachStep = ;
         private const float k_VerticalJumpInEachStep = k_EnemySize / 2;
-        private const float k_EnemyStartSpeedInSec = 1000;
+        private const float k_EnemyStartSpeedInSec = 60;
         private const float k_EnemyIncreaseSpeedInEach5Dead = 0.03f;
         private const float k_EnemyIncreaseSpeedGoingDown = 0.06f;
 
         private readonly Enemy[,] r_EnemyArray;
         private readonly string r_TexturePath;
-        private float m_TimeDeltaCounter = 0;
+        private float m_TimeDeltaCounterToMove = 0;
         private float m_CurrentTopLeftX;
         private float m_CurrentTopLeftY;
         private float m_CurrentSpeed = 1;
         private Enum.eDirectionMove m_eDirectionMove;
         private bool m_FirstTimeSetup = true;
         private bool m_MoveStepDown = false;
+        private readonly Firearm r_Firearm;
+        private float m_TimeDeltaCounterToShoot;
+        private readonly Random r_Random;
+        private float m_EnemyNextTimeToShoot;
 
         public EnemyArmy(Game i_Game, string i_TexturePath) : base(i_Game)
         {
             r_EnemyArray = new Enemy[k_NumberOfEnemyInRow, k_NumberOfEnemyInColumn];
             r_TexturePath = i_TexturePath;
             m_eDirectionMove = Enum.eDirectionMove.Right;
+            r_Firearm = new Firearm(i_Game, SpaceshipMaxOfBullet, Bullet.eBulletType.EnemyBullet);
+            r_Random = new Random();
+            m_EnemyNextTimeToShoot = r_Random.Next((int)GameDefinitions.EnemyMaxTimeForShoot);
             i_Game.Components.Add(this);
         }
 
@@ -81,42 +88,66 @@ namespace GameSprites
 
         public override void Update(GameTime i_GameTime)
         {
-            m_TimeDeltaCounter += (float)i_GameTime.ElapsedGameTime.TotalSeconds;
-            if (m_TimeDeltaCounter >= k_TimeUntilNextStepInSec)
+            m_TimeDeltaCounterToMove += (float)i_GameTime.ElapsedGameTime.TotalSeconds;
+            m_TimeDeltaCounterToShoot += (float)i_GameTime.ElapsedGameTime.TotalSeconds;
+            if (m_TimeDeltaCounterToMove >= k_TimeUntilNextStepInSec)
             {
-                if (m_MoveStepDown)
-                {
-                    m_CurrentTopLeftY += k_EnemySize / 2;
-                    m_CurrentSpeed += k_EnemyIncreaseSpeedGoingDown;
-                    m_MoveStepDown = false;
-                }
-                else
-                {
-                    float newMoveToAdd = k_EnemyStartSpeedInSec * k_TimeUntilNextStepInSec * m_CurrentSpeed;
-                    float rightGroupBorder = getRightGroupBorder();
-                    float leftGroupBorder = 0;
-
-                    if (PreferredBackBufferWidth < rightGroupBorder + k_EnemySize && m_eDirectionMove == Enum.eDirectionMove.Right)
-                    {
-                        newMoveToAdd = PreferredBackBufferWidth - rightGroupBorder;
-                        m_MoveStepDown = true;
-                    }
-                    else if (((leftGroupBorder = getLeftGroupBorder()) - k_EnemySize < 0) && m_eDirectionMove == Enum.eDirectionMove.Left)
-                    {
-                        newMoveToAdd = leftGroupBorder;
-                        m_MoveStepDown = true;
-                    }
-
-                    m_CurrentTopLeftX += m_eDirectionMove == Enum.eDirectionMove.Right ? newMoveToAdd * 1 : newMoveToAdd * -1;
-                }
-
-                m_TimeDeltaCounter = 0;
+                enemyArmyMove(i_GameTime);
+                enemyArmyTryToShoot();
+                m_TimeDeltaCounterToMove = 0;
                 checkAndChangeMoveDirection();
                 InitPosition();
-                if(isEnemyHitFloor())
+                if(isEnemyHitFloorOrSpaceShip())
                 {
                     GameManager.ShowScoreAndEndGame(Game);
                 }
+
+                m_TimeDeltaCounterToMove -= k_TimeUntilNextStepInSec;
+            }
+        }
+
+        private void enemyArmyTryToShoot()
+        {
+            if(m_EnemyNextTimeToShoot <= m_TimeDeltaCounterToShoot)
+            {
+                int randomizeEnemyRow = r_Random.Next(k_NumberOfEnemyInRow - 1);
+                int randomizeEnemyColumn = r_Random.Next(k_NumberOfEnemyInColumn - 1);
+                if (r_EnemyArray[randomizeEnemyRow, randomizeEnemyColumn].Visible)
+                {
+                    r_Firearm.CreateNewBullet(r_EnemyArray[randomizeEnemyRow, randomizeEnemyColumn].Position);
+                }
+
+                m_EnemyNextTimeToShoot = r_Random.Next((int)GameDefinitions.EnemyMaxTimeForShoot);
+                m_TimeDeltaCounterToShoot -= m_TimeDeltaCounterToShoot;
+            }
+        }
+
+        private void enemyArmyMove(GameTime i_GameTime)
+        {
+            if (m_MoveStepDown)
+            {
+                m_CurrentTopLeftY += k_EnemySize / 2;
+                m_CurrentSpeed += k_EnemyIncreaseSpeedGoingDown;
+                m_MoveStepDown = false;
+            }
+            else
+            {
+                float newMoveToAdd = k_EnemyStartSpeedInSec * k_TimeUntilNextStepInSec * m_CurrentSpeed;
+                float rightGroupBorder = getRightGroupBorder();
+                float leftGroupBorder = 0;
+
+                if (PreferredBackBufferWidth < rightGroupBorder + k_EnemySize && m_eDirectionMove == Enum.eDirectionMove.Right)
+                {
+                    newMoveToAdd = PreferredBackBufferWidth - rightGroupBorder;
+                    m_MoveStepDown = true;
+                }
+                else if (((leftGroupBorder = getLeftGroupBorder()) - k_EnemySize < 0) && m_eDirectionMove == Enum.eDirectionMove.Left)
+                {
+                    newMoveToAdd = leftGroupBorder;
+                    m_MoveStepDown = true;
+                }
+
+                m_CurrentTopLeftX += m_eDirectionMove == Enum.eDirectionMove.Right ? newMoveToAdd * 1 : newMoveToAdd * -1;
             }
         }
 
@@ -135,7 +166,7 @@ namespace GameSprites
 
         private float getRightGroupBorder()
         {
-            float rightBorderX = 0;
+            float leftBorderXPosition = 0;
             bool isFound = false;
 
             for (int column = k_NumberOfEnemyInColumn - 1; column >= 0 && !isFound; column--)
@@ -144,18 +175,18 @@ namespace GameSprites
                 {
                     if (r_EnemyArray[row, column].Visible)
                     {
-                        rightBorderX = r_EnemyArray[row, column].Position.X + r_EnemyArray[row, column].Texture.Width;
+                        leftBorderXPosition = r_EnemyArray[row, column].Position.X + r_EnemyArray[row, column].Texture.Width;
                         isFound = true;
                     }
                 }
             }
 
-            return rightBorderX;
+            return leftBorderXPosition;
         }
 
         private float getLeftGroupBorder()
         {
-            float leftBorderX = 0;
+            float leftBorderXPosition = 0;
             bool isFound = false;
 
             for (int column = 0; column < k_NumberOfEnemyInColumn && !isFound; column++)
@@ -164,37 +195,63 @@ namespace GameSprites
                 {
                     if (r_EnemyArray[row, column].Visible)
                     {
-                        leftBorderX = r_EnemyArray[row, column].Position.X;
+                        leftBorderXPosition = r_EnemyArray[row, column].Position.X;
                         isFound = true;
                     }
                 }
             }
 
-            return leftBorderX;
+            return leftBorderXPosition;
         }
 
-        private bool isEnemyHitFloor()
+        private bool isEnemyHitFloorOrSpaceShip()
         {
-            bool isEnemyHitFloor = false;
+            bool isEnemyHitWasSomething = false;
+            Rectangle spaceShipRectangle = default;
 
             if (m_CurrentTopLeftY + k_NumberOfEnemyInColumn * k_NumberOfEnemyInRow >= GraphicsDevice.Viewport.Height)
             {
-                float leftBorderX = 0;
+                foreach(Sprite sprite in SpaceInvaders.ListOfSprites)
+                {
+                    if(sprite is Spaceship)
+                    {
+                        spaceShipRectangle = new Rectangle((int)sprite.Position.X - sprite.Texture.Width, (int)sprite.Position.Y - sprite.Texture.Height, sprite.Texture.Width, sprite.Texture.Height);
+                    }
+                }
 
-                for(int row = k_NumberOfEnemyInRow - 1; row >= 0; row--)
+                for (int row = k_NumberOfEnemyInRow - 1; row >= 0; row--)
                 {
                     for(int column = 0; column < k_NumberOfEnemyInColumn; column++)
                     {
-                        if(r_EnemyArray[row, column].Visible && (r_EnemyArray[row, column].Position.Y + r_EnemyArray[row, column].Texture.Height >= GraphicsDevice.Viewport.Height))
-                        {
-                            isEnemyHitFloor = !isEnemyHitFloor;
-                        }
+                        isEnemyHitWasSomething = isEnemyHitSomething(r_EnemyArray[row, column], spaceShipRectangle);
                     }
                 }
             }
 
-            return isEnemyHitFloor;
+            return isEnemyHitWasSomething;
         }
 
+        private bool isEnemyHitSomething(Enemy i_Enemy, Rectangle i_SpaceShipRectangle)
+        {
+            bool isEnemyHitSomething = false;
+
+            if (i_Enemy.Visible){
+                if(i_Enemy.Position.Y + i_Enemy.Texture.Height >= GraphicsDevice.Viewport.Height)
+                {
+                    isEnemyHitSomething = !isEnemyHitSomething;
+                }
+                else
+                {
+                    Rectangle enemyRectangle = new Rectangle((int)i_Enemy.Position.X, (int)i_Enemy.Position.Y, i_Enemy.Texture.Width, i_Enemy.Texture.Height);
+
+                    if (i_SpaceShipRectangle.Intersects(enemyRectangle))
+                    {
+                        isEnemyHitSomething = !isEnemyHitSomething;
+                    }
+                }
+            }
+
+            return isEnemyHitSomething;
+        }
     }
 }

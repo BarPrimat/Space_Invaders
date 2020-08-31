@@ -27,12 +27,22 @@ namespace C20_Ex01_BarFrimet_313175176
 
         public void CreateNewBullet(Vector2 i_Position)
         {
-            if (GameManager.SpaceShipBulletInTheAir < m_MaximumOfBullet)
+            if (r_eBulletType == Bullet.eBulletType.SpaceShipBullet && GameManager.SpaceShipBulletInTheAir < m_MaximumOfBullet)
             {
-                Bullet bullet = new Bullet(Game, GameSprites.SpritesDefinition.BulletAsset, r_Tint, i_Position, r_eBulletType);
-                GameManager.ListBullets.Add(bullet);
+                createBulletAndAddToList(i_Position);
                 GameManager.SpaceShipBulletInTheAir++;
             }
+            else if (r_eBulletType == Bullet.eBulletType.EnemyBullet && GameManager.EnemyBulletInTheAir < m_MaximumOfBullet)
+            {
+                createBulletAndAddToList(i_Position);
+                GameManager.EnemyBulletInTheAir++;
+            }
+        }
+
+        private void createBulletAndAddToList(Vector2 i_Position)
+        {
+            Bullet bullet = new Bullet(Game, GameSprites.SpritesDefinition.BulletAsset, r_Tint, i_Position, r_eBulletType);
+            GameManager.ListBullets.Add(bullet);
         }
 
         public void RemoveBulletFormListAndComponent(Bullet i_Bullet)

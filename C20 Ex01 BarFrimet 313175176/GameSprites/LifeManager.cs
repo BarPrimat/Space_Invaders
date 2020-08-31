@@ -58,7 +58,8 @@ namespace GameSprites
 
         public void RemoveOneLife()
         {
-            r_LifeArray.RemoveAt(m_CounterOfLife);
+            r_LifeArray[m_CounterOfLife - 1].RemoveComponent();
+            r_LifeArray.RemoveAt(m_CounterOfLife - 1);
             m_CounterOfLife--;
         }
 

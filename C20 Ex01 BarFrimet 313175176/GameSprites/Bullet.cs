@@ -64,7 +64,7 @@ namespace GameSprites
                 bulletHitSomething = !bulletHitSomething;
             }
 
-            Sprite hittenSprite = isGameObjectWasHitten();
+            Sprite hittenSprite = getHitSprite();
 
             if (hittenSprite != null)
             {
@@ -89,51 +89,20 @@ namespace GameSprites
                 }
             }
         }
-        /*
-        private void handleSpaceShipHit(SpaceShip i_SpaceShip)
+
+        public void OnHit(Sprite i_SpriteWosHit)
         {
-            ScoreManager scoreManager = SpaceInvaders.s_GameUtils.ScoreManager;
-
-            if (scoreManager.Souls.Count - 1 == 0)
+            if (!(i_SpriteWosHit is Spaceship))
             {
-                i_SpaceShip.RemoveComponent();
-                SpaceInvaders.s_GameUtils.InputOutputManager.ShowGameOverMessage();
-                this.m_Game.Exit();
-            }
-            else
-            {
-                i_SpaceShip.InitPosition();
-                scoreManager.UpdateScoreAfterHit(i_SpaceShip);
-            }
-        }
-        */
-
-        public void OnHit(Sprite i_HittenSprite)
-        {
-            if (i_HittenSprite is Spaceship)
-            {
-              //  handleSpaceShipHit((SpaceShip)i_HittenSprite);
-            }
-            else
-            {
-                handleNonSpaceShipHit(i_HittenSprite);
+                // Some enemy was hit
+                i_SpriteWosHit.RemoveComponent();
             }
 
-            GameManager.UpdateScore(i_HittenSprite);
+            GameManager.UpdateScore(i_SpriteWosHit);
             this.RemoveComponent();
         }
-        private void handleNonSpaceShipHit(Sprite i_Sprite)
-        {
-            i_Sprite.RemoveComponent();
 
-            if (i_Sprite is Enemy || i_Sprite is MotherShip)
-            {
-               // ScoreManager scoreManager = new ScoreManager;
-               // scoreManager.UpdateScoreAfterHit(i_Sprite);
-            }
-        }
-
-        private Sprite isGameObjectWasHitten()
+        private Sprite getHitSprite()
         {
             Sprite hittenSprite = null;
             Rectangle bulletRectangle = new Rectangle((int)this.Position.X, (int)this.Position.Y, this.Texture.Width, this.Texture.Height);
@@ -142,9 +111,9 @@ namespace GameSprites
             {
                 if (isShootableComponent(sprite) && isOpponents(sprite) && sprite.Visible)
                 {
-                    Rectangle elementRectangle = new Rectangle((int)(sprite).Position.X, (int)(sprite).Position.Y, (int)(sprite).Texture.Width, (int)(sprite).Texture.Height);
+                    Rectangle spriteRectangle = new Rectangle((int)(sprite).Position.X, (int)(sprite).Position.Y, (int)(sprite).Texture.Width, (int)(sprite).Texture.Height);
 
-                    if (bulletRectangle.Intersects(elementRectangle))
+                    if (bulletRectangle.Intersects(spriteRectangle))
                     {
                         hittenSprite = sprite;
                     }
