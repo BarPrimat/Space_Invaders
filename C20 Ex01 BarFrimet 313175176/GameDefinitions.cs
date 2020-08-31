@@ -40,7 +40,7 @@ namespace C20_Ex01_BarFrimet_313175176
         public static readonly Color sr_SpaceshipBulletTint = Color.Red;
 
         // SpaceShip definitions
-        private const int k_SpaceshipMaxOfBullet = 2;
+        private const int k_SpaceshipMaxOfBullet = 1000;
 
 
 

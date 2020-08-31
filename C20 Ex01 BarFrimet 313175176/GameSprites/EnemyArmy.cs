@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using C20_Ex01_BarFrimet_313175176;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using static C20_Ex01_BarFrimet_313175176.GameDefinitions;
+using Enum = C20_Ex01_BarFrimet_313175176.Enum;
 
 
 namespace GameSprites
@@ -16,25 +18,13 @@ namespace GameSprites
         private const float k_EnemySize = 32;
         private const int k_NumberOfEnemyInRow = 5;
         private const int k_NumberOfEnemyInColumn = 9;
-        private static readonly Color sr_EnemyArmyTint = Color.White;
+        private static readonly Color sr_EnemyArmyTint = Color.LightBlue;
         private const float k_TimeUntilNextStepInSec = 0.5f;
         // private const float k_HorizontalJumpInEachStep = ;
         private const float k_VerticalJumpInEachStep = k_EnemySize / 2;
-        private const float k_EnemyStartSpeedInSec = 60;
+        private const float k_EnemyStartSpeedInSec = 1000;
         private const float k_EnemyIncreaseSpeedInEach5Dead = 0.03f;
         private const float k_EnemyIncreaseSpeedGoingDown = 0.06f;
-
-
-        public enum eDirectionMove
-        {
-            Left = -1,
-            Right = 1
-        }
-
-
-
-
-
 
         private readonly Enemy[,] r_EnemyArray;
         private readonly string r_TexturePath;
@@ -42,16 +32,15 @@ namespace GameSprites
         private float m_CurrentTopLeftX;
         private float m_CurrentTopLeftY;
         private float m_CurrentSpeed = 1;
-        private eDirectionMove m_eDirectionMove;
+        private Enum.eDirectionMove m_eDirectionMove;
         private bool m_FirstTimeSetup = true;
         private bool m_MoveStepDown = false;
 
-        public EnemyArmy(Game i_Game, string i_TexturePath)
-            : base(i_Game)
+        public EnemyArmy(Game i_Game, string i_TexturePath) : base(i_Game)
         {
             r_EnemyArray = new Enemy[k_NumberOfEnemyInRow, k_NumberOfEnemyInColumn];
             r_TexturePath = i_TexturePath;
-            m_eDirectionMove = eDirectionMove.Right;
+            m_eDirectionMove = Enum.eDirectionMove.Right;
             i_Game.Components.Add(this);
         }
 
@@ -107,23 +96,27 @@ namespace GameSprites
                     float rightGroupBorder = getRightGroupBorder();
                     float leftGroupBorder = 0;
 
-                    if (PreferredBackBufferWidth < rightGroupBorder + k_EnemySize && m_eDirectionMove == eDirectionMove.Right)
+                    if (PreferredBackBufferWidth < rightGroupBorder + k_EnemySize && m_eDirectionMove == Enum.eDirectionMove.Right)
                     {
                         newMoveToAdd = PreferredBackBufferWidth - rightGroupBorder;
                         m_MoveStepDown = true;
                     }
-                    else if (((leftGroupBorder = getLeftGroupBorder()) - k_EnemySize < 0) && m_eDirectionMove == eDirectionMove.Left)
+                    else if (((leftGroupBorder = getLeftGroupBorder()) - k_EnemySize < 0) && m_eDirectionMove == Enum.eDirectionMove.Left)
                     {
                         newMoveToAdd = leftGroupBorder;
                         m_MoveStepDown = true;
                     }
 
-                    m_CurrentTopLeftX += m_eDirectionMove == eDirectionMove.Right ? newMoveToAdd * 1 : newMoveToAdd * -1;
+                    m_CurrentTopLeftX += m_eDirectionMove == Enum.eDirectionMove.Right ? newMoveToAdd * 1 : newMoveToAdd * -1;
                 }
 
                 m_TimeDeltaCounter = 0;
                 checkAndChangeMoveDirection();
                 InitPosition();
+                if(isEnemyHitFloor())
+                {
+                    GameManager.ShowScoreAndEndGame(Game);
+                }
             }
         }
 
@@ -131,11 +124,11 @@ namespace GameSprites
         {
             if (PreferredBackBufferWidth <= getRightGroupBorder() + k_EnemySize)
             {
-                m_eDirectionMove = eDirectionMove.Left;
+                m_eDirectionMove = Enum.eDirectionMove.Left;
             }
             else if (0 >= getLeftGroupBorder() - k_EnemySize)
             {
-                m_eDirectionMove = eDirectionMove.Right;
+                m_eDirectionMove = Enum.eDirectionMove.Right;
             }
         }
 
@@ -149,7 +142,7 @@ namespace GameSprites
             {
                 for (int row = 0; row < k_NumberOfEnemyInRow; row++)
                 {
-                    if (this.r_EnemyArray[row, column].Visible)
+                    if (r_EnemyArray[row, column].Visible)
                     {
                         rightBorderX = r_EnemyArray[row, column].Position.X + r_EnemyArray[row, column].Texture.Width;
                         isFound = true;
@@ -169,7 +162,7 @@ namespace GameSprites
             {
                 for (int row = 0; row < k_NumberOfEnemyInRow; row++)
                 {
-                    if (this.r_EnemyArray[row, column].Visible)
+                    if (r_EnemyArray[row, column].Visible)
                     {
                         leftBorderX = r_EnemyArray[row, column].Position.X;
                         isFound = true;
@@ -179,5 +172,29 @@ namespace GameSprites
 
             return leftBorderX;
         }
+
+        private bool isEnemyHitFloor()
+        {
+            bool isEnemyHitFloor = false;
+
+            if (m_CurrentTopLeftY + k_NumberOfEnemyInColumn * k_NumberOfEnemyInRow >= GraphicsDevice.Viewport.Height)
+            {
+                float leftBorderX = 0;
+
+                for(int row = k_NumberOfEnemyInRow - 1; row >= 0; row--)
+                {
+                    for(int column = 0; column < k_NumberOfEnemyInColumn; column++)
+                    {
+                        if(r_EnemyArray[row, column].Visible && (r_EnemyArray[row, column].Position.Y + r_EnemyArray[row, column].Texture.Height >= GraphicsDevice.Viewport.Height))
+                        {
+                            isEnemyHitFloor = !isEnemyHitFloor;
+                        }
+                    }
+                }
+            }
+
+            return isEnemyHitFloor;
+        }
+
     }
 }

@@ -119,6 +119,7 @@ namespace GameSprites
                 handleNonSpaceShipHit(i_HittenSprite);
             }
 
+            GameManager.UpdateScore(i_HittenSprite);
             this.RemoveComponent();
         }
         private void handleNonSpaceShipHit(Sprite i_Sprite)

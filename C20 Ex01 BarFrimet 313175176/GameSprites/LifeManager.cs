@@ -50,6 +50,12 @@ namespace GameSprites
             }
         }
 
+        public bool IsNoMoreLifeRemains()
+        {
+            return r_LifeArray.Count == 0;
+        }
+
+
         public void RemoveOneLife()
         {
             r_LifeArray.RemoveAt(m_CounterOfLife);
