@@ -127,7 +127,7 @@ namespace GameSprites
 
             if (i_Sprite is Enemy || i_Sprite is MotherShip)
             {
-               // ScoreManager scoreManager = SpaceInvaders.s_GameUtils.ScoreManager;
+               // ScoreManager scoreManager = new ScoreManager;
                // scoreManager.UpdateScoreAfterHit(i_Sprite);
             }
         }
@@ -139,7 +139,7 @@ namespace GameSprites
 
             foreach (Sprite sprite in SpaceInvaders.ListOfSprites)
             {
-                if (isShootableComponent(sprite) && isOpponents(sprite))
+                if (isShootableComponent(sprite) && isOpponents(sprite) && sprite.Visible)
                 {
                     Rectangle elementRectangle = new Rectangle((int)(sprite).Position.X, (int)(sprite).Position.Y, (int)(sprite).Texture.Width, (int)(sprite).Texture.Height);
 
