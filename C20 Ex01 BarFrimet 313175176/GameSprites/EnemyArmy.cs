@@ -116,7 +116,7 @@ namespace GameSprites
         {
             if (m_MoveStepDown)
             {
-                m_CurrentTopLeftY += EnemySizeHeight / 2;
+                m_CurrentTopLeftY += EnemyStepDown;
                 s_CurrentSpeed += EnemyIncreaseSpeedGoingDown;
                 m_MoveStepDown = false;
             }
@@ -217,6 +217,7 @@ namespace GameSprites
                 }
             }
 
+            // No need to enter the loop is the enemy army can not hit nothing
             if (m_CurrentTopLeftY + NumberOfEnemyInColumn * NumberOfEnemyInRow + spaceShipYPosition >= GraphicsDevice.Viewport.Height)
             {
                 bool findHit = false;

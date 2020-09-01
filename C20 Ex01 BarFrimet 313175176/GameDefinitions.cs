@@ -18,12 +18,13 @@ namespace SpaceInvaders
         private const float k_HorizontalSpaceBetweenEnemy = 32 * 0.6f;
         private const float k_VerticalSpaceBetweenEnemy = 32 * 0.6f;
         private const float k_VerticalSpaceBetweenEnemyAndTopEdge = 32 * 3f;
-        private const int k_NumberOfEnemyInRow = 5;
-        private const int k_NumberOfEnemyInColumn = 9;
+        private const float k_EnemyStepDown = k_EnemySizeHeight / 2;
         private const float k_EnemyStartSpeedInSec = 60;
-        private const float k_EnemyIncreaseSpeedInEach5Dead = 0.03f;
+        private const float k_EnemyIncreaseSpeedEveryXDead = 0.03f;
         private const float k_EnemyIncreaseSpeedGoingDown = 0.06f;
         private const float k_EnemyMaxTimeForShoot = 3;
+        private const int k_NumberOfEnemyInRow = 5;
+        private const int k_NumberOfEnemyInColumn = 9;
         private const int k_EnemyArmyMaxOfBullet = 5;
         private const int k_NumberOfEnemyKilledToIncreaseSpeed = 5;
 
@@ -50,8 +51,8 @@ namespace SpaceInvaders
 
         // SpaceShip definitions
         private const int k_SpaceshipMaxOfBullet = 2;
-        private static readonly Color sr_SpaceshipTint = Color.White;
         private const float k_SpaceshipSpeed = 130;
+        private static readonly Color sr_SpaceshipTint = Color.White;
 
         // Background definitions
         private static readonly Color sr_BackgroundTint = Color.White;
@@ -84,7 +85,7 @@ namespace SpaceInvaders
 
         public static float EnemyStartSpeedInSec => k_EnemyStartSpeedInSec;
 
-        public static float EnemyIncreaseSpeedInEach5Dead => k_EnemyIncreaseSpeedInEach5Dead;
+        public static float EnemyIncreaseSpeedEveryXDead => k_EnemyIncreaseSpeedEveryXDead;
 
         public static float EnemyIncreaseSpeedGoingDown => k_EnemyIncreaseSpeedGoingDown;
 
@@ -133,5 +134,7 @@ namespace SpaceInvaders
         public static string EndGameText => k_EndGameText;
 
         public static string EndGameCaption => k_EndGameCaption;
+
+        public static float EnemyStepDown => k_EnemyStepDown;
     }
 }
