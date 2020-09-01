@@ -264,7 +264,7 @@ namespace GameSprites
         {
             if(s_EnemyKilledCounter % NumberOfEnemyKilledToIncreaseSpeed == 0)
             {
-                s_CurrentSpeed += EnemyIncreaseSpeedInEach5Dead;
+                s_CurrentSpeed += EnemyIncreaseSpeedEveryXDead;
             }
         }
 
