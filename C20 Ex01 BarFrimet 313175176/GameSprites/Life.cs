@@ -9,11 +9,7 @@ namespace GameSprites
 {
     public class Life : Sprite
     {
-        private static readonly Color sr_LifeTint = Color.White;
-
-
-        public Life(Game i_Game, string i_TexturePath)
-            : base(i_Game, i_TexturePath, sr_LifeTint)
+        public Life(Game i_Game, string i_TexturePath) : base(i_Game, i_TexturePath, LifeTint)
         {
         }
 

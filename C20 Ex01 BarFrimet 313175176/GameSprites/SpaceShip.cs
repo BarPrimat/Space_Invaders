@@ -7,33 +7,25 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using static C20_Ex01_BarFrimet_313175176.GameDefinitions;
-using Enum = C20_Ex01_BarFrimet_313175176.Enum;
+using static C20_Ex01_BarFrimet_313175176.Enum;
 
 
 namespace GameSprites
 {
     public class Spaceship : Sprite
     {
-        private static float s_SpaceshipSpeed;
         private readonly InputManager r_InputManager;
-        private static int s_CounterOfSpaceShipBulletInAir = 0;
         private readonly Firearm r_Firearm;
+        private static float s_SpaceshipSpeed;
+        private static int s_CounterOfSpaceShipBulletInAir = 0;
 
         public Spaceship(Game i_Game, string i_TexturePath) 
             : base (i_Game, i_TexturePath, SpaceshipTint)
         {
             r_InputManager = new InputManager();
-            r_Firearm = new Firearm(i_Game, SpaceshipMaxOfBullet, Enum.eBulletType.SpaceShipBullet);
-            s_SpaceshipSpeed = SpaceshipSpeed;
+            r_Firearm = new Firearm(i_Game, SpaceshipMaxOfBullet, eBulletType.SpaceShipBullet);
+            s_SpaceshipSpeed = GameDefinitions.SpaceshipSpeed;
             SpaceInvaders.ListOfSprites.Add(this);
-        }
-
-        public static float SpaceshipSpeed => s_SpaceshipSpeed;
-
-        public static int CounterOfSpaceShipBulletInAir
-        {
-            get => s_CounterOfSpaceShipBulletInAir;
-            set => s_CounterOfSpaceShipBulletInAir = value;
         }
 
         public override void InitPosition()
@@ -79,6 +71,14 @@ namespace GameSprites
         {
             i_NewXPosition = MathHelper.Clamp(i_NewXPosition, 0, i_MaxBoundaryWithoutOffset);
             this.Position = new Vector2(i_NewXPosition, Position.Y);
+        }
+
+        public static float SpaceshipSpeed => s_SpaceshipSpeed;
+
+        public static int CounterOfSpaceShipBulletInAir
+        {
+            get => s_CounterOfSpaceShipBulletInAir;
+            set => s_CounterOfSpaceShipBulletInAir = value;
         }
     }
 }

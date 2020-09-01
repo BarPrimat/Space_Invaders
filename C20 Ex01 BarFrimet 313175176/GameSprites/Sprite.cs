@@ -10,10 +10,10 @@ namespace GameSprites
     public abstract class Sprite : DrawableGameComponent
     {
         protected Texture2D m_Texture;
-        protected readonly string r_TexturePath;
         protected Vector2 m_Position;
         protected Color m_Tint;
         protected SpriteBatch m_SpriteBatch;
+        protected readonly string r_TexturePath;
 
         public Sprite(Game i_Game, string i_TexturePath, Color i_Tint) : base(i_Game)
         {
@@ -56,7 +56,6 @@ namespace GameSprites
             m_SpriteBatch = new SpriteBatch(GraphicsDevice);
             m_Texture = this.Game.Content.Load<Texture2D>(r_TexturePath);
             this.InitPosition();
-            base.LoadContent();
         }
 
         public override void Draw(GameTime i_GameTime)
@@ -67,7 +66,6 @@ namespace GameSprites
                 this.SpriteBatch.Draw(m_Texture, m_Position, m_Tint);
             }
 
-            base.Draw(i_GameTime);
             m_SpriteBatch.End();
         }
 
@@ -78,6 +76,5 @@ namespace GameSprites
         }
 
         public abstract void InitPosition();
-
     }
 }

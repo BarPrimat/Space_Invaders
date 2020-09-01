@@ -9,8 +9,7 @@ namespace GameSprites
 {
     public class Enemy : Sprite
     {
-        public Enemy(Game i_Game, string i_TexturePath, Color i_Tint) 
-            : base(i_Game, i_TexturePath, i_Tint)
+        public Enemy(Game i_Game, string i_TexturePath, Color i_Tint) : base(i_Game, i_TexturePath, i_Tint)
         {
             SpaceInvaders.ListOfSprites.Add(this);
         }

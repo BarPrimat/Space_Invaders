@@ -6,16 +6,16 @@ namespace C20_Ex01_BarFrimet_313175176
 {
     public class Enum
     {
-        public enum eBulletType
-        {
-            SpaceShipBullet = -1,
-            EnemyBullet = 1
-        }
-
         public enum eDirectionMove
         {
             Left,
             Right
+        }
+
+        public enum eBulletType
+        {
+            SpaceShipBullet = -1,
+            EnemyBullet = 1
         }
 
         public enum eScoreValue

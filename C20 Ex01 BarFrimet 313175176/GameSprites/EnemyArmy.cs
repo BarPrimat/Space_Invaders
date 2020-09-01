@@ -5,60 +5,42 @@ using C20_Ex01_BarFrimet_313175176;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using static C20_Ex01_BarFrimet_313175176.GameDefinitions;
-using Enum = C20_Ex01_BarFrimet_313175176.Enum;
+using static C20_Ex01_BarFrimet_313175176.Enum;
 
 
 namespace GameSprites
 {
     public class EnemyArmy : DrawableGameComponent
     {
-        private const float k_HorizontalSpaceBetweenEnemy = 32 * 0.6f;
-        private const float k_VerticalSpaceBetweenEnemy = 32 * 0.6f;
-        private const float k_VerticalSpaceBetweenEnemyAndTopEdge = 32 * 3f;
-        private const float k_EnemySize = 32;
-        private const int k_NumberOfEnemyInRow = 5;
-        private const int k_NumberOfEnemyInColumn = 9;
-        private static readonly Color sr_EnemyArmyTint = Color.LightBlue;
-        private const float k_EnemyStartSpeedInSec = 60;
-        private const float k_NumberOfEnemyKilledToIncreaseSpeed = 5;
-        private const float k_EnemyIncreaseSpeedInEach5Dead = 0.03f;
-        private const float k_EnemyIncreaseSpeedGoingDown = 0.06f;
-
         private readonly Enemy[,] r_EnemyArray;
+        private readonly Firearm r_Firearm;
+        private readonly Random r_Random;
         private float m_CurrentTopLeftX;
         private float m_CurrentTopLeftY;
-        private static float s_CurrentSpeed = 1;
-        private Enum.eDirectionMove m_eDirectionMove;
+        private float m_TimeDeltaCounterToShoot;
+        private float m_EnemyNextTimeToShoot;
         private bool m_FirstTimeSetup = true;
         private bool m_MoveStepDown = false;
-        private readonly Firearm r_Firearm;
-        private float m_TimeDeltaCounterToShoot;
-        private readonly Random r_Random;
-        private float m_EnemyNextTimeToShoot;
+        private eDirectionMove m_eDirectionMove;
+        private static float s_CurrentSpeed = 1;
         private static int s_CounterOfEnemyBulletInAir = 0;
         private static int s_EnemyKilledCounter = 0;
 
         public EnemyArmy(Game i_Game) : base(i_Game)
         {
-            r_EnemyArray = new Enemy[k_NumberOfEnemyInRow, k_NumberOfEnemyInColumn];
-            m_eDirectionMove = Enum.eDirectionMove.Right;
-            r_Firearm = new Firearm(i_Game, EnemyArmyMaxOfBullet, Enum.eBulletType.EnemyBullet);
+            r_EnemyArray = new Enemy[NumberOfEnemyInRow, NumberOfEnemyInColumn];
+            m_eDirectionMove = eDirectionMove.Right;
+            r_Firearm = new Firearm(i_Game, EnemyArmyMaxOfBullet, eBulletType.EnemyBullet);
             r_Random = new Random();
-            m_EnemyNextTimeToShoot = r_Random.Next((int)GameDefinitions.EnemyMaxTimeForShoot);
+            m_EnemyNextTimeToShoot = r_Random.Next((int) EnemyMaxTimeForShoot);
             i_Game.Components.Add(this);
-        }
-
-        public static int CounterOfEnemyBulletInAir
-        {
-            get => s_CounterOfEnemyBulletInAir;
-            set => s_CounterOfEnemyBulletInAir = value;
         }
 
         public override void Initialize()
         {
             base.Initialize();
             m_CurrentTopLeftX = 0;
-            m_CurrentTopLeftY = k_VerticalSpaceBetweenEnemyAndTopEdge + k_EnemySize * k_NumberOfEnemyInColumn;
+            m_CurrentTopLeftY = VerticalSpaceBetweenEnemyAndTopEdge;
             InitPosition();
             m_FirstTimeSetup = false;
         }
@@ -69,9 +51,9 @@ namespace GameSprites
             float xPosition = m_CurrentTopLeftX;
             float yPosition = m_CurrentTopLeftY;
 
-            for (int i = 0; i < k_NumberOfEnemyInRow; i++)
+            for (int i = 0; i < NumberOfEnemyInRow; i++)
             {
-                for (int j = 0; j < k_NumberOfEnemyInColumn; j++)
+                for (int j = 0; j < NumberOfEnemyInColumn; j++)
                 {
                     Vector2 position = new Vector2(xPosition, yPosition);
 
@@ -82,10 +64,10 @@ namespace GameSprites
                     }
 
                     r_EnemyArray[i, j].Position = position;
-                    xPosition += k_HorizontalSpaceBetweenEnemy + k_EnemySize;
+                    xPosition += HorizontalSpaceBetweenEnemy + EnemySizeWidth;
                 }
 
-                yPosition -= k_VerticalSpaceBetweenEnemy + k_EnemySize;
+                yPosition += VerticalSpaceBetweenEnemy + EnemySizeHeight;
                 xPosition = tempCurrentXPosition;
             }
         }
@@ -99,18 +81,18 @@ namespace GameSprites
             switch (i_Row)
             {
                 case 0:
-                case 1:
-                    texturePath = SpritesDefinition.YellowEnemyAsset;
-                    colorAsset = GameDefinitions.EnemyYellowTint;
-                    break;
-                case 2:
-                case 3:
-                    texturePath = SpritesDefinition.BlueLightEnemyAsset;
-                    colorAsset = GameDefinitions.EnemyLightBlueTint;
-                    break;
-                case 4:
                     texturePath = SpritesDefinition.PinkEnemyAsset;
-                    colorAsset = GameDefinitions.EnemyPinkTint;
+                    colorAsset = GameDefinitions.PinkEnemyTint;
+                    break;
+                case 1:
+                case 2:
+                    texturePath = SpritesDefinition.LightBlueEnemyAsset;
+                    colorAsset = GameDefinitions.LightBlueEnemyTint;
+                    break;
+                case 3:
+                case 4:
+                    texturePath = SpritesDefinition.YellowEnemyAsset;
+                    colorAsset = GameDefinitions.YellowEnemyTint;
                     break;
             }
 
@@ -130,12 +112,33 @@ namespace GameSprites
             }
         }
 
+        private void enemyArmyMove(GameTime i_GameTime)
+        {
+            if (m_MoveStepDown)
+            {
+                m_CurrentTopLeftY += EnemySizeWidth / 2;
+                s_CurrentSpeed += EnemyIncreaseSpeedGoingDown;
+                m_MoveStepDown = false;
+            }
+            else
+            {
+                float newMoveToAdd = (float)i_GameTime.ElapsedGameTime.TotalSeconds * EnemyStartSpeedInSec * s_CurrentSpeed;
+                float rightGroupBorder = getRightGroupBorder();
+                float leftGroupBorder = getLeftGroupBorder();
+
+                m_MoveStepDown = (PreferredBackBufferWidth < rightGroupBorder + EnemySizeWidth && m_eDirectionMove == eDirectionMove.Right)
+                                 || (leftGroupBorder - EnemySizeHeight < 0 && m_eDirectionMove == eDirectionMove.Left);
+
+                m_CurrentTopLeftX += m_eDirectionMove == eDirectionMove.Right ? newMoveToAdd * 1 : newMoveToAdd * -1;
+            }
+        }
+
         private void enemyArmyTryToShoot()
         {
             if(m_EnemyNextTimeToShoot <= m_TimeDeltaCounterToShoot)
             {
-                int randomizeEnemyRow = r_Random.Next(k_NumberOfEnemyInRow - 1);
-                int randomizeEnemyColumn = r_Random.Next(k_NumberOfEnemyInColumn - 1);
+                int randomizeEnemyRow = r_Random.Next(NumberOfEnemyInRow - 1);
+                int randomizeEnemyColumn = r_Random.Next(NumberOfEnemyInColumn - 1);
                 if (r_EnemyArray[randomizeEnemyRow, randomizeEnemyColumn].Visible)
                 {
                     r_Firearm.CreateNewBullet(r_EnemyArray[randomizeEnemyRow, randomizeEnemyColumn].Position);
@@ -146,37 +149,15 @@ namespace GameSprites
             }
         }
 
-        private void enemyArmyMove(GameTime i_GameTime)
-        {
-            if (m_MoveStepDown)
-            {
-                m_CurrentTopLeftY += k_EnemySize / 2;
-                s_CurrentSpeed += k_EnemyIncreaseSpeedGoingDown;
-                m_MoveStepDown = false;
-            }
-            else
-            {
-                float newMoveToAdd = (float)i_GameTime.ElapsedGameTime.TotalSeconds * k_EnemyStartSpeedInSec * s_CurrentSpeed;
-
-                float rightGroupBorder = getRightGroupBorder();
-                float leftGroupBorder = getLeftGroupBorder();
-
-                m_MoveStepDown = (PreferredBackBufferWidth < rightGroupBorder + k_EnemySize && m_eDirectionMove == Enum.eDirectionMove.Right)
-                                 || (leftGroupBorder - k_EnemySize < 0 && m_eDirectionMove == Enum.eDirectionMove.Left);
-
-                m_CurrentTopLeftX += m_eDirectionMove == Enum.eDirectionMove.Right ? newMoveToAdd * 1 : newMoveToAdd * -1;
-            }
-        }
-
         private void checkAndChangeMoveDirection()
         {
-            if (PreferredBackBufferWidth <= getRightGroupBorder() + k_EnemySize)
+            if (PreferredBackBufferWidth <= getRightGroupBorder() + r_EnemyArray[0, 0].Texture.Width)
             {
-                m_eDirectionMove = Enum.eDirectionMove.Left;
+                m_eDirectionMove = eDirectionMove.Left;
             }
-            else if (0 >= getLeftGroupBorder() - k_EnemySize)
+            else if (0 >= getLeftGroupBorder() - r_EnemyArray[0, 0].Texture.Width)
             {
-                m_eDirectionMove = Enum.eDirectionMove.Right;
+                m_eDirectionMove = eDirectionMove.Right;
             }
         }
 
@@ -186,9 +167,9 @@ namespace GameSprites
             float leftBorderXPosition = 0;
             bool isFound = false;
 
-            for (int column = k_NumberOfEnemyInColumn - 1; column >= 0 && !isFound; column--)
+            for (int column = NumberOfEnemyInColumn - 1; column >= 0 && !isFound; column--)
             {
-                for (int row = 0; row < k_NumberOfEnemyInRow; row++)
+                for (int row = 0; row < NumberOfEnemyInRow; row++)
                 {
                     if (r_EnemyArray[row, column].Visible)
                     {
@@ -206,9 +187,9 @@ namespace GameSprites
             float leftBorderXPosition = 0;
             bool isFound = false;
 
-            for (int column = 0; column < k_NumberOfEnemyInColumn && !isFound; column++)
+            for (int column = 0; column < NumberOfEnemyInColumn && !isFound; column++)
             {
-                for (int row = 0; row < k_NumberOfEnemyInRow; row++)
+                for (int row = 0; row < NumberOfEnemyInRow; row++)
                 {
                     if (r_EnemyArray[row, column].Visible)
                     {
@@ -227,21 +208,22 @@ namespace GameSprites
             Rectangle spaceShipRectangle = default;
             float spaceShipYPosition = 0;
 
-            foreach (Sprite sprite in SpaceInvaders.ListOfSprites)
+            if (m_CurrentTopLeftY + NumberOfEnemyInColumn * NumberOfEnemyInRow + spaceShipYPosition >= GraphicsDevice.Viewport.Height)
             {
-                if (sprite is Spaceship)
+                // Find Spaceship sprite her for better efficiency
+                foreach (Sprite sprite in SpaceInvaders.ListOfSprites)
                 {
-                    spaceShipRectangle = new Rectangle((int)sprite.Position.X, (int)sprite.Position.Y, sprite.Texture.Width, sprite.Texture.Height);
-                    spaceShipYPosition = sprite.Position.Y;
+                    if (sprite is Spaceship)
+                    {
+                        spaceShipRectangle = new Rectangle((int)sprite.Position.X, (int)sprite.Position.Y, sprite.Texture.Width, sprite.Texture.Height);
+                        spaceShipYPosition = sprite.Position.Y;
+                    }
                 }
-            }
 
-            if (m_CurrentTopLeftY + k_NumberOfEnemyInColumn * k_NumberOfEnemyInRow + spaceShipYPosition >= GraphicsDevice.Viewport.Height)
-            {
                 bool findHit = false;
-                for (int row = k_NumberOfEnemyInRow - 1; row >= 0 && !findHit; row--)
+                for (int row = NumberOfEnemyInRow - 1; row >= 0 && !findHit; row--)
                 {
-                    for(int column = 0; column < k_NumberOfEnemyInColumn; column++)
+                    for(int column = 0; column < NumberOfEnemyInColumn; column++)
                     {
                         if(isEnemyHitWasSomething = isEnemyHitSomething(row, column, spaceShipRectangle))
                         {
@@ -280,9 +262,9 @@ namespace GameSprites
 
         private static void increaseSpeedIfEnemyKilled()
         {
-            if(s_EnemyKilledCounter % k_NumberOfEnemyKilledToIncreaseSpeed == 0)
+            if(s_EnemyKilledCounter % NumberOfEnemyKilledToIncreaseSpeed == 0)
             {
-                s_CurrentSpeed += k_EnemyIncreaseSpeedInEach5Dead;
+                s_CurrentSpeed += EnemyIncreaseSpeedInEach5Dead;
             }
         }
 
@@ -290,6 +272,12 @@ namespace GameSprites
         {
             s_EnemyKilledCounter++;
             increaseSpeedIfEnemyKilled();
+        }
+
+        public static int CounterOfEnemyBulletInAir
+        {
+            get => s_CounterOfEnemyBulletInAir;
+            set => s_CounterOfEnemyBulletInAir = value;
         }
     }
 }

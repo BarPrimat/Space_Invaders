@@ -5,33 +5,35 @@ using GameSprites;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using static C20_Ex01_BarFrimet_313175176.GameDefinitions;
+using static C20_Ex01_BarFrimet_313175176.Enum;
+
 
 
 namespace C20_Ex01_BarFrimet_313175176
 {
     public class Firearm
     {
-        private int m_MaximumOfBullet;
+        private readonly int r_MaximumOfBullet;
+        private readonly eBulletType r_eBulletType;
         private readonly Color r_Tint;
-        private readonly Enum.eBulletType r_eBulletType;
-        private readonly Game m_Game;
+        private readonly Game r_Game;
 
-        public Firearm(Game i_Game, int i_MaximumOfBullet, Enum.eBulletType i_eBulletType)
+        public Firearm(Game i_Game, int i_MaximumOfBullet, eBulletType i_eBulletType)
         {
-            m_MaximumOfBullet = i_MaximumOfBullet;
+            r_MaximumOfBullet = i_MaximumOfBullet;
             r_eBulletType = i_eBulletType;
-            r_Tint = i_eBulletType == Enum.eBulletType.SpaceShipBullet ? SpaceshipBulletTint : EnemyBulletTint;
-            m_Game = i_Game;
+            r_Tint = i_eBulletType == eBulletType.SpaceShipBullet ? SpaceshipBulletTint : EnemyBulletTint;
+            r_Game = i_Game;
         }
 
         public void CreateNewBullet(Vector2 i_Position)
         {
-            if (r_eBulletType == Enum.eBulletType.SpaceShipBullet && Spaceship.CounterOfSpaceShipBulletInAir < m_MaximumOfBullet)
+            if (r_eBulletType == eBulletType.SpaceShipBullet && Spaceship.CounterOfSpaceShipBulletInAir < r_MaximumOfBullet)
             {
                 createBulletAndAddToList(i_Position);
                 Spaceship.CounterOfSpaceShipBulletInAir++;
             }
-            else if (r_eBulletType == Enum.eBulletType.EnemyBullet && EnemyArmy.CounterOfEnemyBulletInAir < m_MaximumOfBullet)
+            else if (r_eBulletType == eBulletType.EnemyBullet && EnemyArmy.CounterOfEnemyBulletInAir < r_MaximumOfBullet)
             {
                 createBulletAndAddToList(i_Position);
                 EnemyArmy.CounterOfEnemyBulletInAir++;
@@ -40,8 +42,8 @@ namespace C20_Ex01_BarFrimet_313175176
 
         private void createBulletAndAddToList(Vector2 i_Position)
         {
-            Bullet bullet = new Bullet(m_Game, GameSprites.SpritesDefinition.BulletAsset, r_Tint, i_Position, r_eBulletType);
-            GameManager.ListBullets.Add(bullet);
+            Bullet bullet = new Bullet(r_Game, GameSprites.SpritesDefinition.BulletAsset, r_Tint, i_Position, r_eBulletType);
+            GameManager.ListOfBullets.Add(bullet);
         }
     }
 }

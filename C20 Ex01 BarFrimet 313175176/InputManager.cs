@@ -9,7 +9,7 @@ namespace C20_Ex01_BarFrimet_313175176
 {
     public class InputManager
     {
-        // CCan make problems with the order of operations therefore needed 2 pointers
+        // Can make problems with the order of operations therefore needed 2 pointers
         private MouseState m_PrevMouseStateToMove;
         private MouseState m_PrevMouseStateToShoot;
         private KeyboardState m_PrevKeyboardState;
@@ -36,9 +36,8 @@ namespace C20_Ex01_BarFrimet_313175176
             if (currentKeyboardState.IsKeyDown(Keys.Left))
             {
                 newXPosition -= Spaceship.SpaceshipSpeed * (float)i_GameTime.ElapsedGameTime.TotalSeconds;
-            }
-
-            if (currentKeyboardState.IsKeyDown(Keys.Right))
+            } 
+            else if(currentKeyboardState.IsKeyDown(Keys.Right))
             {
                 newXPosition += Spaceship.SpaceshipSpeed * (float)i_GameTime.ElapsedGameTime.TotalSeconds;
             }
@@ -52,7 +51,7 @@ namespace C20_Ex01_BarFrimet_313175176
         {
             MouseState currentMouseState = Mouse.GetState();
             KeyboardState currentKeyboardState = Keyboard.GetState();
-            bool isUserClickToShoot = ((m_PrevKeyboardStateToShoot.IsKeyDown(Keys.Enter) && currentKeyboardState.IsKeyUp(Keys.Enter)) 
+            bool isUserClickToShoot = ((m_PrevKeyboardStateToShoot.IsKeyUp(Keys.Enter) && currentKeyboardState.IsKeyDown(Keys.Enter)) 
                                        || (m_PrevMouseStateToShoot.LeftButton == ButtonState.Released && currentMouseState.LeftButton == ButtonState.Pressed));
             
             m_PrevMouseStateToShoot = currentMouseState;

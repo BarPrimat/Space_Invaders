@@ -9,6 +9,8 @@ namespace C20_Ex01_BarFrimet_313175176
     {
         // Game setup definitions
         private const string k_GameName = "Space Invaders";
+        private const string k_EndGameText = "Your score is: ";
+        private const string k_EndGameCaption = "Game Over";
         private const int k_PreferredBackBufferWidth = 700;
         private const int k_PreferredBackBufferHeight = 500;
 
@@ -16,22 +18,22 @@ namespace C20_Ex01_BarFrimet_313175176
         private const float k_HorizontalSpaceBetweenEnemy = 32 * 0.6f;
         private const float k_VerticalSpaceBetweenEnemy = 32 * 0.6f;
         private const float k_VerticalSpaceBetweenEnemyAndTopEdge = 32 * 3f;
-        private const float k_EnemySize = 32;
         private const int k_NumberOfEnemyInRow = 5;
         private const int k_NumberOfEnemyInColumn = 9;
-        private const float k_TimeUntilNextStepInSec = 0.5f;
-        private const float k_VerticalJumpInEachStep = k_EnemySize / 2;
         private const float k_EnemyStartSpeedInSec = 60;
         private const float k_EnemyIncreaseSpeedInEach5Dead = 0.03f;
         private const float k_EnemyIncreaseSpeedGoingDown = 0.06f;
         private const float k_EnemyMaxTimeForShoot = 3;
         private const int k_EnemyArmyMaxOfBullet = 5;
+        private const int k_NumberOfEnemyKilledToIncreaseSpeed = 5;
 
         // Enemy definitions
-        private static readonly Color sr_EnemyPinkTint = Color.Pink;
-        private static readonly Color sr_EnemyLightBlueTint = Color.LightBlue;
-        private static readonly Color sr_EnemyYellowTint = Color.Yellow;
-
+        private static readonly Color sr_PinkEnemyTint = Color.Pink;
+        private static readonly Color sr_LightBlueEnemyTint = Color.LightBlue;
+        private static readonly Color sr_YellowEnemyTint = Color.Yellow;
+        private const float k_EnemySize = 32;
+        private const float k_EnemySizeWidth = k_EnemySize;
+        private const float k_EnemySizeHeight = k_EnemySize;
 
         // Life definitions
         private const int k_SpaceBetweenLife = 32;
@@ -47,18 +49,16 @@ namespace C20_Ex01_BarFrimet_313175176
         public static readonly Color sr_SpaceshipBulletTint = Color.Red;
 
         // SpaceShip definitions
-        private const int k_SpaceshipMaxOfBullet = 2;
-        private static readonly Color s_SpaceshipTint = Color.White;
+        private const int k_SpaceshipMaxOfBullet = 100;
+        private static readonly Color sr_SpaceshipTint = Color.White;
         private const float k_SpaceshipSpeed = 130;
 
+        // Background definitions
+        private static readonly Color sr_BackgroundTint = Color.White;
 
-
-
-
-
-
-
-
+        // MotherShip definitions
+        private const float k_MotherShipSpeed = 95;
+        private const int k_MotherShipMaxTimeToNextAppearsInSec = 15;
 
 
         public static string GameName => k_GameName;
@@ -78,11 +78,6 @@ namespace C20_Ex01_BarFrimet_313175176
         public static int NumberOfEnemyInRow => k_NumberOfEnemyInRow;
 
         public static int NumberOfEnemyInColumn => k_NumberOfEnemyInColumn;
-
-
-        public static float TimeUntilNextStepInSec => k_TimeUntilNextStepInSec;
-
-        public static float VerticalJumpInEachStep => k_VerticalJumpInEachStep;
 
         public static float EnemyStartSpeedInSec => k_EnemyStartSpeedInSec;
 
@@ -116,12 +111,28 @@ namespace C20_Ex01_BarFrimet_313175176
 
         public static float SpaceshipSpeed => k_SpaceshipSpeed;
 
-        public static Color SpaceshipTint => s_SpaceshipTint;
+        public static Color SpaceshipTint => sr_SpaceshipTint;
 
-        public static Color EnemyPinkTint => sr_EnemyPinkTint;
+        public static Color PinkEnemyTint => sr_PinkEnemyTint;
 
-        public static Color EnemyLightBlueTint => sr_EnemyLightBlueTint;
+        public static Color LightBlueEnemyTint => sr_LightBlueEnemyTint;
 
-        public static Color EnemyYellowTint => sr_EnemyYellowTint;
+        public static Color YellowEnemyTint => sr_YellowEnemyTint;
+
+        public static Color BackgroundTint => sr_BackgroundTint;
+
+        public static int NumberOfEnemyKilledToIncreaseSpeed => k_NumberOfEnemyKilledToIncreaseSpeed;
+
+        public static float EnemySizeWidth => k_EnemySizeWidth;
+
+        public static float EnemySizeHeight => k_EnemySizeHeight;
+
+        public static float MotherShipSpeed => k_MotherShipSpeed;
+
+        public static int MotherShipMaxTimeToNextAppearsInSec => k_MotherShipMaxTimeToNextAppearsInSec;
+
+        public static string EndGameText => k_EndGameText;
+
+        public static string EndGameCaption => k_EndGameCaption;
     }
 }
