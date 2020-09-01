@@ -60,56 +60,11 @@ namespace C20_Ex01_BarFrimet_313175176
         private const float k_MotherShipSpeed = 95;
         private const int k_MotherShipMaxTimeToNextAppearsInSec = 15;
 
-
-        public static string GameName => k_GameName;
-
-        public static int PreferredBackBufferWidth => k_PreferredBackBufferWidth;
-
-        public static int PreferredBackBufferHeight => k_PreferredBackBufferHeight;
-
-        public static int SpaceBetweenLife => k_SpaceBetweenLife;
-
-        public static float HorizontalSpaceBetweenEnemy => k_HorizontalSpaceBetweenEnemy;
-
-        public static float VerticalSpaceBetweenEnemy => k_VerticalSpaceBetweenEnemy;
-
-        public static float VerticalSpaceBetweenEnemyAndTopEdge => k_VerticalSpaceBetweenEnemyAndTopEdge;
-
-        public static int NumberOfEnemyInRow => k_NumberOfEnemyInRow;
-
-        public static int NumberOfEnemyInColumn => k_NumberOfEnemyInColumn;
-
-        public static float EnemyStartSpeedInSec => k_EnemyStartSpeedInSec;
-
-        public static float EnemyIncreaseSpeedInEach5Dead => k_EnemyIncreaseSpeedInEach5Dead;
-
-        public static float EnemyIncreaseSpeedGoingDown => k_EnemyIncreaseSpeedGoingDown;
-
-        public static int StartLifePositionWidth => k_StartLifePositionWidth;
-
-        public static int StartLifePositionHeight => k_StartLifePositionHeight;
-
-        public static float EnemySize => k_EnemySize;
-
-        public static int LifeSize => k_LifeSize;
-
         public static Color LifeTint => sr_LifeTint;
-
-        public static int BulletStartSpeedInSec => k_BulletStartSpeedInSec;
 
         public static Color EnemyBulletTint => sr_EnemyBulletTint;
 
         public static Color SpaceshipBulletTint => sr_SpaceshipBulletTint;
-
-        public static int SpaceshipMaxOfBullet => k_SpaceshipMaxOfBullet;
-
-        public static int NumberOfLifeToStart => k_NumberOfLifeToStart;
-
-        public static float EnemyMaxTimeForShoot => k_EnemyMaxTimeForShoot;
-
-        public static int EnemyArmyMaxOfBullet => k_EnemyArmyMaxOfBullet;
-
-        public static float SpaceshipSpeed => k_SpaceshipSpeed;
 
         public static Color SpaceshipTint => sr_SpaceshipTint;
 
@@ -121,7 +76,23 @@ namespace C20_Ex01_BarFrimet_313175176
 
         public static Color BackgroundTint => sr_BackgroundTint;
 
-        public static int NumberOfEnemyKilledToIncreaseSpeed => k_NumberOfEnemyKilledToIncreaseSpeed;
+        public static float HorizontalSpaceBetweenEnemy => k_HorizontalSpaceBetweenEnemy;
+
+        public static float VerticalSpaceBetweenEnemy => k_VerticalSpaceBetweenEnemy;
+
+        public static float VerticalSpaceBetweenEnemyAndTopEdge => k_VerticalSpaceBetweenEnemyAndTopEdge;
+
+        public static float EnemyStartSpeedInSec => k_EnemyStartSpeedInSec;
+
+        public static float EnemyIncreaseSpeedInEach5Dead => k_EnemyIncreaseSpeedInEach5Dead;
+
+        public static float EnemyIncreaseSpeedGoingDown => k_EnemyIncreaseSpeedGoingDown;
+
+        public static float EnemySize => k_EnemySize;
+
+        public static float EnemyMaxTimeForShoot => k_EnemyMaxTimeForShoot;
+
+        public static float SpaceshipSpeed => k_SpaceshipSpeed;
 
         public static float EnemySizeWidth => k_EnemySizeWidth;
 
@@ -129,7 +100,35 @@ namespace C20_Ex01_BarFrimet_313175176
 
         public static float MotherShipSpeed => k_MotherShipSpeed;
 
+        public static int PreferredBackBufferWidth => k_PreferredBackBufferWidth;
+
+        public static int PreferredBackBufferHeight => k_PreferredBackBufferHeight;
+
+        public static int SpaceBetweenLife => k_SpaceBetweenLife;
+
+        public static int NumberOfEnemyInRow => k_NumberOfEnemyInRow;
+
+        public static int NumberOfEnemyInColumn => k_NumberOfEnemyInColumn;
+
+        public static int EnemyArmyMaxOfBullet => k_EnemyArmyMaxOfBullet;
+
+        public static int StartLifePositionWidth => k_StartLifePositionWidth;
+
+        public static int StartLifePositionHeight => k_StartLifePositionHeight;
+
+        public static int LifeSize => k_LifeSize;
+
+        public static int BulletStartSpeedInSec => k_BulletStartSpeedInSec;
+
+        public static int SpaceshipMaxOfBullet => k_SpaceshipMaxOfBullet;
+
+        public static int NumberOfLifeToStart => k_NumberOfLifeToStart;
+
+        public static int NumberOfEnemyKilledToIncreaseSpeed => k_NumberOfEnemyKilledToIncreaseSpeed;
+
         public static int MotherShipMaxTimeToNextAppearsInSec => k_MotherShipMaxTimeToNextAppearsInSec;
+
+        public static string GameName => k_GameName;
 
         public static string EndGameText => k_EndGameText;
 

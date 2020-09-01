@@ -9,12 +9,11 @@ namespace C20_Ex01_BarFrimet_313175176
 {
     public class InputManager
     {
-        // Can make problems with the order of operations therefore needed 2 pointers
+        // Can make problems with the order of operations therefore needed 2 pointers for the 2 faction
         private MouseState m_PrevMouseStateToMove;
         private MouseState m_PrevMouseStateToShoot;
         private KeyboardState m_PrevKeyboardState;
         private KeyboardState m_PrevKeyboardStateToShoot;
-
 
         public Vector2 GetMousePositionDelta()
         {

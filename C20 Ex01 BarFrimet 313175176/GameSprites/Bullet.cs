@@ -12,7 +12,7 @@ namespace GameSprites
 {
     public class Bullet : Sprite
     {
-        private  Vector2 m_CurrentPosition;
+        private Vector2 m_CurrentPosition;
         private readonly eBulletType r_eBulletType;
         private readonly Color r_Tint;
 
@@ -46,8 +46,7 @@ namespace GameSprites
             Sprite spriteThatHit = getSpriteCollision();
 
             bulletHitSomething = deleteOrMoveBullet(i_GameTime, spriteThatHit);
-            if (bulletHitSomething)
-            {
+            if (bulletHitSomething){
                 switch (r_eBulletType)
                 {
                     case eBulletType.SpaceShipBullet:

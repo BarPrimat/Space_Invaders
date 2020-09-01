@@ -10,10 +10,10 @@ namespace C20_Ex01_BarFrimet_313175176
 {
     public class GameManager : DrawableGameComponent
     {
-        private static readonly List<Bullet> r_ListOfBullets = new List<Bullet>();
         private static LifeManager s_LifeManager;
         private static int s_CurrentScore = 0;
         private static int s_EnemyThatLeftToFinishGame;
+        private static readonly List<Bullet> sr_ListOfBullets = new List<Bullet>();
 
         public GameManager(Game i_Game) : base(i_Game)
         {
@@ -36,9 +36,9 @@ namespace C20_Ex01_BarFrimet_313175176
             i_Game.Exit();
         }
 
-        public static void UpdateScore(Sprite sprite)
+        public static void UpdateScore(Sprite i_Sprite)
         {
-            if (sprite is Spaceship)
+            if (i_Sprite is Spaceship)
             {
                 s_CurrentScore += (int) eScoreValue.LoseLife;
                 if(s_CurrentScore < 0)
@@ -48,12 +48,12 @@ namespace C20_Ex01_BarFrimet_313175176
 
                 s_LifeManager.RemoveOneLife();
             }
-            else if (sprite is Enemy)
+            else if (i_Sprite is Enemy)
             {
-                identifiesEnemyAndUpdateScore(sprite);
+                identifiesEnemyAndUpdateScore(i_Sprite);
                 s_EnemyThatLeftToFinishGame--;
             }
-            else if (sprite is MotherShip)
+            else if (i_Sprite is MotherShip)
             {
                 s_CurrentScore += (int) eScoreValue.MotherShip;
             }
@@ -61,23 +61,23 @@ namespace C20_Ex01_BarFrimet_313175176
 
         private static void identifiesEnemyAndUpdateScore(Sprite i_Sprite)
         {
-            if(i_Sprite is Enemy)
+            if (i_Sprite is Enemy)
             {
-                if(i_Sprite.Tint == Color.Pink)
+                if (i_Sprite.Tint == Color.Pink)
                 {
                     s_CurrentScore += (int) eScoreValue.PinkEnemy;
                 } 
-                else if(i_Sprite.Tint == Color.LightBlue)
+                else if (i_Sprite.Tint == Color.LightBlue)
                 {
                     s_CurrentScore += (int) eScoreValue.LightBlueEnemy;
                 }
-                else if(i_Sprite.Tint == Color.Yellow)
+                else if (i_Sprite.Tint == Color.Yellow)
                 {
                     s_CurrentScore += (int) eScoreValue.YellowEnemy;
                 }
             }
         }
 
-        public static List<Bullet> ListOfBullets => r_ListOfBullets;
+        public static List<Bullet> ListOfBullets => sr_ListOfBullets;
     }
 }

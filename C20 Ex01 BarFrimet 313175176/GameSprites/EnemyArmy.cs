@@ -28,7 +28,7 @@ namespace GameSprites
 
         public EnemyArmy(Game i_Game) : base(i_Game)
         {
-            r_EnemyArray = new Enemy[NumberOfEnemyInRow, NumberOfEnemyInColumn];
+            r_EnemyArray = new Enemy[GameDefinitions.NumberOfEnemyInRow, GameDefinitions.NumberOfEnemyInColumn];
             m_eDirectionMove = eDirectionMove.Right;
             r_Firearm = new Firearm(i_Game, EnemyArmyMaxOfBullet, eBulletType.EnemyBullet);
             r_Random = new Random();
@@ -116,7 +116,7 @@ namespace GameSprites
         {
             if (m_MoveStepDown)
             {
-                m_CurrentTopLeftY += EnemySizeWidth / 2;
+                m_CurrentTopLeftY += EnemySizeHeight / 2;
                 s_CurrentSpeed += EnemyIncreaseSpeedGoingDown;
                 m_MoveStepDown = false;
             }
@@ -137,8 +137,8 @@ namespace GameSprites
         {
             if(m_EnemyNextTimeToShoot <= m_TimeDeltaCounterToShoot)
             {
-                int randomizeEnemyRow = r_Random.Next(NumberOfEnemyInRow - 1);
-                int randomizeEnemyColumn = r_Random.Next(NumberOfEnemyInColumn - 1);
+                int randomizeEnemyRow = r_Random.Next(NumberOfEnemyInRow);
+                int randomizeEnemyColumn = r_Random.Next(NumberOfEnemyInColumn);
                 if (r_EnemyArray[randomizeEnemyRow, randomizeEnemyColumn].Visible)
                 {
                     r_Firearm.CreateNewBullet(r_EnemyArray[randomizeEnemyRow, randomizeEnemyColumn].Position);
@@ -151,7 +151,7 @@ namespace GameSprites
 
         private void checkAndChangeMoveDirection()
         {
-            if (PreferredBackBufferWidth <= getRightGroupBorder() + r_EnemyArray[0, 0].Texture.Width)
+            if (GraphicsDevice.Viewport.Width <= getRightGroupBorder() + r_EnemyArray[0, 0].Texture.Width)
             {
                 m_eDirectionMove = eDirectionMove.Left;
             }
@@ -160,7 +160,6 @@ namespace GameSprites
                 m_eDirectionMove = eDirectionMove.Right;
             }
         }
-
 
         private float getRightGroupBorder()
         {
@@ -208,18 +207,18 @@ namespace GameSprites
             Rectangle spaceShipRectangle = default;
             float spaceShipYPosition = 0;
 
+            // Find Spaceship sprite her for better efficiency
+            foreach (Sprite sprite in SpaceInvaders.ListOfSprites)
+            {
+                if (sprite is Spaceship)
+                {
+                    spaceShipRectangle = new Rectangle((int)sprite.Position.X, (int)sprite.Position.Y, sprite.Texture.Width, sprite.Texture.Height);
+                    spaceShipYPosition = sprite.Position.Y;
+                }
+            }
+
             if (m_CurrentTopLeftY + NumberOfEnemyInColumn * NumberOfEnemyInRow + spaceShipYPosition >= GraphicsDevice.Viewport.Height)
             {
-                // Find Spaceship sprite her for better efficiency
-                foreach (Sprite sprite in SpaceInvaders.ListOfSprites)
-                {
-                    if (sprite is Spaceship)
-                    {
-                        spaceShipRectangle = new Rectangle((int)sprite.Position.X, (int)sprite.Position.Y, sprite.Texture.Width, sprite.Texture.Height);
-                        spaceShipYPosition = sprite.Position.Y;
-                    }
-                }
-
                 bool findHit = false;
                 for (int row = NumberOfEnemyInRow - 1; row >= 0 && !findHit; row--)
                 {

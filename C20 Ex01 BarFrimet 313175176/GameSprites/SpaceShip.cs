@@ -19,8 +19,7 @@ namespace GameSprites
         private static float s_SpaceshipSpeed;
         private static int s_CounterOfSpaceShipBulletInAir = 0;
 
-        public Spaceship(Game i_Game, string i_TexturePath) 
-            : base (i_Game, i_TexturePath, SpaceshipTint)
+        public Spaceship(Game i_Game, string i_TexturePath) : base (i_Game, i_TexturePath, GameDefinitions.SpaceshipTint)
         {
             r_InputManager = new InputManager();
             r_Firearm = new Firearm(i_Game, SpaceshipMaxOfBullet, eBulletType.SpaceShipBullet);

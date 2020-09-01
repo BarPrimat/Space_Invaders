@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using C20_Ex01_BarFrimet_313175176;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using static C20_Ex01_BarFrimet_313175176.GameDefinitions;
-
 
 namespace GameSprites
 {
     public class LifeManager
     {
         private readonly Vector2 r_StartPosition;
-        private readonly List<Sprite> r_LifeArray;
+        private readonly List<Life> r_LifeArray;
         private readonly string r_TexturePath;
         private readonly Game r_Game;
         private int m_CounterOfLife;
@@ -20,8 +19,8 @@ namespace GameSprites
         public LifeManager(Game i_Game, string i_TexturePath, int i_CounterOfLife)
         {
             m_CounterOfLife = i_CounterOfLife;
-            r_StartPosition = new Vector2(StartLifePositionWidth - LifeSize, StartLifePositionHeight);
-            r_LifeArray = new List<Sprite>();
+            r_StartPosition = new Vector2(GameDefinitions.StartLifePositionWidth - GameDefinitions.LifeSize, GameDefinitions.StartLifePositionHeight);
+            r_LifeArray = new List<Life>();
             r_TexturePath = i_TexturePath;
             r_Game = i_Game;
             Initialize();
@@ -44,7 +43,7 @@ namespace GameSprites
             foreach (Life life in r_LifeArray)
             {
                 life.Position = new Vector2(currentXPosition, life.Position.Y);
-                currentXPosition -= SpaceBetweenLife;
+                currentXPosition -= GameDefinitions.SpaceBetweenLife;
             }
         }
 

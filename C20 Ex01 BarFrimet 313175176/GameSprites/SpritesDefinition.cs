@@ -15,8 +15,6 @@ namespace GameSprites
         private const string k_LifeAsset = @"Sprites\Ship01_32x32";
         private const string k_BulletAsset = @"Sprites\Bullet";
 
-
-
         public static string SpaceshipAsset => k_SpaceshipAsset;
 
         public static string BackgroundAsset => k_BackgroundAsset;

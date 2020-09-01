@@ -35,8 +35,8 @@ namespace C20_Ex01_BarFrimet_313175176
         protected override void Initialize()
         {
             base.Initialize();
-            this.r_Graphics.PreferredBackBufferWidth = PreferredBackBufferWidth;
-            this.r_Graphics.PreferredBackBufferHeight = PreferredBackBufferHeight;
+            this.r_Graphics.PreferredBackBufferWidth = GameDefinitions.PreferredBackBufferWidth;
+            this.r_Graphics.PreferredBackBufferHeight = GameDefinitions.PreferredBackBufferHeight;
             this.r_Graphics.ApplyChanges();
             Mouse.SetPosition((int)this.r_Spaceship.Position.X, GraphicsDevice.Viewport.Height);
             this.Window.Title = GameName;
