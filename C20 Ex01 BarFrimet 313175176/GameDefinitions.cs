@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework;
 
-namespace C20_Ex01_BarFrimet_313175176
+namespace SpaceInvaders
 {
     public class GameDefinitions
     {
@@ -11,8 +11,8 @@ namespace C20_Ex01_BarFrimet_313175176
         private const string k_GameName = "Space Invaders";
         private const string k_EndGameText = "Your score is: ";
         private const string k_EndGameCaption = "Game Over";
-        private const int k_PreferredBackBufferWidth = 700;
-        private const int k_PreferredBackBufferHeight = 500;
+        private const int k_PreferredBackBufferWidth = 750;
+        private const int k_PreferredBackBufferHeight = 550;
 
         // EnemyArmy definitions
         private const float k_HorizontalSpaceBetweenEnemy = 32 * 0.6f;
@@ -49,7 +49,7 @@ namespace C20_Ex01_BarFrimet_313175176
         public static readonly Color sr_SpaceshipBulletTint = Color.Red;
 
         // SpaceShip definitions
-        private const int k_SpaceshipMaxOfBullet = 100;
+        private const int k_SpaceshipMaxOfBullet = 2;
         private static readonly Color sr_SpaceshipTint = Color.White;
         private const float k_SpaceshipSpeed = 130;
 

@@ -1,13 +1,13 @@
 ﻿using System;
 
-namespace C20_Ex01_BarFrimet_313175176
+namespace SpaceInvaders
 {
     public static class Program
     {
         [STAThread]
         static void Main()
         {
-            using (var game = new SpaceInvaders())
+            using (var game = new SpaceInvadersGame())
                 game.Run();
         }
     }

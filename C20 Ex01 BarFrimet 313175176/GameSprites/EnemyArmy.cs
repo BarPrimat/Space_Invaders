@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using C20_Ex01_BarFrimet_313175176;
+using SpaceInvaders;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using static C20_Ex01_BarFrimet_313175176.GameDefinitions;
-using static C20_Ex01_BarFrimet_313175176.Enum;
+using static SpaceInvaders.GameDefinitions;
+using static SpaceInvaders.Enum;
 
 
 namespace GameSprites
@@ -208,7 +208,7 @@ namespace GameSprites
             float spaceShipYPosition = 0;
 
             // Find Spaceship sprite her for better efficiency
-            foreach (Sprite sprite in SpaceInvaders.ListOfSprites)
+            foreach (Sprite sprite in SpaceInvadersGame.ListOfSprites)
             {
                 if (sprite is Spaceship)
                 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
-using static C20_Ex01_BarFrimet_313175176.GameDefinitions;
+using static SpaceInvaders.GameDefinitions;
 
 namespace GameSprites
 {

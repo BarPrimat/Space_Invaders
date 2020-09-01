@@ -5,7 +5,7 @@ using GameSprites;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace C20_Ex01_BarFrimet_313175176
+namespace SpaceInvaders
 {
     public class InputManager
     {

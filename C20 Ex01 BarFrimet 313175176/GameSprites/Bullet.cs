@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using C20_Ex01_BarFrimet_313175176;
+using SpaceInvaders;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
-using static C20_Ex01_BarFrimet_313175176.GameDefinitions;
-using static C20_Ex01_BarFrimet_313175176.Enum;
+using static SpaceInvaders.GameDefinitions;
+using static SpaceInvaders.Enum;
 
 
 namespace GameSprites
@@ -23,7 +23,7 @@ namespace GameSprites
             r_eBulletType = i_eBulletType;
             this.Position = i_CurrentPosition;
             r_Tint = i_eBulletType == eBulletType.SpaceShipBullet ? SpaceshipBulletTint : EnemyBulletTint;
-            SpaceInvaders.ListOfSprites.Add(this);
+            SpaceInvadersGame.ListOfSprites.Add(this);
         }
 
         public override void Initialize()
@@ -64,7 +64,7 @@ namespace GameSprites
             Sprite spriteThatHit = null;
             Rectangle bulletRectangle = new Rectangle((int)this.Position.X, (int)this.Position.Y, this.Texture.Width, this.Texture.Height);
 
-            foreach (Sprite sprite in SpaceInvaders.ListOfSprites)
+            foreach (Sprite sprite in SpaceInvadersGame.ListOfSprites)
             {
                 // Check if spaceship is hit
                 bool isRival = (sprite is Spaceship && r_eBulletType == eBulletType.EnemyBullet);

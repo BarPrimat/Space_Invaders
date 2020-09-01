@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using C20_Ex01_BarFrimet_313175176;
+using SpaceInvaders;
 using Microsoft.Xna.Framework;
-using static C20_Ex01_BarFrimet_313175176.GameDefinitions;
+using static SpaceInvaders.GameDefinitions;
 
 namespace GameSprites
 {
@@ -17,7 +17,7 @@ namespace GameSprites
         {
             r_Random = new Random();
             m_RandomTimeToNextAppears = r_Random.Next(0, MotherShipMaxTimeToNextAppearsInSec);
-            SpaceInvaders.ListOfSprites.Add(this);
+            SpaceInvadersGame.ListOfSprites.Add(this);
         }
 
         public override void InitPosition()

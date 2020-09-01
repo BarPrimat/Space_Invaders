@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using C20_Ex01_BarFrimet_313175176;
+using SpaceInvaders;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -60,6 +60,9 @@ namespace GameSprites
             m_CounterOfLife--;
         }
 
+        /**
+         * Maybe in the future, we will want to add new life during the game
+         */
         public void AddOneLife()
         {
             r_LifeArray.Add(new Life(r_Game, r_TexturePath));

@@ -3,11 +3,11 @@ using GameSprites;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using static C20_Ex01_BarFrimet_313175176.GameDefinitions;
+using static SpaceInvaders.GameDefinitions;
 
-namespace C20_Ex01_BarFrimet_313175176
+namespace SpaceInvaders
 {
-    public class SpaceInvaders : Game
+    public class SpaceInvadersGame : Game
     {
         private readonly GraphicsDeviceManager r_Graphics;
 
@@ -19,7 +19,7 @@ namespace C20_Ex01_BarFrimet_313175176
         private readonly GameManager r_GameManager;
         private static readonly List<Sprite> sr_ListOfSprites = new List<Sprite>();
 
-        public SpaceInvaders()
+        public SpaceInvadersGame()
         {
             r_Graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";

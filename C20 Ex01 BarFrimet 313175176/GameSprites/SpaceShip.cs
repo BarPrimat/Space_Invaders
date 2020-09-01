@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using C20_Ex01_BarFrimet_313175176;
+using SpaceInvaders;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using static C20_Ex01_BarFrimet_313175176.GameDefinitions;
-using static C20_Ex01_BarFrimet_313175176.Enum;
+using static SpaceInvaders.GameDefinitions;
+using static SpaceInvaders.Enum;
 
 
 namespace GameSprites
@@ -24,7 +24,7 @@ namespace GameSprites
             r_InputManager = new InputManager();
             r_Firearm = new Firearm(i_Game, SpaceshipMaxOfBullet, eBulletType.SpaceShipBullet);
             s_SpaceshipSpeed = GameDefinitions.SpaceshipSpeed;
-            SpaceInvaders.ListOfSprites.Add(this);
+            SpaceInvadersGame.ListOfSprites.Add(this);
         }
 
         public override void InitPosition()

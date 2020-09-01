@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using GameSprites;
 using Microsoft.Xna.Framework;
-using static C20_Ex01_BarFrimet_313175176.Enum;
+using static SpaceInvaders.Enum;
 
 
-namespace C20_Ex01_BarFrimet_313175176
+namespace SpaceInvaders
 {
     public class GameManager : DrawableGameComponent
     {
@@ -40,7 +40,7 @@ namespace C20_Ex01_BarFrimet_313175176
         {
             if (i_Sprite is Spaceship)
             {
-                s_CurrentScore += (int) eScoreValue.LoseLife;
+                s_CurrentScore += (int) Enum.eScoreValue.LoseLife;
                 if(s_CurrentScore < 0)
                 {
                     s_CurrentScore = 0;
@@ -55,7 +55,7 @@ namespace C20_Ex01_BarFrimet_313175176
             }
             else if (i_Sprite is MotherShip)
             {
-                s_CurrentScore += (int) eScoreValue.MotherShip;
+                s_CurrentScore += (int) Enum.eScoreValue.MotherShip;
             }
         }
 
@@ -65,15 +65,15 @@ namespace C20_Ex01_BarFrimet_313175176
             {
                 if (i_Sprite.Tint == Color.Pink)
                 {
-                    s_CurrentScore += (int) eScoreValue.PinkEnemy;
+                    s_CurrentScore += (int) Enum.eScoreValue.PinkEnemy;
                 } 
                 else if (i_Sprite.Tint == Color.LightBlue)
                 {
-                    s_CurrentScore += (int) eScoreValue.LightBlueEnemy;
+                    s_CurrentScore += (int) Enum.eScoreValue.LightBlueEnemy;
                 }
                 else if (i_Sprite.Tint == Color.Yellow)
                 {
-                    s_CurrentScore += (int) eScoreValue.YellowEnemy;
+                    s_CurrentScore += (int) Enum.eScoreValue.YellowEnemy;
                 }
             }
         }
