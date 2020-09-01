@@ -12,8 +12,10 @@ namespace GameSprites
         protected Texture2D m_Texture;
         protected Vector2 m_Position;
         protected Color m_Tint;
-        protected SpriteBatch m_SpriteBatch;
         protected readonly string r_TexturePath;
+        // Needed to loading the SpriteBatch just one time
+        protected static SpriteBatch s_SpriteBatch; 
+        private bool m_FirstTimeLoad = true;
 
         public Sprite(Game i_Game, string i_TexturePath, Color i_Tint) : base(i_Game)
         {
@@ -42,8 +44,8 @@ namespace GameSprites
 
         public SpriteBatch SpriteBatch
         {
-            get => m_SpriteBatch;
-            set => m_SpriteBatch = value;
+            get => s_SpriteBatch;
+            set => s_SpriteBatch = value;
         }
 
         public string TexturePath
@@ -53,20 +55,26 @@ namespace GameSprites
 
         protected override void LoadContent()
         {
-            m_SpriteBatch = new SpriteBatch(GraphicsDevice);
+            // Needed to loading the SpriteBatch just one time
+            if (m_FirstTimeLoad)
+            {
+                s_SpriteBatch = new SpriteBatch(GraphicsDevice);
+                m_FirstTimeLoad = !m_FirstTimeLoad;
+            }
+
             m_Texture = this.Game.Content.Load<Texture2D>(r_TexturePath);
             this.InitPosition();
         }
 
         public override void Draw(GameTime i_GameTime)
         {
-            m_SpriteBatch.Begin();
+            s_SpriteBatch.Begin();
             if (this.Visible)
             {
-                this.SpriteBatch.Draw(m_Texture, m_Position, m_Tint);
+                s_SpriteBatch.Draw(m_Texture, m_Position, m_Tint);
             }
 
-            m_SpriteBatch.End();
+            s_SpriteBatch.End();
         }
 
         public void RemoveComponent()
