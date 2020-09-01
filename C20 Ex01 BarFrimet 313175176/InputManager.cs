@@ -9,17 +9,21 @@ namespace C20_Ex01_BarFrimet_313175176
 {
     public class InputManager
     {
-        private MouseState m_PrevMouseState;
+        // CCan make problems with the order of operations therefore needed 2 pointers
+        private MouseState m_PrevMouseStateToMove;
+        private MouseState m_PrevMouseStateToShoot;
         private KeyboardState m_PrevKeyboardState;
+        private KeyboardState m_PrevKeyboardStateToShoot;
+
 
         public Vector2 GetMousePositionDelta()
         {
             Vector2 retVal = Vector2.Zero;
             MouseState currentState = Mouse.GetState();
 
-            retVal.X = currentState.X - m_PrevMouseState.X;
-            retVal.Y = currentState.Y - m_PrevMouseState.Y;
-            m_PrevMouseState = currentState;
+            retVal.X = currentState.X - m_PrevMouseStateToMove.X;
+            retVal.Y = currentState.Y - m_PrevMouseStateToMove.Y;
+            m_PrevMouseStateToMove = currentState;
 
             return retVal;
         }
@@ -46,19 +50,13 @@ namespace C20_Ex01_BarFrimet_313175176
 
         public bool IsUserClickToShoot()
         {
-            KeyboardState currentKeyboardState = Keyboard.GetState();
             MouseState currentMouseState = Mouse.GetState();
-            bool isUserClickToShoot = false;
-         //   bool isUserClickToShoot = ((m_PrevKeyboardState.IsKeyDown(Keys.Enter) && currentKeyboardState.IsKeyDown(Keys.Enter))
-         //     || (m_PrevMouseState.LeftButton == ButtonState.Released && currentMouseState.LeftButton == ButtonState.Pressed));
-
-            if ((m_PrevKeyboardState.IsKeyDown(Keys.Enter) && currentKeyboardState.IsKeyDown(Keys.Enter))
-               || (m_PrevMouseState.LeftButton == ButtonState.Released && currentMouseState.LeftButton == ButtonState.Pressed))
-            {
-                isUserClickToShoot = !isUserClickToShoot;
-            }
-
-           m_PrevMouseState = currentMouseState;
+            KeyboardState currentKeyboardState = Keyboard.GetState();
+            bool isUserClickToShoot = ((m_PrevKeyboardStateToShoot.IsKeyDown(Keys.Enter) && currentKeyboardState.IsKeyUp(Keys.Enter)) 
+                                       || (m_PrevMouseStateToShoot.LeftButton == ButtonState.Released && currentMouseState.LeftButton == ButtonState.Pressed));
+            
+            m_PrevMouseStateToShoot = currentMouseState;
+            m_PrevKeyboardStateToShoot = currentKeyboardState;
 
             return isUserClickToShoot;
         }

@@ -9,7 +9,9 @@ namespace GameSprites
         private const string k_MotherSpaceShipAsset = @"Sprites\MotherShip_32x120";
         private const string k_SpaceshipAsset = @"Sprites\Ship01_32x32";
         private const string k_BackgroundAsset = @"Sprites\BG_Space01_1024x768";
-        private const string k_Enemy0101Asset = @"Sprites\Enemy0101_32x32";
+        private const string k_PinkEnemyAsset = @"Sprites\Enemy0101_32x32";
+        private const string k_BlueLightEnemyAsset = @"Sprites\Enemy0201_32x32";
+        private const string k_YellowEnemyAsset = @"Sprites\Enemy0301_32x32";
         private const string k_LifeAsset = @"Sprites\Ship01_32x32";
         private const string k_BulletAsset = @"Sprites\Bullet";
 
@@ -21,10 +23,14 @@ namespace GameSprites
 
         public static string MotherSpaceShipAsset => k_MotherSpaceShipAsset;
 
-        public static string Enemy0101Asset => k_Enemy0101Asset;
+        public static string PinkEnemyAsset => k_PinkEnemyAsset;
 
         public static string LifeAsset => k_LifeAsset;
 
         public static string BulletAsset => k_BulletAsset;
+
+        public static string BlueLightEnemyAsset => k_BlueLightEnemyAsset;
+
+        public static string YellowEnemyAsset => k_YellowEnemyAsset;
     }
 }

@@ -17,7 +17,7 @@ namespace C20_Ex01_BarFrimet_313175176
         private readonly EnemyArmy r_EnemyArmy;
         private readonly MotherShip r_MotherShip;
         private static GameManager s_GameManager;
-        private static readonly List<Sprite> r_ListOfSprites = new List<Sprite>();
+        private static readonly List<Sprite> sr_ListOfSprites = new List<Sprite>();
 
 
 
@@ -28,12 +28,12 @@ namespace C20_Ex01_BarFrimet_313175176
             this.IsMouseVisible = true;
             r_Background = new Background(this, SpritesDefinition.BackgroundAsset);
             r_Spaceship = new Spaceship(this, SpritesDefinition.SpaceshipAsset);
-            r_EnemyArmy = new EnemyArmy(this, SpritesDefinition.Enemy0101Asset);
+            r_EnemyArmy = new EnemyArmy(this);
             r_MotherShip = new MotherShip(this, SpritesDefinition.MotherSpaceShipAsset, Color.Red);
             s_GameManager = new GameManager(this);
         }
 
-        public static List<Sprite> ListOfSprites => r_ListOfSprites;
+        public static List<Sprite> ListOfSprites => sr_ListOfSprites;
 
         protected override void Initialize()
         {

@@ -9,16 +9,14 @@ namespace C20_Ex01_BarFrimet_313175176
     public class GameManager : DrawableGameComponent
     {
         private static readonly List<Bullet> r_ListBullets = new List<Bullet>();
-        private static int m_CurrentScore = 0;
-        private static int m_EnemyThatLeftToFinishGame;
-
-        private static LifeManager r_LifeManager;
-        private bool m_GameIsFinish = false;
+        private static int s_CurrentScore = 0;
+        private static int s_EnemyThatLeftToFinishGame;
+        private static LifeManager s_LifeManager;
 
         public GameManager(Game i_Game) : base(i_Game)
         {
-            r_LifeManager = new LifeManager(i_Game, SpritesDefinition.LifeAsset, GameDefinitions.NumberOfLifeToStart);
-            m_EnemyThatLeftToFinishGame = GameDefinitions.NumberOfEnemyInColumn * GameDefinitions.NumberOfEnemyInRow;
+            s_LifeManager = new LifeManager(i_Game, SpritesDefinition.LifeAsset, GameDefinitions.NumberOfLifeToStart);
+            s_EnemyThatLeftToFinishGame = GameDefinitions.NumberOfEnemyInColumn * GameDefinitions.NumberOfEnemyInRow;
             i_Game.Components.Add(this);
         }
 
@@ -29,7 +27,7 @@ namespace C20_Ex01_BarFrimet_313175176
 
         public override void Update(GameTime i_GameTime)
         {
-            if (m_EnemyThatLeftToFinishGame == 0 || r_LifeManager.IsNoMoreLifeRemains())
+            if (s_EnemyThatLeftToFinishGame == 0 || s_LifeManager.IsNoMoreLifeRemains())
             {
                 ShowScoreAndEndGame(Game);
             }
@@ -39,22 +37,22 @@ namespace C20_Ex01_BarFrimet_313175176
         {
             if(sprite is Spaceship)
             {
-                m_CurrentScore += (int) Enum.eScoreValue.LoseLife;
-                if(m_CurrentScore < 0)
+                s_CurrentScore += (int) Enum.eScoreValue.LoseLife;
+                if(s_CurrentScore < 0)
                 {
-                    m_CurrentScore = 0;
+                    s_CurrentScore = 0;
                 }
 
-                r_LifeManager.RemoveOneLife();
+                s_LifeManager.RemoveOneLife();
             }
             else if(sprite is Enemy)
             {
                 identifiesEnemyAndUpdateScore(sprite);
-                m_EnemyThatLeftToFinishGame--;
+                s_EnemyThatLeftToFinishGame--;
             }
             else if (sprite is MotherShip)
             {
-                m_CurrentScore += (int)Enum.eScoreValue.MotherShip;
+                s_CurrentScore += (int)Enum.eScoreValue.MotherShip;
             }
         }
 
@@ -62,7 +60,7 @@ namespace C20_Ex01_BarFrimet_313175176
         {
             System.Windows.Forms.MessageBox.Show(string.Format(@"
 Game Over
-Youre score is: {0}", m_CurrentScore));
+Youre score is: {0}", s_CurrentScore));
             i_Game.Exit();
         }
 
@@ -72,15 +70,15 @@ Youre score is: {0}", m_CurrentScore));
             {
                 if(i_Sprite.Tint == Color.Pink)
                 {
-                    m_CurrentScore += (int)Enum.eScoreValue.PinkEnemy;
+                    s_CurrentScore += (int)Enum.eScoreValue.PinkEnemy;
                 } 
                 else if(i_Sprite.Tint == Color.LightBlue)
                 {
-                    m_CurrentScore += (int)Enum.eScoreValue.LightBlueEnemy;
+                    s_CurrentScore += (int)Enum.eScoreValue.LightBlueEnemy;
                 }
                 else if(i_Sprite.Tint == Color.Yellow)
                 {
-                    m_CurrentScore += (int)Enum.eScoreValue.YellowEnemy;
+                    s_CurrentScore += (int)Enum.eScoreValue.YellowEnemy;
                 }
             }
         }

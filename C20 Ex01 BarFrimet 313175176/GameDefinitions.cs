@@ -19,7 +19,6 @@ namespace C20_Ex01_BarFrimet_313175176
         private const float k_EnemySize = 32;
         private const int k_NumberOfEnemyInRow = 5;
         private const int k_NumberOfEnemyInColumn = 9;
-        public static readonly Color sr_EnemyArmyTint = Color.White;
         private const float k_TimeUntilNextStepInSec = 0.5f;
         private const float k_VerticalJumpInEachStep = k_EnemySize / 2;
         private const float k_EnemyStartSpeedInSec = 60;
@@ -28,10 +27,15 @@ namespace C20_Ex01_BarFrimet_313175176
         private const float k_EnemyMaxTimeForShoot = 3;
         private const int k_EnemyArmyMaxOfBullet = 5;
 
+        // Enemy definitions
+        private static readonly Color sr_EnemyPinkTint = Color.Pink;
+        private static readonly Color sr_EnemyLightBlueTint = Color.LightBlue;
+        private static readonly Color sr_EnemyYellowTint = Color.Yellow;
+
 
         // Life definitions
         private const int k_SpaceBetweenLife = 32;
-        private const int k_StartLifePositionWidth = 1024;
+        private const int k_StartLifePositionWidth = k_PreferredBackBufferWidth;
         private const int k_StartLifePositionHeight = 32;
         private const int k_LifeSize = 32;
         private const int k_NumberOfLifeToStart = 3;
@@ -43,7 +47,9 @@ namespace C20_Ex01_BarFrimet_313175176
         public static readonly Color sr_SpaceshipBulletTint = Color.Red;
 
         // SpaceShip definitions
-        private const int k_SpaceshipMaxOfBullet = 1000;
+        private const int k_SpaceshipMaxOfBullet = 2;
+        private static readonly Color s_SpaceshipTint = Color.White;
+        private const float k_SpaceshipSpeed = 130;
 
 
 
@@ -73,7 +79,6 @@ namespace C20_Ex01_BarFrimet_313175176
 
         public static int NumberOfEnemyInColumn => k_NumberOfEnemyInColumn;
 
-        public static Color EnemyArmyTint => sr_EnemyArmyTint;
 
         public static float TimeUntilNextStepInSec => k_TimeUntilNextStepInSec;
 
@@ -108,5 +113,15 @@ namespace C20_Ex01_BarFrimet_313175176
         public static float EnemyMaxTimeForShoot => k_EnemyMaxTimeForShoot;
 
         public static int EnemyArmyMaxOfBullet => k_EnemyArmyMaxOfBullet;
+
+        public static float SpaceshipSpeed => k_SpaceshipSpeed;
+
+        public static Color SpaceshipTint => s_SpaceshipTint;
+
+        public static Color EnemyPinkTint => sr_EnemyPinkTint;
+
+        public static Color EnemyLightBlueTint => sr_EnemyLightBlueTint;
+
+        public static Color EnemyYellowTint => sr_EnemyYellowTint;
     }
 }

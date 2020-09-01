@@ -9,18 +9,14 @@ namespace GameSprites
 {
     public class Enemy : Sprite
     {
-        private readonly Vector2 r_Position;
-
-        public Enemy(Game i_Game, string i_TexturePath, Color i_Tint, Vector2 i_Position) 
+        public Enemy(Game i_Game, string i_TexturePath, Color i_Tint) 
             : base(i_Game, i_TexturePath, i_Tint)
         {
-            r_Position = i_Position;
             SpaceInvaders.ListOfSprites.Add(this);
         }
 
         public override void InitPosition()
         {
-            this.Position = r_Position;
         }
 
         public override void Update(GameTime i_GameTime)

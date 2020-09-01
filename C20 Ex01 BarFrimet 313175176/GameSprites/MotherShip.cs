@@ -10,7 +10,7 @@ namespace GameSprites
     {
         private const float k_MotherShipSpeed = 95;
         private int m_RandomToNextAppears;
-        private Random r_Random;
+        private readonly Random r_Random;
         private float m_TimeDeltaCounter = 0;
 
         public MotherShip(Game i_Game, string i_TexturePath, Color i_Tint) : base(i_Game, i_TexturePath, i_Tint)

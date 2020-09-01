@@ -57,10 +57,10 @@ namespace GameSprites
                 switch (m_eBulletType)
                 {
                     case Enum.eBulletType.SpaceShipBullet:
-                        Spaceship.NumberOfSpaceShipBulletInAir--;
+                        Spaceship.CounterOfSpaceShipBulletInAir--;
                         break;
                     case Enum.eBulletType.EnemyBullet:
-                        EnemyArmy.NumberOfEnemyBulletInAir--;
+                        EnemyArmy.CounterOfEnemyBulletInAir--;
                         break;
                 }
             }
@@ -99,6 +99,7 @@ namespace GameSprites
             {
                 // Some enemy was hit
                 i_SpriteWosHit.RemoveComponent();
+                EnemyArmy.AddEnemyKilledByOne();
             }
 
             GameManager.UpdateScore(i_SpriteWosHit);

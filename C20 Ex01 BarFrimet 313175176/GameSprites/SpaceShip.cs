@@ -14,27 +14,26 @@ namespace GameSprites
 {
     public class Spaceship : Sprite
     {
-        private static readonly Color sr_SpaceshipTint = Color.White;
-        private const float k_SpaceshipSpeed = 130;
+        private static float s_SpaceshipSpeed;
         private readonly InputManager r_InputManager;
-
-        private static int m_NumberOfSpaceShipBulletInAir = 0;
+        private static int s_CounterOfSpaceShipBulletInAir = 0;
         private readonly Firearm r_Firearm;
 
         public Spaceship(Game i_Game, string i_TexturePath) 
-            : base (i_Game, i_TexturePath, sr_SpaceshipTint)
+            : base (i_Game, i_TexturePath, SpaceshipTint)
         {
             r_InputManager = new InputManager();
             r_Firearm = new Firearm(i_Game, SpaceshipMaxOfBullet, Enum.eBulletType.SpaceShipBullet);
+            s_SpaceshipSpeed = SpaceshipSpeed;
             SpaceInvaders.ListOfSprites.Add(this);
         }
 
-        public static float SpaceshipSpeed => k_SpaceshipSpeed;
+        public static float SpaceshipSpeed => s_SpaceshipSpeed;
 
-        public static int NumberOfSpaceShipBulletInAir
+        public static int CounterOfSpaceShipBulletInAir
         {
-            get => m_NumberOfSpaceShipBulletInAir;
-            set => m_NumberOfSpaceShipBulletInAir = value;
+            get => s_CounterOfSpaceShipBulletInAir;
+            set => s_CounterOfSpaceShipBulletInAir = value;
         }
 
         public override void InitPosition()
@@ -55,7 +54,7 @@ namespace GameSprites
         public override void Update(GameTime i_GameTime)
         {
             moveSpaceship(i_GameTime);
-            if(r_InputManager.IsUserClickToShoot())
+            if (r_InputManager.IsUserClickToShoot())
             {
                 tryToShoot(i_GameTime);
             }
@@ -64,8 +63,6 @@ namespace GameSprites
         private void tryToShoot(GameTime i_GameTime)
         {
             r_Firearm.CreateNewBullet(new Vector2(this.Position.X + Texture.Width / 2, this.Position.Y));
-            r_Firearm.Update(i_GameTime);
-            //r_Firearm.Draw(i_GameTime, i_SpriteBatch);
         }
 
         private void moveSpaceship(GameTime i_GameTime)

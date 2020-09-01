@@ -19,15 +19,12 @@ namespace GameSprites
         private const int k_NumberOfEnemyInRow = 5;
         private const int k_NumberOfEnemyInColumn = 9;
         private static readonly Color sr_EnemyArmyTint = Color.LightBlue;
-        // private const float k_HorizontalJumpInEachStep = ;
-        private const float k_VerticalJumpInEachStep = k_EnemySize / 2;
         private const float k_EnemyStartSpeedInSec = 60;
+        private const float k_NumberOfEnemyKilledToIncreaseSpeed = 5;
         private const float k_EnemyIncreaseSpeedInEach5Dead = 0.03f;
         private const float k_EnemyIncreaseSpeedGoingDown = 0.06f;
 
         private readonly Enemy[,] r_EnemyArray;
-        private readonly string r_TexturePath;
-        private float m_TimeDeltaCounterToMove = 0;
         private float m_CurrentTopLeftX;
         private float m_CurrentTopLeftY;
         private static float s_CurrentSpeed = 1;
@@ -38,13 +35,12 @@ namespace GameSprites
         private float m_TimeDeltaCounterToShoot;
         private readonly Random r_Random;
         private float m_EnemyNextTimeToShoot;
-        private static int s_NumberOfEnemyBulletInAir = 0;
-        private static int m_EnemyKilledCounter = 0;
+        private static int s_CounterOfEnemyBulletInAir = 0;
+        private static int s_EnemyKilledCounter = 0;
 
-        public EnemyArmy(Game i_Game, string i_TexturePath) : base(i_Game)
+        public EnemyArmy(Game i_Game) : base(i_Game)
         {
             r_EnemyArray = new Enemy[k_NumberOfEnemyInRow, k_NumberOfEnemyInColumn];
-            r_TexturePath = i_TexturePath;
             m_eDirectionMove = Enum.eDirectionMove.Right;
             r_Firearm = new Firearm(i_Game, EnemyArmyMaxOfBullet, Enum.eBulletType.EnemyBullet);
             r_Random = new Random();
@@ -52,10 +48,10 @@ namespace GameSprites
             i_Game.Components.Add(this);
         }
 
-        public static int NumberOfEnemyBulletInAir
+        public static int CounterOfEnemyBulletInAir
         {
-            get => s_NumberOfEnemyBulletInAir;
-            set => s_NumberOfEnemyBulletInAir = value;
+            get => s_CounterOfEnemyBulletInAir;
+            set => s_CounterOfEnemyBulletInAir = value;
         }
 
         public override void Initialize()
@@ -81,7 +77,8 @@ namespace GameSprites
 
                     if (m_FirstTimeSetup)
                     {
-                        r_EnemyArray[i, j] = new Enemy(Game, r_TexturePath, sr_EnemyArmyTint, position);
+                        // First time creating the Army
+                        initEnemyArmy(i, j);
                     }
 
                     r_EnemyArray[i, j].Position = position;
@@ -91,6 +88,33 @@ namespace GameSprites
                 yPosition -= k_VerticalSpaceBetweenEnemy + k_EnemySize;
                 xPosition = tempCurrentXPosition;
             }
+        }
+
+        private void initEnemyArmy(int i_Row, int i_Column)
+        {
+            string texturePath = null;
+            Color colorAsset = Color.White;
+
+            // The number represent the line number
+            switch (i_Row)
+            {
+                case 0:
+                case 1:
+                    texturePath = SpritesDefinition.YellowEnemyAsset;
+                    colorAsset = GameDefinitions.EnemyYellowTint;
+                    break;
+                case 2:
+                case 3:
+                    texturePath = SpritesDefinition.BlueLightEnemyAsset;
+                    colorAsset = GameDefinitions.EnemyLightBlueTint;
+                    break;
+                case 4:
+                    texturePath = SpritesDefinition.PinkEnemyAsset;
+                    colorAsset = GameDefinitions.EnemyPinkTint;
+                    break;
+            }
+
+            r_EnemyArray[i_Row, i_Column] = new Enemy(Game, texturePath, colorAsset);
         }
 
         public override void Update(GameTime i_GameTime)
@@ -254,10 +278,18 @@ namespace GameSprites
             return isEnemyHitSomething;
         }
 
-        public static void increaseSpeedIfEnemyKilled()
+        private static void increaseSpeedIfEnemyKilled()
         {
-
+            if(s_EnemyKilledCounter % k_NumberOfEnemyKilledToIncreaseSpeed == 0)
+            {
+                s_CurrentSpeed += k_EnemyIncreaseSpeedInEach5Dead;
+            }
         }
 
+        public static void AddEnemyKilledByOne()
+        {
+            s_EnemyKilledCounter++;
+            increaseSpeedIfEnemyKilled();
+        }
     }
 }
