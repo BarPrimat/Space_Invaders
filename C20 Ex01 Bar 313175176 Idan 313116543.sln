@@ -7,7 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Space Invaders Game", "C20 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AD3CDB74-CF6F-4B89-8FB2-C94F8336F5A2}"
 	ProjectSection(SolutionItems) = preProject
-		C20 Ex01 BarFrimet 313175176\GameSprites\Background.cs = C20 Ex01 BarFrimet 313175176\GameSprites\Background.cs
 		Ex01 Checking Report.txt = Ex01 Checking Report.txt
 	EndProjectSection
 EndProject
