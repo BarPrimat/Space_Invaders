@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using static SpaceInvaders.GameDefinitions;
 using static SpaceInvaders.Enum;
-
+//using Sprite = Infrastructure.ObjectModel.Sprite;
 
 namespace GameSprites
 {
@@ -19,11 +19,13 @@ namespace GameSprites
         private float m_CurrentTopLeftY;
         private float m_TimeDeltaCounterToShoot;
         private float m_EnemyNextTimeToShoot;
+        private float m_TimeDeltaCounterToMove;
+
         private bool m_FirstTimeSetup = true;
         private bool m_MoveStepDown = false;
         private eDirectionMove m_eDirectionMove;
+        private int m_CounterOfEnemyBulletInAir = 0;
         private static float s_CurrentSpeed = 1;
-        private static int s_CounterOfEnemyBulletInAir = 0;
         private static int s_EnemyKilledCounter = 0;
 
         public EnemyArmy(Game i_Game) : base(i_Game)
@@ -101,35 +103,53 @@ namespace GameSprites
 
         public override void Update(GameTime i_GameTime)
         {
+            m_TimeDeltaCounterToMove += (float)i_GameTime.ElapsedGameTime.TotalSeconds;
             m_TimeDeltaCounterToShoot += (float)i_GameTime.ElapsedGameTime.TotalSeconds;
             enemyArmyMove(i_GameTime);
             enemyArmyTryToShoot();
-            checkAndChangeMoveDirection();
+            // checkAndChangeMoveDirection();
             InitPosition();
-            if(isEnemyHitFloorOrSpaceShip())
+            if(isEnemyReachSpaceShipHeight())
             {
-                GameManager.ShowScoreAndEndGame(Game);
+                //GameManager.ShowScoreAndEndGame(Game);
             }
         }
 
         private void enemyArmyMove(GameTime i_GameTime)
         {
-            if (m_MoveStepDown)
+            if (m_TimeDeltaCounterToMove >= TimeBetweenJumpsInSec)
             {
-                m_CurrentTopLeftY += EnemyStepDown;
-                s_CurrentSpeed += EnemyIncreaseSpeedGoingDown;
-                m_MoveStepDown = false;
-            }
-            else
-            {
-                float newMoveToAdd = (float)i_GameTime.ElapsedGameTime.TotalSeconds * EnemyStartSpeedInSec * s_CurrentSpeed;
-                float rightGroupBorder = getRightGroupBorder();
-                float leftGroupBorder = getLeftGroupBorder();
+                if (m_MoveStepDown)
+                {
+                    m_CurrentTopLeftY += EnemyStepDown;
+                    s_CurrentSpeed += EnemyIncreaseSpeedGoingDown;
+                    m_MoveStepDown = false;
+                }
+                else
+                {
+                    float newMoveToAdd = EnemyStartSpeedInSec * TimeBetweenJumpsInSec * s_CurrentSpeed;
+                    float rightGroupBorder = getRightGroupBorder();
+                    float leftGroupBorder = getLeftGroupBorder();
 
-                m_MoveStepDown = (PreferredBackBufferWidth < rightGroupBorder + EnemySizeWidth && m_eDirectionMove == eDirectionMove.Right)
-                                 || (leftGroupBorder - EnemySizeHeight < 0 && m_eDirectionMove == eDirectionMove.Left);
+                    if (!m_MoveStepDown && (PreferredBackBufferWidth <= rightGroupBorder + Math.Max(EnemySizeWidth, newMoveToAdd)) && m_eDirectionMove == eDirectionMove.Right)
+                    {
+                        newMoveToAdd = PreferredBackBufferWidth - rightGroupBorder;
+                      //  m_MoveStepDown = true;
+                    }
+                    else if (!m_MoveStepDown && (leftGroupBorder - Math.Max(EnemySizeWidth, newMoveToAdd) <= 0) && m_eDirectionMove == eDirectionMove.Left)
+                    {
+                        newMoveToAdd = leftGroupBorder;
+                       //  m_MoveStepDown = true;
+                    }
 
-                m_CurrentTopLeftX += m_eDirectionMove == eDirectionMove.Right ? newMoveToAdd * 1 : newMoveToAdd * -1;
+                    m_MoveStepDown = (PreferredBackBufferWidth < rightGroupBorder + EnemySizeWidth && m_eDirectionMove == eDirectionMove.Right)
+                                     || (leftGroupBorder - EnemySizeHeight < 0 && m_eDirectionMove == eDirectionMove.Left);
+
+                    m_CurrentTopLeftX += m_eDirectionMove == eDirectionMove.Right ? newMoveToAdd * 1 : newMoveToAdd * -1;
+                    checkAndChangeMoveDirection();
+                }
+
+                m_TimeDeltaCounterToMove -= TimeBetweenJumpsInSec;
             }
         }
 
@@ -141,7 +161,7 @@ namespace GameSprites
                 int randomizeEnemyColumn = r_Random.Next(NumberOfEnemyInColumn);
                 if (r_EnemyArray[randomizeEnemyRow, randomizeEnemyColumn].Visible)
                 {
-                    r_Firearm.CreateNewBullet(r_EnemyArray[randomizeEnemyRow, randomizeEnemyColumn].Position);
+                    r_Firearm.CreateNewBullet(r_EnemyArray[randomizeEnemyRow, randomizeEnemyColumn].Position, ref m_CounterOfEnemyBulletInAir);
                 }
 
                 m_EnemyNextTimeToShoot = r_Random.Next((int)GameDefinitions.EnemyMaxTimeForShoot);
@@ -163,10 +183,30 @@ namespace GameSprites
 
         private float getRightGroupBorder()
         {
-            float leftBorderXPosition = 0;
+            float rightBorderXPosition = 0;
             bool isFound = false;
 
             for (int column = NumberOfEnemyInColumn - 1; column >= 0 && !isFound; column--)
+            {
+                for (int row = 0; row < NumberOfEnemyInRow; row++)
+                {
+                    if (r_EnemyArray[row, column].Visible)
+                    {
+                        rightBorderXPosition = r_EnemyArray[row, column].Position.X + r_EnemyArray[row, column].Texture.Width;
+                        isFound = true;
+                    }
+                }
+            }
+
+            return rightBorderXPosition;
+        }
+
+        private float getLeftGroupBorder()
+        {
+            float leftBorderXPosition = 0;
+            bool isFound = false;
+
+            for (int column = 0; column < NumberOfEnemyInColumn && !isFound; column++)
             {
                 for (int row = 0; row < NumberOfEnemyInRow; row++)
                 {
@@ -181,38 +221,18 @@ namespace GameSprites
             return leftBorderXPosition;
         }
 
-        private float getLeftGroupBorder()
-        {
-            float leftBorderXPosition = 0;
-            bool isFound = false;
-
-            for (int column = 0; column < NumberOfEnemyInColumn && !isFound; column++)
-            {
-                for (int row = 0; row < NumberOfEnemyInRow; row++)
-                {
-                    if (r_EnemyArray[row, column].Visible)
-                    {
-                        leftBorderXPosition = r_EnemyArray[row, column].Position.X + r_EnemyArray[row, column].Texture.Width;
-                        isFound = true;
-                    }
-                }
-            }
-
-            return leftBorderXPosition;
-        }
-
-        private bool isEnemyHitFloorOrSpaceShip()
+        private bool isEnemyReachSpaceShipHeight()
         {
             bool isEnemyHitWasSomething = false;
             Rectangle spaceShipRectangle = default;
             float spaceShipYPosition = 0;
+            bool findHit = false;
 
             // Find Spaceship sprite her for better efficiency
             foreach (Sprite sprite in SpaceInvadersGame.ListOfSprites)
             {
                 if (sprite is Spaceship)
                 {
-                    spaceShipRectangle = new Rectangle((int)sprite.Position.X, (int)sprite.Position.Y, sprite.Texture.Width, sprite.Texture.Height);
                     spaceShipYPosition = sprite.Position.Y;
                 }
             }
@@ -220,24 +240,22 @@ namespace GameSprites
             // No need to enter the loop is the enemy army can not hit nothing
             if (m_CurrentTopLeftY + NumberOfEnemyInColumn * NumberOfEnemyInRow + spaceShipYPosition >= GraphicsDevice.Viewport.Height)
             {
-                bool findHit = false;
                 for (int row = NumberOfEnemyInRow - 1; row >= 0 && !findHit; row--)
                 {
-                    for(int column = 0; column < NumberOfEnemyInColumn; column++)
+                    for(int column = 0; column < NumberOfEnemyInColumn && !findHit; column++)
                     {
-                        if(isEnemyHitWasSomething = isEnemyHitSomething(row, column, spaceShipRectangle))
+                        if (r_EnemyArray[row, column].Visible && (r_EnemyArray[row, column].Position.Y + r_EnemyArray[row, column].Texture.Height >= spaceShipYPosition))
                         {
                             findHit = !findHit;
-                            break;
                         }
                     }
                 }
             }
 
-            return isEnemyHitWasSomething;
+            return findHit;
         }
 
-        private bool isEnemyHitSomething(int i_Row, int i_Column, Rectangle i_SpaceShipRectangle)
+        private bool isEnemyHitSomething(int i_Row, int i_Column)
         {
             bool isEnemyHitSomething = false;
 
@@ -245,15 +263,6 @@ namespace GameSprites
                 if (r_EnemyArray[i_Row, i_Column].Position.Y + r_EnemyArray[i_Row, i_Column].Texture.Height >= GraphicsDevice.Viewport.Height)
                 {
                     isEnemyHitSomething = !isEnemyHitSomething;
-                }
-                else
-                {
-                    Rectangle enemyRectangle = new Rectangle((int)r_EnemyArray[i_Row, i_Column].Position.X, (int)r_EnemyArray[i_Row, i_Column].Position.Y, r_EnemyArray[i_Row, i_Column].Texture.Width, r_EnemyArray[i_Row, i_Column].Texture.Height);
-
-                    if (i_SpaceShipRectangle.Intersects(enemyRectangle))
-                    {
-                        isEnemyHitSomething = !isEnemyHitSomething;
-                    }
                 }
             }
 
@@ -272,12 +281,6 @@ namespace GameSprites
         {
             s_EnemyKilledCounter++;
             increaseSpeedIfEnemyKilled();
-        }
-
-        public static int CounterOfEnemyBulletInAir
-        {
-            get => s_CounterOfEnemyBulletInAir;
-            set => s_CounterOfEnemyBulletInAir = value;
         }
     }
 }

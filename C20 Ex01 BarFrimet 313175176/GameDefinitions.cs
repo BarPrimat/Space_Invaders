@@ -9,7 +9,8 @@ namespace SpaceInvaders
     {
         // Game setup definitions
         private const string k_GameName = "Space Invaders";
-        private const string k_EndGameText = "Your score is: ";
+        private const string k_EndGameText1Player = "Your score is: ";
+        private const string k_EndGameTextMoreThen1Player = "The score is: ";
         private const string k_EndGameCaption = "Game Over";
         private const int k_PreferredBackBufferWidth = 750;
         private const int k_PreferredBackBufferHeight = 550;
@@ -23,9 +24,11 @@ namespace SpaceInvaders
         private const float k_EnemyIncreaseSpeedEveryXDead = 0.03f;
         private const float k_EnemyIncreaseSpeedGoingDown = 0.06f;
         private const float k_EnemyMaxTimeForShoot = 3;
+        private const float k_NumberOfJumpInSec = 2;
+        private const float k_TimeBetweenJumpsInSec = 1 / k_NumberOfJumpInSec;
         private const int k_NumberOfEnemyInRow = 5;
         private const int k_NumberOfEnemyInColumn = 9;
-        private const int k_EnemyArmyMaxOfBullet = 5;
+        private const int k_EnemyArmyMaxOfBullet = 400;
         private const int k_NumberOfEnemyKilledToIncreaseSpeed = 5;
 
         // Enemy definitions
@@ -42,6 +45,7 @@ namespace SpaceInvaders
         private const int k_StartLifePositionHeight = 32;
         private const int k_LifeSize = 32;
         private const int k_NumberOfLifeToStart = 3;
+        private const float k_Opacity = 0.5f;
         private static readonly Color sr_LifeTint = Color.White;
 
         // Bullet definitions
@@ -131,10 +135,18 @@ namespace SpaceInvaders
 
         public static string GameName => k_GameName;
 
-        public static string EndGameText => k_EndGameText;
+        public static string EndGameText1Player => k_EndGameText1Player;
 
         public static string EndGameCaption => k_EndGameCaption;
 
         public static float EnemyStepDown => k_EnemyStepDown;
+
+        public static float NumberOfJumpInSec => k_NumberOfJumpInSec;
+
+        public static float TimeBetweenJumpsInSec => k_TimeBetweenJumpsInSec;
+
+        public static string EndGameTextMoreThen1Player => k_EndGameTextMoreThen1Player;
+
+        public static float Opacity => k_Opacity;
     }
 }

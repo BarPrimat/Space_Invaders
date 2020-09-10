@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Infrastructure.ServiceInterfaces;
 using SpaceInvaders;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -16,25 +17,27 @@ namespace GameSprites
     {
         private readonly InputManager r_InputManager;
         private readonly Firearm r_Firearm;
-        private static float s_SpaceshipSpeed;
-        private static int s_CounterOfSpaceShipBulletInAir = 0;
+        private float m_SpaceshipSpeed;
+        private int m_CounterOfSpaceShipBulletInAir = 0;
+        private int m_NumberOfTheSpaceship;
 
-        public Spaceship(Game i_Game, string i_TexturePath) : base (i_Game, i_TexturePath, GameDefinitions.SpaceshipTint)
+        public Spaceship(Game i_Game, string i_TexturePath, int i_NumberOfTheSpaceship) : base (i_Game, i_TexturePath, GameDefinitions.SpaceshipTint)
         {
+            // this.TintColor = GameDefinitions.SpaceshipTint;
             r_InputManager = new InputManager();
             r_Firearm = new Firearm(i_Game, SpaceshipMaxOfBullet, eBulletType.SpaceShipBullet);
-            s_SpaceshipSpeed = GameDefinitions.SpaceshipSpeed;
+            m_SpaceshipSpeed = GameDefinitions.SpaceshipSpeed;
+            m_NumberOfTheSpaceship = i_NumberOfTheSpaceship;
             SpaceInvadersGame.ListOfSprites.Add(this);
         }
 
         public override void InitPosition()
         {
             // Init the ship position
-            float x = (float) PreferredBackBufferWidth;
+            float x = m_NumberOfTheSpaceship * this.Texture.Width;
             float y = (float) PreferredBackBufferHeight;
 
             // Offset:
-            x -= this.Texture.Width;
             y -= this.Texture.Height;
 
             // Put it a little bit higher:
@@ -53,13 +56,13 @@ namespace GameSprites
 
         private void tryToShoot(GameTime i_GameTime)
         {
-            r_Firearm.CreateNewBullet(new Vector2(this.Position.X + Texture.Width / 2, this.Position.Y));
+            r_Firearm.CreateNewBullet(new Vector2(this.Position.X + Texture.Width / 2, this.Position.Y), ref m_CounterOfSpaceShipBulletInAir);
         }
 
         private void moveSpaceship(GameTime i_GameTime)
         {
             float maxBoundaryWithoutOffset = GraphicsDevice.Viewport.Width - Texture.Width;
-            float keyboardNewXPosition = r_InputManager.UserTryToMoveWithKeyboard(i_GameTime, this.Position.X);
+            float keyboardNewXPosition = r_InputManager.UserTryToMoveWithKeyboard(i_GameTime, this.Position.X, m_SpaceshipSpeed);
 
             setupNewPosition(keyboardNewXPosition, maxBoundaryWithoutOffset);
             float mouseNewXPosition = this.Position.X + r_InputManager.GetMousePositionDelta().X;
@@ -72,12 +75,17 @@ namespace GameSprites
             this.Position = new Vector2(i_NewXPosition, Position.Y);
         }
 
-        public static float SpaceshipSpeed => s_SpaceshipSpeed;
+        public float SpaceshipSpeed => m_SpaceshipSpeed;
 
-        public static int CounterOfSpaceShipBulletInAir
+        public int CounterOfSpaceShipBulletInAir
         {
-            get => s_CounterOfSpaceShipBulletInAir;
-            set => s_CounterOfSpaceShipBulletInAir = value;
+            get => m_CounterOfSpaceShipBulletInAir;
+            set => m_CounterOfSpaceShipBulletInAir = value;
+        }
+        public int NumberOfTheSpaceship
+        {
+            get => m_NumberOfTheSpaceship;
+            set => m_NumberOfTheSpaceship = value;
         }
     }
 }

@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using GameSprites;
+using Infrastructure.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using static SpaceInvaders.GameDefinitions;
+//using Sprite = Infrastructure.ObjectModel.Sprite;
 
 namespace SpaceInvaders
 {
@@ -13,10 +15,10 @@ namespace SpaceInvaders
 
         // It is not necessary to save the elements game but they may be used in the future
         private readonly Background r_Background;
-        private readonly Spaceship r_Spaceship;
         private readonly EnemyArmy r_EnemyArmy;
         private readonly MotherShip r_MotherShip;
         private readonly GameManager r_GameManager;
+        private readonly CollisionsManager r_CollisionsManager;
         private static readonly List<Sprite> sr_ListOfSprites = new List<Sprite>();
 
         public SpaceInvadersGame()
@@ -26,10 +28,10 @@ namespace SpaceInvaders
             this.IsMouseVisible = true;
             // It is not necessary to save the elements game but they may be used in the future
             r_Background = new Background(this, SpritesDefinition.BackgroundAsset);
-            r_Spaceship = new Spaceship(this, SpritesDefinition.SpaceshipAsset);
             r_MotherShip = new MotherShip(this, SpritesDefinition.MotherSpaceShipAsset, Color.Red);
             r_EnemyArmy = new EnemyArmy(this);
-            r_GameManager = new GameManager(this);
+            r_GameManager = new GameManager(this, 2);
+            // r_CollisionsManager = new CollisionsManager(this);
         }
 
         protected override void Initialize()
@@ -38,7 +40,7 @@ namespace SpaceInvaders
             this.r_Graphics.PreferredBackBufferWidth = GameDefinitions.PreferredBackBufferWidth;
             this.r_Graphics.PreferredBackBufferHeight = GameDefinitions.PreferredBackBufferHeight;
             this.r_Graphics.ApplyChanges();
-            Mouse.SetPosition((int)this.r_Spaceship.Position.X, GraphicsDevice.Viewport.Height);
+            Mouse.SetPosition(0, GraphicsDevice.Viewport.Height);
             this.Window.Title = GameName;
         }
 

@@ -26,17 +26,17 @@ namespace SpaceInvaders
             r_Game = i_Game;
         }
 
-        public void CreateNewBullet(Vector2 i_Position)
+        public void CreateNewBullet(Vector2 i_Position, ref int i_CounterOfBulletInAir)
         {
-            if (r_eBulletType == Enum.eBulletType.SpaceShipBullet && Spaceship.CounterOfSpaceShipBulletInAir < r_MaximumOfBullet)
+            if (r_eBulletType == Enum.eBulletType.SpaceShipBullet && i_CounterOfBulletInAir < r_MaximumOfBullet)
             {
                 createBulletAndAddToList(i_Position);
-                Spaceship.CounterOfSpaceShipBulletInAir++;
+                i_CounterOfBulletInAir++;
             }
-            else if (r_eBulletType == Enum.eBulletType.EnemyBullet && EnemyArmy.CounterOfEnemyBulletInAir < r_MaximumOfBullet)
+            else if (r_eBulletType == Enum.eBulletType.EnemyBullet && i_CounterOfBulletInAir < r_MaximumOfBullet)
             {
                 createBulletAndAddToList(i_Position);
-                EnemyArmy.CounterOfEnemyBulletInAir++;
+                i_CounterOfBulletInAir++;
             }
         }
 

@@ -27,18 +27,18 @@ namespace SpaceInvaders
             return retVal;
         }
 
-        public float UserTryToMoveWithKeyboard(GameTime i_GameTime, float i_PositionX)
+        public float UserTryToMoveWithKeyboard(GameTime i_GameTime, float i_PositionX, float i_SpaceshipSpeed)
         {
             float newXPosition = i_PositionX;
             KeyboardState currentKeyboardState = Keyboard.GetState();
 
             if (currentKeyboardState.IsKeyDown(Keys.Left))
             {
-                newXPosition -= Spaceship.SpaceshipSpeed * (float)i_GameTime.ElapsedGameTime.TotalSeconds;
+                newXPosition -= i_SpaceshipSpeed * (float)i_GameTime.ElapsedGameTime.TotalSeconds;
             } 
             else if(currentKeyboardState.IsKeyDown(Keys.Right))
             {
-                newXPosition += Spaceship.SpaceshipSpeed * (float)i_GameTime.ElapsedGameTime.TotalSeconds;
+                newXPosition += i_SpaceshipSpeed * (float)i_GameTime.ElapsedGameTime.TotalSeconds;
             }
 
             m_PrevKeyboardState = currentKeyboardState;

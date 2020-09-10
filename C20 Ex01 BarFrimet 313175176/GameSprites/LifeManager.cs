@@ -3,24 +3,22 @@ using System.Collections.Generic;
 using System.Text;
 using SpaceInvaders;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace GameSprites
 {
     public class LifeManager
     {
-        private readonly Vector2 r_StartPosition;
-        private readonly List<Life> r_LifeArray;
+        private readonly List<Life> r_LifeList;
         private readonly string r_TexturePath;
         private readonly Game r_Game;
         private int m_CounterOfLife;
+        private Vector2 m_CurrentPosition;
 
-        public LifeManager(Game i_Game, string i_TexturePath, int i_CounterOfLife)
+        public LifeManager(Game i_Game, string i_TexturePath, int i_CounterOfLife, int i_YPosition)
         {
             m_CounterOfLife = i_CounterOfLife;
-            r_StartPosition = new Vector2(GameDefinitions.StartLifePositionWidth - GameDefinitions.LifeSize, GameDefinitions.StartLifePositionHeight);
-            r_LifeArray = new List<Life>();
+            m_CurrentPosition = new Vector2(GameDefinitions.StartLifePositionWidth - GameDefinitions.LifeSize, i_YPosition );
+            r_LifeList = new List<Life>();
             r_TexturePath = i_TexturePath;
             r_Game = i_Game;
             Initialize();
@@ -28,35 +26,28 @@ namespace GameSprites
 
         public void Initialize()
         {
+            float currentXPosition = m_CurrentPosition.X;
+
             for (int i = 0; i < m_CounterOfLife; i++)
             {
-                r_LifeArray.Add(new Life(r_Game, r_TexturePath));
-            }
-
-            InitPosition();
-        }
-
-        public void InitPosition()
-        {
-            float currentXPosition = r_StartPosition.X;
-
-            foreach (Life life in r_LifeArray)
-            {
-                life.Position = new Vector2(currentXPosition, life.Position.Y);
+                Life life = new Life(r_Game, r_TexturePath, m_CurrentPosition);
                 currentXPosition -= GameDefinitions.SpaceBetweenLife;
+                m_CurrentPosition = new Vector2(currentXPosition, m_CurrentPosition.Y);
+                r_LifeList.Add(life);
             }
+
         }
 
         public bool IsNoMoreLifeRemains()
         {
-            return r_LifeArray.Count == 0;
+            return r_LifeList.Count == 0;
         }
 
 
         public void RemoveOneLife()
         {
-            r_LifeArray[m_CounterOfLife - 1].RemoveComponent();
-            r_LifeArray.RemoveAt(m_CounterOfLife - 1);
+            r_LifeList[m_CounterOfLife - 1].RemoveComponent();
+            r_LifeList.RemoveAt(m_CounterOfLife - 1);
             m_CounterOfLife--;
         }
 
@@ -65,7 +56,7 @@ namespace GameSprites
          */
         public void AddOneLife()
         {
-            r_LifeArray.Add(new Life(r_Game, r_TexturePath));
+            r_LifeList.Add(new Life(r_Game, r_TexturePath, m_CurrentPosition));
             m_CounterOfLife++;
         }
     }

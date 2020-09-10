@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Infrastructure.Managers;
+using Infrastructure.ServiceInterfaces;
 using SpaceInvaders;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -15,6 +17,7 @@ namespace GameSprites
         private Vector2 m_CurrentPosition;
         private readonly eBulletType r_eBulletType;
         private readonly Color r_Tint;
+        private int m_NumberOfTheSpaceship;
 
         public Bullet(Game i_Game, string i_TexturePath, Color i_Tint, Vector2 i_CurrentPosition, eBulletType i_eBulletType)
             : base(i_Game, i_TexturePath, i_Tint)
@@ -24,6 +27,11 @@ namespace GameSprites
             this.Position = i_CurrentPosition;
             r_Tint = i_eBulletType == eBulletType.SpaceShipBullet ? SpaceshipBulletTint : EnemyBulletTint;
             SpaceInvadersGame.ListOfSprites.Add(this);
+        }
+        public Bullet(Game i_Game, string i_TexturePath, Color i_Tint, Vector2 i_CurrentPosition, eBulletType i_eBulletType, int i_NumberOfTheSpaceship)
+            : this(i_Game, i_TexturePath, i_Tint, i_CurrentPosition, i_eBulletType)
+        {
+            m_NumberOfTheSpaceship = i_NumberOfTheSpaceship;
         }
 
         public override void Initialize()
@@ -50,10 +58,10 @@ namespace GameSprites
                 switch (r_eBulletType)
                 {
                     case eBulletType.SpaceShipBullet:
-                        Spaceship.CounterOfSpaceShipBulletInAir--;
+                      //  Spaceship.CounterOfSpaceShipBulletInAir--;
                         break;
                     case eBulletType.EnemyBullet:
-                        EnemyArmy.CounterOfEnemyBulletInAir--;
+                     //   EnemyArmy.CounterOfEnemyBulletInAir--;
                         break;
                 }
             }
@@ -112,7 +120,13 @@ namespace GameSprites
         {
             if (i_SpriteWosHit is Spaceship)
             {
+                int numberOfTheSpaceship = ((Spaceship)i_SpriteWosHit).NumberOfTheSpaceship;
                 i_SpriteWosHit.InitPosition();
+                GameManager.PlayersList[numberOfTheSpaceship].LifeManager.RemoveOneLife();
+                if (GameManager.PlayersList[numberOfTheSpaceship].LifeManager.IsNoMoreLifeRemains())
+                {
+                    GameManager.PlayersList[numberOfTheSpaceship].Spaceship.RemoveComponent();
+                }
             }
             else
             {
@@ -121,7 +135,7 @@ namespace GameSprites
                 EnemyArmy.AddEnemyKilledByOne();
             }
 
-            GameManager.UpdateScore(i_SpriteWosHit);
+            //  GameManager.PlayersList[m_NumberOfTheSpaceship].;
             this.RemoveComponent();
         }
 
