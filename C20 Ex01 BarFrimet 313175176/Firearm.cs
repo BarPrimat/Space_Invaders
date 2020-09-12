@@ -15,35 +15,47 @@ namespace SpaceInvaders
     {
         private readonly int r_MaximumOfBullet;
         private readonly Enum.eBulletType r_eBulletType;
-        private readonly Color r_Tint;
+        private readonly List<Bullet> r_ListOfBullets = new List<Bullet>();
+        private readonly Color r_TintColor;
         private readonly Game r_Game;
 
         public Firearm(Game i_Game, int i_MaximumOfBullet, Enum.eBulletType i_eBulletType)
         {
             r_MaximumOfBullet = i_MaximumOfBullet;
             r_eBulletType = i_eBulletType;
-            r_Tint = i_eBulletType == Enum.eBulletType.SpaceShipBullet ? SpaceshipBulletTint : EnemyBulletTint;
+            r_TintColor = i_eBulletType == Enum.eBulletType.SpaceShipBullet ? SpaceshipBulletTint : EnemyBulletTint;
             r_Game = i_Game;
         }
 
-        public void CreateNewBullet(Vector2 i_Position, ref int i_CounterOfBulletInAir)
+        public void Shoot(Vector2 i_Position)
         {
-            if (r_eBulletType == Enum.eBulletType.SpaceShipBullet && i_CounterOfBulletInAir < r_MaximumOfBullet)
+            bool isExistBulletHasBeenSet = setExistDisableBullet(i_Position);
+
+            if(!isExistBulletHasBeenSet)
             {
-                createBulletAndAddToList(i_Position);
-                i_CounterOfBulletInAir++;
-            }
-            else if (r_eBulletType == Enum.eBulletType.EnemyBullet && i_CounterOfBulletInAir < r_MaximumOfBullet)
-            {
-                createBulletAndAddToList(i_Position);
-                i_CounterOfBulletInAir++;
+                if(r_ListOfBullets.Count < r_MaximumOfBullet)
+                {
+                    Bullet bullet = new Bullet(r_Game, GameSprites.SpritesDefinition.BulletAsset, r_TintColor, i_Position, r_eBulletType);
+                    r_ListOfBullets.Add(bullet);
+                }
             }
         }
 
-        private void createBulletAndAddToList(Vector2 i_Position)
+        private bool setExistDisableBullet(Vector2 i_Position)
         {
-            Bullet bullet = new Bullet(r_Game, GameSprites.SpritesDefinition.BulletAsset, r_Tint, i_Position, r_eBulletType);
-            GameManager.ListOfBullets.Add(bullet);
+            bool isExistBulletHasBeenSet = false;
+
+            foreach (Bullet bullet in r_ListOfBullets)
+            {
+                if (!bullet.Visible)
+                {
+                    isExistBulletHasBeenSet = true;
+                    bullet.EnableBullet(i_Position);
+                    break;
+                }
+            }
+
+            return isExistBulletHasBeenSet;
         }
     }
 }

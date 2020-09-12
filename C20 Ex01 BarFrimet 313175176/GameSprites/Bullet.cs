@@ -12,144 +12,75 @@ using static SpaceInvaders.Enum;
 
 namespace GameSprites
 {
-    public class Bullet : Sprite
+    public class Bullet : Infrastructure.ObjectModel.Sprite, ICollidable2D
     {
-        private Vector2 m_CurrentPosition;
         private readonly eBulletType r_eBulletType;
-        private readonly Color r_Tint;
-        private int m_NumberOfTheSpaceship;
+        private static readonly Random sr_Random = new Random();
 
-        public Bullet(Game i_Game, string i_TexturePath, Color i_Tint, Vector2 i_CurrentPosition, eBulletType i_eBulletType)
-            : base(i_Game, i_TexturePath, i_Tint)
+        public Bullet(Game i_Game, string i_TexturePath, Color i_Tint, Vector2 i_CurrentPosition, eBulletType i_eBulletType) : base(i_TexturePath, i_Game)
         {
-            m_CurrentPosition = i_CurrentPosition;
-            r_eBulletType = i_eBulletType;
+            this.TintColor = i_Tint;
             this.Position = i_CurrentPosition;
-            r_Tint = i_eBulletType == eBulletType.SpaceShipBullet ? SpaceshipBulletTint : EnemyBulletTint;
-            SpaceInvadersGame.ListOfSprites.Add(this);
-        }
-        public Bullet(Game i_Game, string i_TexturePath, Color i_Tint, Vector2 i_CurrentPosition, eBulletType i_eBulletType, int i_NumberOfTheSpaceship)
-            : this(i_Game, i_TexturePath, i_Tint, i_CurrentPosition, i_eBulletType)
-        {
-            m_NumberOfTheSpaceship = i_NumberOfTheSpaceship;
-        }
-
-        public override void Initialize()
-        {
-            base.Initialize();
-        }
-
-        public override void InitPosition()
-        {
+            r_eBulletType = i_eBulletType;
+            float velocityAxisY = BulletStartSpeedInSec * (i_eBulletType == eBulletType.EnemyBullet ? 1 : -1);
+            this.Velocity = new Vector2(0, velocityAxisY);
         }
 
         public override void Update(GameTime i_GameTime)
-        { 
-            isBulletHitSomething(i_GameTime);
-        }
-
-        private void isBulletHitSomething(GameTime i_GameTime)
         {
-            bool bulletHitSomething = false;
-            Sprite spriteThatHit = getSpriteCollision();
-
-            bulletHitSomething = deleteOrMoveBullet(i_GameTime, spriteThatHit);
-            if (bulletHitSomething){
-                switch (r_eBulletType)
-                {
-                    case eBulletType.SpaceShipBullet:
-                      //  Spaceship.CounterOfSpaceShipBulletInAir--;
-                        break;
-                    case eBulletType.EnemyBullet:
-                     //   EnemyArmy.CounterOfEnemyBulletInAir--;
-                        break;
-                }
+            base.Update(i_GameTime);
+            if (this.Visible && isBulletHitBorder())
+            {
+                DisableBullet();
             }
         }
 
-        private Sprite getSpriteCollision()
+        protected override void InitOrigins()
         {
-            Sprite spriteThatHit = null;
-            Rectangle bulletRectangle = new Rectangle((int)this.Position.X, (int)this.Position.Y, this.Texture.Width, this.Texture.Height);
-
-            foreach (Sprite sprite in SpaceInvadersGame.ListOfSprites)
-            {
-                // Check if spaceship is hit
-                bool isRival = (sprite is Spaceship && r_eBulletType == eBulletType.EnemyBullet);
-                // Check if some enemy is hit
-                isRival = isRival || ((sprite is Enemy || sprite is MotherShip) && (r_eBulletType == eBulletType.SpaceShipBullet));
-
-                if (isRival && sprite.Visible)
-                {
-                    Rectangle spriteRectangle = new Rectangle((int)(sprite).Position.X, (int)(sprite).Position.Y, (int)(sprite).Texture.Width, (int)(sprite).Texture.Height);
-
-                    if (bulletRectangle.Intersects(spriteRectangle))
-                    {
-                        spriteThatHit = sprite;
-                    }
-                }
-            }
-
-            return spriteThatHit;
-        }
-
-        private bool deleteOrMoveBullet(GameTime i_GameTime, Sprite i_SpriteThatCollision)
-        {
-            bool bulletHitSomething = false;
-
-            if (isBulletHitBorder())
-            {
-                this.RemoveComponent();
-                bulletHitSomething = !bulletHitSomething;
-            }
-
-            if (i_SpriteThatCollision != null)
-            {
-                killElementOnHit(i_SpriteThatCollision);
-                bulletHitSomething = !bulletHitSomething;
-            }
-            else
-            {
-                moveBullet(i_GameTime);
-            }
-
-            return bulletHitSomething;
-        }
-
-        private void killElementOnHit(Sprite i_SpriteWosHit)
-        {
-            if (i_SpriteWosHit is Spaceship)
-            {
-                int numberOfTheSpaceship = ((Spaceship)i_SpriteWosHit).NumberOfTheSpaceship;
-                i_SpriteWosHit.InitPosition();
-                GameManager.PlayersList[numberOfTheSpaceship].LifeManager.RemoveOneLife();
-                if (GameManager.PlayersList[numberOfTheSpaceship].LifeManager.IsNoMoreLifeRemains())
-                {
-                    GameManager.PlayersList[numberOfTheSpaceship].Spaceship.RemoveComponent();
-                }
-            }
-            else
-            {
-                // Some enemy was hit
-                i_SpriteWosHit.RemoveComponent();
-                EnemyArmy.AddEnemyKilledByOne();
-            }
-
-            //  GameManager.PlayersList[m_NumberOfTheSpaceship].;
-            this.RemoveComponent();
-        }
-
-        private void moveBullet(GameTime i_GameTime)
-        {
-            float newYPosition = BulletStartSpeedInSec * (float)i_GameTime.ElapsedGameTime.TotalSeconds;
-
-            m_CurrentPosition.Y += r_eBulletType == eBulletType.EnemyBullet ? 1 * newYPosition : -1 * newYPosition;
-            this.Position = m_CurrentPosition;
+            this.m_PositionOrigin = new Vector2(this.Texture.Width / 2, this.Texture.Height / 2);
+            base.InitOrigins();
         }
 
         private bool isBulletHitBorder()
         {
-            return m_Position.Y >= Game.GraphicsDevice.Viewport.Height || 0 >= m_Position.Y;
+            return this.Position.Y > Game.GraphicsDevice.Viewport.Height || 0 > (this.Position.Y + this.Texture.Height);
         }
+
+
+        public override void Collided(ICollidable i_Collidable)
+        {
+            Bullet bullet = i_Collidable as Bullet;
+
+            if (bullet != null)
+            {
+                if(this.r_eBulletType != bullet.eBulletType)
+                {
+                    if(this.eBulletType == eBulletType.SpaceShipBullet)
+                    {
+                        this.Dispose();
+                    }
+                    else if (sr_Random.NextDouble() > ChanceBallDeleteWithHittingAnotherBall)
+                    {
+                        this.Dispose();
+                    }
+                }
+            }
+        }
+
+        public void EnableBullet(Vector2 i_Position)
+        {
+            this.Position = i_Position;
+            this.Enabled = true;
+            this.Visible = true;
+        }
+
+        public void DisableBullet()
+        {
+            this.Enabled = false;
+            this.Visible = false;
+        }
+
+        public eBulletType eBulletType => r_eBulletType;
+
     }
 }

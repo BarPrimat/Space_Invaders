@@ -21,6 +21,7 @@ namespace GameSprites
         protected override void InitOrigins()
         {
             this.Position = m_StartPosition;
+            base.InitOrigins(); 
         }
 
         public void RemoveComponent()

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 
 namespace SpaceInvaders
 {
@@ -50,12 +51,13 @@ namespace SpaceInvaders
 
         // Bullet definitions
         private const int k_BulletStartSpeedInSec = 140;
+        private const float k_ChanceBallDeleteWithHittingAnotherBall = 0.5f;
         public static readonly Color sr_EnemyBulletTint = Color.Blue;
         public static readonly Color sr_SpaceshipBulletTint = Color.Red;
 
         // SpaceShip definitions
-        private const int k_SpaceshipMaxOfBullet = 2;
-        private const float k_SpaceshipSpeed = 130;
+        private const int k_SpaceshipMaxOfBullet = 100;  // 2
+        private const float k_SpaceshipSpeed = 140;
         private static readonly Color sr_SpaceshipTint = Color.White;
 
         // Background definitions
@@ -64,6 +66,15 @@ namespace SpaceInvaders
         // MotherShip definitions
         private const float k_MotherShipSpeed = 95;
         private const int k_MotherShipMaxTimeToNextAppearsInSec = 15;
+
+        // Player definitions
+        private const Keys k_FirstPlayerKeyToRight = Keys.P;
+        private const Keys k_FirstPlayerKeyToLeft = Keys.I;
+        private const Keys k_FirstPlayerKeyToShoot = Keys.D9;
+        private const Keys k_SecondPlayerKeyToRight = Keys.R;
+        private const Keys k_SecondPlayerKeyToLeft = Keys.W;
+        private const Keys k_SecondPlayerKeyToShoot = Keys.D3;
+        private const int k_PlayertThatAllowedToMouse = 0;
 
         public static Color LifeTint => sr_LifeTint;
 
@@ -148,5 +159,21 @@ namespace SpaceInvaders
         public static string EndGameTextMoreThen1Player => k_EndGameTextMoreThen1Player;
 
         public static float Opacity => k_Opacity;
+
+        public static Keys FirstPlayerKeyToRight => k_FirstPlayerKeyToRight;
+
+        public static Keys FirstPlayerKeyToLeft => k_FirstPlayerKeyToLeft;
+
+        public static Keys FirstPlayerKeyToShoot => k_FirstPlayerKeyToShoot;
+
+        public static Keys SecondPlayerKeyToRight => k_SecondPlayerKeyToRight;
+
+        public static Keys SecondPlayerKeyToLeft => k_SecondPlayerKeyToLeft;
+
+        public static Keys SecondPlayerKeyToShoot => k_SecondPlayerKeyToShoot;
+
+        public static int PlayertThatAllowedToMouse => k_PlayertThatAllowedToMouse;
+
+        public static float ChanceBallDeleteWithHittingAnotherBall => k_ChanceBallDeleteWithHittingAnotherBall;
     }
 }

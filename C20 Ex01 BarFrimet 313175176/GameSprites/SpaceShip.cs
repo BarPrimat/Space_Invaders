@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Infrastructure.Managers;
 using Infrastructure.ServiceInterfaces;
 using SpaceInvaders;
 using Microsoft.Xna.Framework;
@@ -13,25 +14,29 @@ using static SpaceInvaders.Enum;
 
 namespace GameSprites
 {
-    public class Spaceship : Sprite
+    public class Spaceship : Infrastructure.ObjectModel.Sprite, ICollidable2D
     {
-        private readonly InputManager r_InputManager;
         private readonly Firearm r_Firearm;
+        private readonly LifeManager r_LifeManager;
         private float m_SpaceshipSpeed;
-        private int m_CounterOfSpaceShipBulletInAir = 0;
         private int m_NumberOfTheSpaceship;
 
-        public Spaceship(Game i_Game, string i_TexturePath, int i_NumberOfTheSpaceship) : base (i_Game, i_TexturePath, GameDefinitions.SpaceshipTint)
+        public Spaceship(Game i_Game, string i_TexturePath, int i_NumberOfTheSpaceship, LifeManager i_LifeManager) : base (i_TexturePath, i_Game)
         {
-            // this.TintColor = GameDefinitions.SpaceshipTint;
-            r_InputManager = new InputManager();
+            this.TintColor = GameDefinitions.SpaceshipTint;
             r_Firearm = new Firearm(i_Game, SpaceshipMaxOfBullet, eBulletType.SpaceShipBullet);
             m_SpaceshipSpeed = GameDefinitions.SpaceshipSpeed;
             m_NumberOfTheSpaceship = i_NumberOfTheSpaceship;
-            SpaceInvadersGame.ListOfSprites.Add(this);
+            r_LifeManager = i_LifeManager;
+            // SpaceInvadersGame.ListOfSprites.Add(this);
         }
 
-        public override void InitPosition()
+        protected override void InitOrigins()
+        {
+            InitPosition();
+        }
+
+        private void InitPosition()
         {
             // Init the ship position
             float x = m_NumberOfTheSpaceship * this.Texture.Width;
@@ -45,47 +50,35 @@ namespace GameSprites
             this.Position = new Vector2(x, y);
         }
 
-        public override void Update(GameTime i_GameTime)
+        public void Shoot()
         {
-            moveSpaceship(i_GameTime);
-            if (r_InputManager.IsUserClickToShoot())
-            {
-                tryToShoot(i_GameTime);
-            }
+            r_Firearm.Shoot(new Vector2(this.Position.X + Texture.Width / 2, this.Position.Y));
         }
 
-        private void tryToShoot(GameTime i_GameTime)
-        {
-            r_Firearm.CreateNewBullet(new Vector2(this.Position.X + Texture.Width / 2, this.Position.Y), ref m_CounterOfSpaceShipBulletInAir);
-        }
-
-        private void moveSpaceship(GameTime i_GameTime)
-        {
-            float maxBoundaryWithoutOffset = GraphicsDevice.Viewport.Width - Texture.Width;
-            float keyboardNewXPosition = r_InputManager.UserTryToMoveWithKeyboard(i_GameTime, this.Position.X, m_SpaceshipSpeed);
-
-            setupNewPosition(keyboardNewXPosition, maxBoundaryWithoutOffset);
-            float mouseNewXPosition = this.Position.X + r_InputManager.GetMousePositionDelta().X;
-            setupNewPosition(mouseNewXPosition, maxBoundaryWithoutOffset);
-        }
-
-        private void setupNewPosition(float i_NewXPosition, float i_MaxBoundaryWithoutOffset)
+        public void SetupNewPosition(float i_NewXPosition, float i_MaxBoundaryWithoutOffset)
         {
             i_NewXPosition = MathHelper.Clamp(i_NewXPosition, 0, i_MaxBoundaryWithoutOffset);
             this.Position = new Vector2(i_NewXPosition, Position.Y);
         }
 
-        public float SpaceshipSpeed => m_SpaceshipSpeed;
+        public override void Collided(ICollidable i_Collidable)
+        {
+            Bullet bullet = i_Collidable as Bullet;
 
-        public int CounterOfSpaceShipBulletInAir
-        {
-            get => m_CounterOfSpaceShipBulletInAir;
-            set => m_CounterOfSpaceShipBulletInAir = value;
+            if(bullet != null)
+            {
+                if(bullet.eBulletType == eBulletType.EnemyBullet)
+                {
+                    r_LifeManager.RemoveOneLife();
+                    if(!r_LifeManager.IsNoMoreLifeRemains())
+                    {
+                        this.InitPosition();
+                    }
+                }
+            }
         }
-        public int NumberOfTheSpaceship
-        {
-            get => m_NumberOfTheSpaceship;
-            set => m_NumberOfTheSpaceship = value;
-        }
+
+
+        public float SpaceshipSpeed => m_SpaceshipSpeed;
     }
 }

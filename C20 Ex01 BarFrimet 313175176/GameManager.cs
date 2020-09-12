@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics.Eventing.Reader;
 using System.Text;
 using GameSprites;
+using Infrastructure.Managers;
+using Infrastructure.ObjectModel;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using static SpaceInvaders.Enum;
 
 
@@ -15,13 +18,19 @@ namespace SpaceInvaders
         private static readonly List<Player> sr_PlayersList = new List<Player>();
         private static readonly List<Bullet> sr_ListOfBullets = new List<Bullet>();
 
+
         public GameManager(Game i_Game, int i_NumberOfPlayers) : base(i_Game)
         {
             m_EnemyThatLeftToFinishGame = GameDefinitions.NumberOfEnemyInColumn * GameDefinitions.NumberOfEnemyInRow;
-            for(int i = 0; i < i_NumberOfPlayers; i++)
+            CollisionsManager collisionsManager = new CollisionsManager(this.Game);
+
+            for (int i = 0; i < i_NumberOfPlayers; i++)
             {
                 string assetPath = i == 0 ? SpritesDefinition.SpaceshipUser1Asset : SpritesDefinition.SpaceshipUser2Asset;
-                sr_PlayersList.Add(new Player(i_Game, "P " + i, assetPath, i));
+                Keys leftKey = i == 0 ? GameDefinitions.FirstPlayerKeyToLeft : GameDefinitions.SecondPlayerKeyToLeft;
+                Keys rightKey = i == 0 ? GameDefinitions.FirstPlayerKeyToRight : GameDefinitions.SecondPlayerKeyToRight;
+                Keys shootKey = i == 0 ? GameDefinitions.FirstPlayerKeyToShoot : GameDefinitions.SecondPlayerKeyToShoot;
+                sr_PlayersList.Add(new Player(i_Game, "P " + i, assetPath, i, rightKey, leftKey, shootKey));
             }
 
             i_Game.Components.Add(this);
@@ -79,15 +88,15 @@ namespace SpaceInvaders
         {
             if (i_Sprite is Enemy)
             {
-                if (i_Sprite.Tint == Color.Pink)
+                if (i_Sprite.TintColor == Color.Pink)
                 {
                     sr_PlayersList[i_NumberOfPlayer].CurrentScore += (int)Enum.eScoreValue.PinkEnemy;
                 }
-                else if (i_Sprite.Tint == Color.LightBlue)
+                else if (i_Sprite.TintColor == Color.LightBlue)
                 {
                     sr_PlayersList[i_NumberOfPlayer].CurrentScore += (int)Enum.eScoreValue.LightBlueEnemy;
                 }
-                else if (i_Sprite.Tint == Color.Yellow)
+                else if (i_Sprite.TintColor == Color.Yellow)
                 {
                     sr_PlayersList[i_NumberOfPlayer].CurrentScore += (int)Enum.eScoreValue.YellowEnemy;
                 }

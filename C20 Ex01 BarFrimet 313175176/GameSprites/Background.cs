@@ -6,18 +6,11 @@ using SharpDX.Direct3D9;
 
 namespace GameSprites
 {
-    public class Background : Sprite
+    public class Background : Infrastructure.ObjectModel.Sprite
     {
-        public Background(Game i_Game, string i_TexturePath) : base(i_Game, i_TexturePath, GameDefinitions.BackgroundTint)
+        public Background(Game i_Game, string i_TexturePath) : base(i_TexturePath, i_Game)
         {
-        }
-
-        public override void InitPosition()
-        { 
-        }
-
-        public override void Update(GameTime i_GameTime)
-        {
+            this.TintColor = GameDefinitions.BackgroundTint;
         }
     }
 }

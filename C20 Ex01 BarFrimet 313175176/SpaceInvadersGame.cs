@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using static SpaceInvaders.GameDefinitions;
+using Infrastructure.Managers;
 //using Sprite = Infrastructure.ObjectModel.Sprite;
 
 namespace SpaceInvaders
@@ -18,8 +19,8 @@ namespace SpaceInvaders
         private readonly EnemyArmy r_EnemyArmy;
         private readonly MotherShip r_MotherShip;
         private readonly GameManager r_GameManager;
+        private readonly InputManager r_InputManager;
         private readonly CollisionsManager r_CollisionsManager;
-        private static readonly List<Sprite> sr_ListOfSprites = new List<Sprite>();
 
         public SpaceInvadersGame()
         {
@@ -31,6 +32,7 @@ namespace SpaceInvaders
             r_MotherShip = new MotherShip(this, SpritesDefinition.MotherSpaceShipAsset, Color.Red);
             r_EnemyArmy = new EnemyArmy(this);
             r_GameManager = new GameManager(this, 2);
+            r_InputManager = new InputManager(this);
             // r_CollisionsManager = new CollisionsManager(this);
         }
 
@@ -64,7 +66,5 @@ namespace SpaceInvaders
             GraphicsDevice.Clear(Color.CornflowerBlue);
             base.Draw(i_GameTime);
         }
-
-        public static List<Sprite> ListOfSprites => sr_ListOfSprites;
     }
 }

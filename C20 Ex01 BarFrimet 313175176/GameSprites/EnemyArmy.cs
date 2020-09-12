@@ -161,7 +161,7 @@ namespace GameSprites
                 int randomizeEnemyColumn = r_Random.Next(NumberOfEnemyInColumn);
                 if (r_EnemyArray[randomizeEnemyRow, randomizeEnemyColumn].Visible)
                 {
-                    r_Firearm.CreateNewBullet(r_EnemyArray[randomizeEnemyRow, randomizeEnemyColumn].Position, ref m_CounterOfEnemyBulletInAir);
+                    //r_Firearm.CreateNewBullet(r_EnemyArray[randomizeEnemyRow, randomizeEnemyColumn].Position, ref m_CounterOfEnemyBulletInAir);
                 }
 
                 m_EnemyNextTimeToShoot = r_Random.Next((int)GameDefinitions.EnemyMaxTimeForShoot);
@@ -223,10 +223,12 @@ namespace GameSprites
 
         private bool isEnemyReachSpaceShipHeight()
         {
+            
             bool isEnemyHitWasSomething = false;
             Rectangle spaceShipRectangle = default;
             float spaceShipYPosition = 0;
             bool findHit = false;
+            /*
 
             // Find Spaceship sprite her for better efficiency
             foreach (Sprite sprite in SpaceInvadersGame.ListOfSprites)
@@ -251,7 +253,7 @@ namespace GameSprites
                     }
                 }
             }
-
+            */
             return findHit;
         }
 
