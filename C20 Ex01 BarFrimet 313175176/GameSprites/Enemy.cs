@@ -11,9 +11,12 @@ namespace GameSprites
 {
     public class Enemy : Infrastructure.ObjectModel.Sprite, ICollidable2D
     {
+        private readonly Firearm r_Firearm;
+
         public Enemy(Game i_Game, string i_TexturePath, Color i_Tint) : base(i_TexturePath, i_Game)
         {
             this.TintColor = i_Tint;
+            r_Firearm = new Firearm(i_Game, GameDefinitions.EnemyMaxOfBullet, Enum.eBulletType.EnemyBullet);
         }
 
         public override void Collided(ICollidable i_Collidable)
@@ -34,6 +37,11 @@ namespace GameSprites
         {
             this.Visible = false;
             Game.Components.Remove(this);
+        }
+
+        public void Shoot(Vector2 i_Position)
+        {
+            r_Firearm.Shoot(i_Position);
         }
     }
 }

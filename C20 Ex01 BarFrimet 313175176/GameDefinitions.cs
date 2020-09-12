@@ -37,6 +37,7 @@ namespace SpaceInvaders
         private static readonly Color sr_LightBlueEnemyTint = Color.LightBlue;
         private static readonly Color sr_YellowEnemyTint = Color.Yellow;
         private const float k_EnemySize = 32;
+        private const int k_EnemyMaxOfBullet = 1;
         private const float k_EnemySizeWidth = k_EnemySize;
         private const float k_EnemySizeHeight = k_EnemySize;
 
@@ -51,12 +52,12 @@ namespace SpaceInvaders
 
         // Bullet definitions
         private const int k_BulletStartSpeedInSec = 140;
-        private const float k_ChanceBallDeleteWithHittingAnotherBall = 0.5f;
+        private const float k_ChanceBallDeleteWithHittingAnotherBall = 1f; // 0.5f
         public static readonly Color sr_EnemyBulletTint = Color.Blue;
         public static readonly Color sr_SpaceshipBulletTint = Color.Red;
 
         // SpaceShip definitions
-        private const int k_SpaceshipMaxOfBullet = 100;  // 2
+        private const int k_SpaceshipMaxOfBullet = 2;  // 2
         private const float k_SpaceshipSpeed = 140;
         private static readonly Color sr_SpaceshipTint = Color.White;
 
@@ -175,5 +176,7 @@ namespace SpaceInvaders
         public static int PlayertThatAllowedToMouse => k_PlayertThatAllowedToMouse;
 
         public static float ChanceBallDeleteWithHittingAnotherBall => k_ChanceBallDeleteWithHittingAnotherBall;
+
+        public static int EnemyMaxOfBullet => k_EnemyMaxOfBullet;
     }
 }

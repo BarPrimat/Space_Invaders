@@ -46,8 +46,8 @@ namespace GameSprites
 
         public void RemoveOneLife()
         {
-            r_LifeList[m_CounterOfLife - 1].RemoveComponent();
-            r_LifeList.RemoveAt(m_CounterOfLife - 1);
+            r_LifeList[r_LifeList.Count - 1].RemoveComponent();
+            r_LifeList.RemoveAt(r_LifeList.Count - 1);
             m_CounterOfLife--;
         }
 

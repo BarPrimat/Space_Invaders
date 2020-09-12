@@ -15,13 +15,15 @@ namespace GameSprites
     public class Bullet : Infrastructure.ObjectModel.Sprite, ICollidable2D
     {
         private readonly eBulletType r_eBulletType;
+        public static int sirialNumber = 0;
         private static readonly Random sr_Random = new Random();
 
         public Bullet(Game i_Game, string i_TexturePath, Color i_Tint, Vector2 i_CurrentPosition, eBulletType i_eBulletType) : base(i_TexturePath, i_Game)
         {
+            sirialNumber++;
+            r_eBulletType = i_eBulletType;
             this.TintColor = i_Tint;
             this.Position = i_CurrentPosition;
-            r_eBulletType = i_eBulletType;
             float velocityAxisY = BulletStartSpeedInSec * (i_eBulletType == eBulletType.EnemyBullet ? 1 : -1);
             this.Velocity = new Vector2(0, velocityAxisY);
         }
@@ -57,11 +59,11 @@ namespace GameSprites
                 {
                     if(this.eBulletType == eBulletType.SpaceShipBullet)
                     {
-                        this.Dispose();
+                        this.DisableBullet();
                     }
-                    else if (sr_Random.NextDouble() > ChanceBallDeleteWithHittingAnotherBall)
+                    else if (sr_Random.NextDouble() < ChanceBallDeleteWithHittingAnotherBall)
                     {
-                        this.Dispose();
+                        this.DisableBullet();
                     }
                 }
             }
@@ -70,14 +72,14 @@ namespace GameSprites
         public void EnableBullet(Vector2 i_Position)
         {
             this.Position = i_Position;
-            this.Enabled = true;
+           // this.Enabled = true;
             this.Visible = true;
         }
 
         public void DisableBullet()
         {
-            this.Enabled = false;
             this.Visible = false;
+           // this.Enabled = false;
         }
 
         public eBulletType eBulletType => r_eBulletType;

@@ -161,7 +161,7 @@ namespace GameSprites
                 int randomizeEnemyColumn = r_Random.Next(NumberOfEnemyInColumn);
                 if (r_EnemyArray[randomizeEnemyRow, randomizeEnemyColumn].Visible)
                 {
-                    //r_Firearm.CreateNewBullet(r_EnemyArray[randomizeEnemyRow, randomizeEnemyColumn].Position, ref m_CounterOfEnemyBulletInAir);
+                    r_EnemyArray[randomizeEnemyRow, randomizeEnemyColumn].Shoot(r_EnemyArray[randomizeEnemyRow, randomizeEnemyColumn].Position);
                 }
 
                 m_EnemyNextTimeToShoot = r_Random.Next((int)GameDefinitions.EnemyMaxTimeForShoot);

@@ -31,8 +31,9 @@ namespace GameSprites
             // SpaceInvadersGame.ListOfSprites.Add(this);
         }
 
-        protected override void InitOrigins()
+        public override void Initialize()
         {
+            base.Initialize();
             InitPosition();
         }
 
@@ -52,7 +53,10 @@ namespace GameSprites
 
         public void Shoot()
         {
-            r_Firearm.Shoot(new Vector2(this.Position.X + Texture.Width / 2, this.Position.Y));
+            if(this.Visible)
+            {
+                r_Firearm.Shoot(new Vector2(this.Position.X + Texture.Width / 2, this.Position.Y));
+            }
         }
 
         public void SetupNewPosition(float i_NewXPosition, float i_MaxBoundaryWithoutOffset)
@@ -65,15 +69,21 @@ namespace GameSprites
         {
             Bullet bullet = i_Collidable as Bullet;
 
-            if(bullet != null)
+            if(bullet != null && this.Visible)
             {
-                if(bullet.eBulletType == eBulletType.EnemyBullet)
+                if(bullet.eBulletType != eBulletType.SpaceShipBullet)
                 {
                     r_LifeManager.RemoveOneLife();
-                    if(!r_LifeManager.IsNoMoreLifeRemains())
+                    if (r_LifeManager.IsNoMoreLifeRemains())
+                    {
+                        this.Visible = false;
+                    }
+                    else
                     {
                         this.InitPosition();
                     }
+
+                    bullet.DisableBullet();
                 }
             }
         }

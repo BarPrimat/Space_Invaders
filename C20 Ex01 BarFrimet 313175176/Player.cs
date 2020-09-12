@@ -26,8 +26,8 @@ namespace SpaceInvaders
             : base(i_Game)
         {
             r_Name = i_Name;
-            r_Spaceship = new Spaceship(i_Game, i_TextureSpaceshipPath, i_NumberOfThePlayer, r_LifeManager);
             r_LifeManager = new LifeManager(i_Game, i_TextureSpaceshipPath, GameDefinitions.NumberOfLifeToStart, i_NumberOfThePlayer * GameDefinitions.StartLifePositionHeight);
+            r_Spaceship = new Spaceship(i_Game, i_TextureSpaceshipPath, i_NumberOfThePlayer, r_LifeManager);
             r_RightMoveKey = i_RightMoveKey;
             r_LeftMoveKey = i_LeftMoveKey;
             r_ShootKey = i_ShootKey;
