@@ -16,13 +16,11 @@ namespace SpaceInvaders
     {
         private int m_EnemyThatLeftToFinishGame;
         private static readonly List<Player> sr_PlayersList = new List<Player>();
-        private static readonly List<Bullet> sr_ListOfBullets = new List<Bullet>();
-
 
         public GameManager(Game i_Game, int i_NumberOfPlayers) : base(i_Game)
         {
             m_EnemyThatLeftToFinishGame = GameDefinitions.NumberOfEnemyInColumn * GameDefinitions.NumberOfEnemyInRow;
-            CollisionsManager collisionsManager = new CollisionsManager(this.Game);
+            new CollisionsManager(this.Game);
 
             for (int i = 0; i < i_NumberOfPlayers; i++)
             {
@@ -60,31 +58,46 @@ namespace SpaceInvaders
             }
         }
 
-
-        public void UpdateScore(Sprite i_Sprite, int i_NumberOfPlayer)
+        /*
+        public static Player GetPlayerComponent(Game i_Game, int i_GunSerialNumber, Sprite i_Sprite)
         {
-            if (i_Sprite is Spaceship)
+            foreach (Player player in sr_PlayersList)
             {
-                sr_PlayersList[i_NumberOfPlayer].CurrentScore += (int)Enum.eScoreValue.LoseLife;
-                if (sr_PlayersList[i_NumberOfPlayer].CurrentScore < 0)
+                if (player.SerialNumber == i_GunSerialNumber)
                 {
-                    sr_PlayersList[i_NumberOfPlayer].CurrentScore = 0;
+                    UpdateScore(i_Sprite,);
                 }
+            }
 
-                sr_PlayersList[i_NumberOfPlayer].LifeManager.RemoveOneLife();
-            }
-            else if (i_Sprite is Enemy)
+            return player;
+        }
+
+        */
+
+        public static void UpdateScore(Sprite i_Sprite, int i_NumberOfPlayer)
+        {
+            if(i_NumberOfPlayer != -1)
             {
-                identifiesEnemyAndUpdateScore(i_Sprite, i_NumberOfPlayer);
-                m_EnemyThatLeftToFinishGame--;
-            }
-            else if (i_Sprite is MotherShip)
-            {
-                sr_PlayersList[i_NumberOfPlayer].CurrentScore += (int)Enum.eScoreValue.MotherShip;
+                if (i_Sprite is Spaceship)
+                {
+                    sr_PlayersList[i_NumberOfPlayer].CurrentScore += (int)Enum.eScoreValue.LoseLife;
+                    if (sr_PlayersList[i_NumberOfPlayer].CurrentScore < 0)
+                    {
+                        sr_PlayersList[i_NumberOfPlayer].CurrentScore = 0;
+                    }
+                }
+                else if (i_Sprite is Enemy)
+                {
+                    identifiesEnemyAndUpdateScore(i_Sprite, i_NumberOfPlayer);
+                }
+                else if (i_Sprite is MotherShip)
+                {
+                    sr_PlayersList[i_NumberOfPlayer].CurrentScore += (int)Enum.eScoreValue.MotherShip;
+                }
             }
         }
 
-        private void identifiesEnemyAndUpdateScore(Sprite i_Sprite, int i_NumberOfPlayer)
+        private static void identifiesEnemyAndUpdateScore(Sprite i_Sprite, int i_NumberOfPlayer)
         {
             if (i_Sprite is Enemy)
             {
@@ -121,7 +134,7 @@ namespace SpaceInvaders
                         maxScore = player.CurrentScore;
                         winnerNameText = string.Format(@"
 {0}
-{1}", winnerText, player.Name);
+{1} with the Score: {2}", winnerText, player.Name , player.CurrentScore);
 
                     }
                     else if (maxScore == player.CurrentScore)
@@ -137,8 +150,6 @@ namespace SpaceInvaders
             System.Windows.Forms.MessageBox.Show(endGameText, GameDefinitions.EndGameCaption);
             i_Game.Exit();
         }
-
-        public static List<Bullet> ListOfBullets => sr_ListOfBullets;
 
         public static List<Player> PlayersList => sr_PlayersList;
     }

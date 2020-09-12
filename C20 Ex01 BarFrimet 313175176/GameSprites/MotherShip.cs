@@ -54,6 +54,7 @@ namespace GameSprites
 
             if (bullet != null)
             {
+                GameManager.UpdateScore(this, bullet.FirearmSerialNumber);
                 bullet.DisableBullet();
                 this.Velocity = Vector2.Zero;
                 setupTimeDeltaAndRandomTime();

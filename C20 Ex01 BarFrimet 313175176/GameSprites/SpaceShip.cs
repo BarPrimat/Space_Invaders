@@ -21,14 +21,13 @@ namespace GameSprites
         private float m_SpaceshipSpeed;
         private int m_NumberOfTheSpaceship;
 
-        public Spaceship(Game i_Game, string i_TexturePath, int i_NumberOfTheSpaceship, LifeManager i_LifeManager) : base (i_TexturePath, i_Game)
+        public Spaceship(Game i_Game, string i_TexturePath, int i_NumberOfSpaceship, LifeManager i_LifeManager) : base (i_TexturePath, i_Game)
         {
             this.TintColor = GameDefinitions.SpaceshipTint;
-            r_Firearm = new Firearm(i_Game, SpaceshipMaxOfBullet, eBulletType.SpaceShipBullet);
+            r_Firearm = new Firearm(i_Game, SpaceshipMaxOfBullet, eBulletType.SpaceShipBullet, i_NumberOfSpaceship);
             m_SpaceshipSpeed = GameDefinitions.SpaceshipSpeed;
-            m_NumberOfTheSpaceship = i_NumberOfTheSpaceship;
+            m_NumberOfTheSpaceship = i_NumberOfSpaceship;
             r_LifeManager = i_LifeManager;
-            // SpaceInvadersGame.ListOfSprites.Add(this);
         }
 
         public override void Initialize()
@@ -73,6 +72,7 @@ namespace GameSprites
             {
                 if(bullet.eBulletType != eBulletType.SpaceShipBullet)
                 {
+                    GameManager.UpdateScore(this, r_Firearm.FirearmSerialNumber);
                     r_LifeManager.RemoveOneLife();
                     if (r_LifeManager.IsNoMoreLifeRemains())
                     {

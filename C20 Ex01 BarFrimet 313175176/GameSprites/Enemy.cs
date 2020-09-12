@@ -12,6 +12,7 @@ namespace GameSprites
     public class Enemy : Infrastructure.ObjectModel.Sprite, ICollidable2D
     {
         private readonly Firearm r_Firearm;
+        private static readonly int r_FirearmSerialNumber = 0;
 
         public Enemy(Game i_Game, string i_TexturePath, Color i_Tint) : base(i_TexturePath, i_Game)
         {
@@ -25,8 +26,9 @@ namespace GameSprites
 
             if(bullet != null && this.Visible)
             {
-                if(bullet.eBulletType != Enum.eBulletType.EnemyBullet)
+                if(bullet.eBulletType == Enum.eBulletType.SpaceShipBullet)
                 {
+                    GameManager.UpdateScore(this, bullet.FirearmSerialNumber);
                     RemoveComponent();
                     bullet.DisableBullet();
                 }

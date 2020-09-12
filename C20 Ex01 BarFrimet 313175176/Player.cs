@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows.Forms;
 using GameSprites;
 using Infrastructure.ServiceInterfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
+using Keys = Microsoft.Xna.Framework.Input.Keys;
 
 namespace SpaceInvaders
 {
@@ -17,21 +18,22 @@ namespace SpaceInvaders
         private readonly bool r_MouseIsAllowed;
         private readonly string r_Name;
         private readonly LifeManager r_LifeManager;
-        private readonly List<Bullet> r_ListOfBullets = new List<Bullet>();
         private readonly Keys r_RightMoveKey;
         private readonly Keys r_LeftMoveKey;
         private readonly Keys r_ShootKey;
+        private readonly int r_SerialNumber;
 
-        public Player(Game i_Game, string i_Name, string i_TextureSpaceshipPath, int i_NumberOfThePlayer, Keys i_RightMoveKey, Keys i_LeftMoveKey, Keys i_ShootKey)
+        public Player(Game i_Game, string i_Name, string i_TextureSpaceshipPath, int i_SerialNumberOfPlayer, Keys i_RightMoveKey, Keys i_LeftMoveKey, Keys i_ShootKey)
             : base(i_Game)
         {
+            r_SerialNumber = i_SerialNumberOfPlayer;
             r_Name = i_Name;
-            r_LifeManager = new LifeManager(i_Game, i_TextureSpaceshipPath, GameDefinitions.NumberOfLifeToStart, i_NumberOfThePlayer * GameDefinitions.StartLifePositionHeight);
-            r_Spaceship = new Spaceship(i_Game, i_TextureSpaceshipPath, i_NumberOfThePlayer, r_LifeManager);
+            r_LifeManager = new LifeManager(i_Game, i_TextureSpaceshipPath, GameDefinitions.NumberOfLifeToStart, r_SerialNumber * GameDefinitions.StartLifePositionHeight);
+            r_Spaceship = new Spaceship(i_Game, i_TextureSpaceshipPath, r_SerialNumber, r_LifeManager);
             r_RightMoveKey = i_RightMoveKey;
             r_LeftMoveKey = i_LeftMoveKey;
             r_ShootKey = i_ShootKey;
-            r_MouseIsAllowed = i_NumberOfThePlayer == GameDefinitions.PlayertThatAllowedToMouse ? true : false;
+            r_MouseIsAllowed = r_SerialNumber == GameDefinitions.PlayertThatAllowedToMouse;
             i_Game.Components.Add(this);
         }
 
@@ -89,5 +91,7 @@ namespace SpaceInvaders
         public string Name => r_Name;
 
         public Spaceship Spaceship => r_Spaceship;
+
+        public int SerialNumber => r_SerialNumber;
     }
 }
