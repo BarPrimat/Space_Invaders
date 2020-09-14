@@ -16,11 +16,21 @@ namespace SpaceInvaders
     {
         private int m_EnemyThatLeftToFinishGame;
         private static readonly List<Player> sr_PlayersList = new List<Player>();
+        // It is not necessary to save the elements game but they may be used in the future
+        private readonly Background r_Background;
+        private readonly MotherShip r_MotherShip;
+        private readonly EnemyArmy r_EnemyArmy;
+        private readonly BarriersGroup r_BarriersGroup;
 
         public GameManager(Game i_Game, int i_NumberOfPlayers) : base(i_Game)
         {
             m_EnemyThatLeftToFinishGame = GameDefinitions.NumberOfEnemyInColumn * GameDefinitions.NumberOfEnemyInRow;
-            new CollisionsManager(this.Game);
+            // It is not necessary to save the elements game but they may be used in the future
+            r_Background = new Background(i_Game, SpritesDefinition.BackgroundAsset);
+            r_MotherShip = new MotherShip(i_Game, SpritesDefinition.MotherSpaceShipAsset, Color.Red);
+            r_EnemyArmy = new EnemyArmy(i_Game);
+            r_BarriersGroup = new BarriersGroup(i_Game, SpritesDefinition.BarrierAsset, GameDefinitions.NumberOfBarrier);
+            new CollisionsManager(i_Game);
 
             for (int i = 0; i < i_NumberOfPlayers; i++)
             {

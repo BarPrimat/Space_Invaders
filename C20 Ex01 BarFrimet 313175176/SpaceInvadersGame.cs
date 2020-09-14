@@ -27,13 +27,8 @@ namespace SpaceInvaders
             r_Graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             this.IsMouseVisible = true;
-            // It is not necessary to save the elements game but they may be used in the future
-            r_Background = new Background(this, SpritesDefinition.BackgroundAsset);
-            r_MotherShip = new MotherShip(this, SpritesDefinition.MotherSpaceShipAsset, Color.Red);
-            r_EnemyArmy = new EnemyArmy(this);
             r_GameManager = new GameManager(this, 2);
             r_InputManager = new InputManager(this);
-            // r_CollisionsManager = new CollisionsManager(this);
         }
 
         protected override void Initialize()

@@ -33,7 +33,7 @@ namespace SpaceInvaders
             r_RightMoveKey = i_RightMoveKey;
             r_LeftMoveKey = i_LeftMoveKey;
             r_ShootKey = i_ShootKey;
-            r_MouseIsAllowed = r_SerialNumber == GameDefinitions.PlayertThatAllowedToMouse;
+            r_MouseIsAllowed = r_SerialNumber == GameDefinitions.PlayerThatAllowedToMouse;
             i_Game.Components.Add(this);
         }
 

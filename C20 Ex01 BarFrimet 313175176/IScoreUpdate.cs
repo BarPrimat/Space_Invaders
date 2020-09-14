@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Infrastructure.ServiceInterfaces;
+using Microsoft.Xna.Framework;
 
 namespace SpaceInvaders
 {
-    public interface IScoreUpdate
-    {
-        event EventHandler<EventArgs> UpdateScore;
-        void ScoreUpdate(IScoreUpdate i_UpdateScore);
-    }
+
 }

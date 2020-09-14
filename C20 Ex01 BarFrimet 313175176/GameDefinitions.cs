@@ -59,6 +59,8 @@ namespace SpaceInvaders
         // SpaceShip definitions
         private const int k_SpaceshipMaxOfBullet = 2;  // 2
         private const float k_SpaceshipSpeed = 140;
+        private const float k_SpaceshipSize = 32;
+        private const float k_SpaceshipYStartPosition = k_PreferredBackBufferHeight - k_SpaceshipSize - 10; // View point - Offset - put it a little bit higher
         private static readonly Color sr_SpaceshipTint = Color.White;
 
         // Background definitions
@@ -75,7 +77,17 @@ namespace SpaceInvaders
         private const Keys k_SecondPlayerKeyToRight = Keys.R;
         private const Keys k_SecondPlayerKeyToLeft = Keys.W;
         private const Keys k_SecondPlayerKeyToShoot = Keys.D3;
-        private const int k_PlayertThatAllowedToMouse = 0;
+        private const int k_PlayerThatAllowedToMouse = 0;
+
+        // Barrier definitions
+        private const float k_BarrierSpeed = 35;
+        private static readonly int sr_BarrierStartYPosition = PreferredBackBufferHeight;
+        private const Enum.eDirectionMove k_BarrierStartDirectionToMove = Enum.eDirectionMove.Right;
+
+        // BarrierGroup definitions
+        private const float k_SpaceBetweenBarrier = 1.3f;
+        private const int k_NumberOfBarrier = 4;
+        private const float k_VerticalSpaceBetweenSpaceshipAndBarrier = 1f;
 
         public static Color LifeTint => sr_LifeTint;
 
@@ -173,10 +185,24 @@ namespace SpaceInvaders
 
         public static Keys SecondPlayerKeyToShoot => k_SecondPlayerKeyToShoot;
 
-        public static int PlayertThatAllowedToMouse => k_PlayertThatAllowedToMouse;
+        public static int PlayerThatAllowedToMouse => k_PlayerThatAllowedToMouse;
 
         public static float ChanceBallDeleteWithHittingAnotherBall => k_ChanceBallDeleteWithHittingAnotherBall;
 
         public static int EnemyMaxOfBullet => k_EnemyMaxOfBullet;
+
+        public static float BarrierSpeed => k_BarrierSpeed;
+
+        public static Enum.eDirectionMove BarrierStartDirectionToMove => k_BarrierStartDirectionToMove;
+
+        public static float SpaceBetweenBarrier => k_SpaceBetweenBarrier;
+
+        public static int BarrierStartYPosition => sr_BarrierStartYPosition;
+
+        public static int NumberOfBarrier => k_NumberOfBarrier;
+
+        public static float SpaceshipYStartPosition => k_SpaceshipYStartPosition;
+
+        public static float VerticalSpaceBetweenSpaceshipAndBarrier => k_VerticalSpaceBetweenSpaceshipAndBarrier;
     }
 }

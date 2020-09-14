@@ -20,6 +20,7 @@ namespace GameSprites
         private readonly LifeManager r_LifeManager;
         private float m_SpaceshipSpeed;
         private int m_NumberOfTheSpaceship;
+        private static float s_YPosition;
 
         public Spaceship(Game i_Game, string i_TexturePath, int i_NumberOfSpaceship, LifeManager i_LifeManager) : base (i_TexturePath, i_Game)
         {
@@ -33,21 +34,14 @@ namespace GameSprites
         public override void Initialize()
         {
             base.Initialize();
-            InitPosition();
+            initPosition();
         }
 
-        private void InitPosition()
+        private void initPosition()
         {
             // Init the ship position
             float x = m_NumberOfTheSpaceship * this.Texture.Width;
-            float y = (float) PreferredBackBufferHeight;
-
-            // Offset:
-            y -= this.Texture.Height;
-
-            // Put it a little bit higher:
-            y -= 10;
-            this.Position = new Vector2(x, y);
+            this.Position = new Vector2(x, SpaceshipYStartPosition);
         }
 
         public void Shoot()
@@ -80,7 +74,7 @@ namespace GameSprites
                     }
                     else
                     {
-                        this.InitPosition();
+                        initPosition();
                     }
 
                     bullet.DisableBullet();
@@ -90,5 +84,10 @@ namespace GameSprites
 
 
         public float SpaceshipSpeed => m_SpaceshipSpeed;
+
+        public static float YPosition
+        {
+            get => s_YPosition;
+        }
     }
 }

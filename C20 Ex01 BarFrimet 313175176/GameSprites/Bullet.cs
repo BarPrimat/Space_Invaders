@@ -39,7 +39,7 @@ namespace GameSprites
 
         protected override void InitOrigins()
         {
-            this.m_PositionOrigin = new Vector2(this.Texture.Width / 2, this.Texture.Height / 2);
+            this.PositionOrigin = new Vector2(this.Texture.Width / 2, this.Texture.Height / 2);
             base.InitOrigins();
         }
 
