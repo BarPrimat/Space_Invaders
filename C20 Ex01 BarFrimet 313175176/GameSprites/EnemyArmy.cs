@@ -26,11 +26,12 @@ namespace GameSprites
         private eDirectionMove m_eDirectionMove;
         private int m_CounterOfEnemyBulletInAir = 0;
         private static float s_CurrentSpeed = 1;
-        private static int s_EnemyKilledCounter = 0;
+        private static int s_EnemyThatLeft = 0;
 
         public EnemyArmy(Game i_Game) : base(i_Game)
         {
             r_EnemyArray = new Enemy[GameDefinitions.NumberOfEnemyInRow, GameDefinitions.NumberOfEnemyInColumn];
+            s_EnemyThatLeft = GameDefinitions.NumberOfEnemyInRow * GameDefinitions.NumberOfEnemyInColumn;
             m_eDirectionMove = eDirectionMove.Right;
             r_Firearm = new Firearm(i_Game, EnemyArmyMaxOfBullet, eBulletType.EnemyBullet);
             r_Random = new Random();
@@ -111,7 +112,7 @@ namespace GameSprites
             InitPosition();
             if(isEnemyReachSpaceShipHeight())
             {
-                //GameManager.ShowScoreAndEndGame(Game);
+              //  GameManager.ShowScoreAndEndGame(Game);
             }
         }
 
@@ -273,16 +274,22 @@ namespace GameSprites
 
         private static void increaseSpeedIfEnemyKilled()
         {
-            if(s_EnemyKilledCounter % NumberOfEnemyKilledToIncreaseSpeed == 0)
+            if(s_EnemyThatLeft % NumberOfEnemyKilledToIncreaseSpeed == 0)
             {
                 s_CurrentSpeed += EnemyIncreaseSpeedEveryXDead;
             }
         }
 
-        public static void AddEnemyKilledByOne()
+        public static void SubtractionEnemyByOne()
         {
-            s_EnemyKilledCounter++;
+            s_EnemyThatLeft--;
             increaseSpeedIfEnemyKilled();
+        }
+
+        public static  int EnemyThatLeft
+        {
+            get => s_EnemyThatLeft;
+            set => s_EnemyThatLeft = value;
         }
     }
 }

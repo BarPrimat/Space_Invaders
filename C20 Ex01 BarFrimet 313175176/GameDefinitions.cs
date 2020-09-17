@@ -57,7 +57,7 @@ namespace SpaceInvaders
         public static readonly Color sr_SpaceshipBulletTint = Color.Red;
 
         // SpaceShip definitions
-        private const int k_SpaceshipMaxOfBullet = 2;  // 2
+        private const int k_SpaceshipMaxOfBullet = 100;  // 2
         private const float k_SpaceshipSpeed = 140;
         private const float k_SpaceshipSize = 32;
         private const float k_SpaceshipYStartPosition = k_PreferredBackBufferHeight - k_SpaceshipSize - 10; // View point - Offset - put it a little bit higher

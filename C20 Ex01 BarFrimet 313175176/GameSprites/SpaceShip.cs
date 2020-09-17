@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using Infrastructure.Managers;
+using Infrastructure.ObjectModel.Animators;
+using Infrastructure.ObjectModel.Animators.ConcreteAnimators;
 using Infrastructure.ServiceInterfaces;
 using SpaceInvaders;
 using Microsoft.Xna.Framework;
@@ -34,7 +36,14 @@ namespace GameSprites
         public override void Initialize()
         {
             base.Initialize();
+            this.initAnimations();
             initPosition();
+        }
+
+        protected override void InitOrigins()
+        {
+            this.m_RotationOrigin = new Vector2(this.Texture.Width / 2, this.Texture.Height / 2);
+            base.InitOrigins();
         }
 
         private void initPosition()
@@ -74,7 +83,10 @@ namespace GameSprites
                     }
                     else
                     {
-                        initPosition();
+                        // RotateAnimator rotateAnimator = new RotateAnimator(5, RotateAnimator.eDirection.Right, TimeSpan.FromSeconds(1.5));
+
+                        this.Animations["BlinkAnimator"].Reset();
+                        this.Animations["BlinkAnimator"].Resume();
                     }
 
                     bullet.DisableBullet();
@@ -82,6 +94,21 @@ namespace GameSprites
             }
         }
 
+        private void initAnimations()
+        {
+            // RotateAnimator rotateAnimator = new RotateAnimator(5, RotateAnimator.eDirection.Right, TimeSpan.FromSeconds(1.5));
+            BlinkAnimator blinkAnimator = new BlinkAnimator("BlinkAnimator", TimeSpan.FromSeconds(0.2), TimeSpan.FromSeconds(2));
+            this.Animations.Add(blinkAnimator);
+            this.Animations.Enabled = true;
+
+            blinkAnimator.Finished += animations_Finished;
+            this.Animations["BlinkAnimator"].Pause();
+        }
+
+        private void animations_Finished(object sender, EventArgs e)
+        {
+            initPosition();
+        }
 
         public float SpaceshipSpeed => m_SpaceshipSpeed;
 

@@ -2,11 +2,19 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Infrastructure.ServiceInterfaces;
+using Infrastructure.ObjectModel.Animators;
 
 namespace Infrastructure.ObjectModel
 {
     public class Sprite : LoadableDrawableComponent
     {
+        protected CompositeAnimator m_Animations;
+        public CompositeAnimator Animations
+        {
+            get { return m_Animations; }
+            set { m_Animations = value; }
+        }
+
         private Texture2D m_Texture;
         public Texture2D Texture
         {
@@ -246,6 +254,13 @@ namespace Infrastructure.ObjectModel
             }
         }
 
+        public override void Initialize()
+        {
+            base.Initialize();
+
+            m_Animations = new CompositeAnimator(this);
+        }
+
         protected override void LoadContent()
         {
             m_Texture = Game.Content.Load<Texture2D>(m_AssetName);
@@ -280,6 +295,8 @@ namespace Infrastructure.ObjectModel
             this.Rotation += this.AngularVelocity * totalSeconds;
 
             base.Update(gameTime);
+
+            this.Animations.Update(gameTime);
         }
 
         /// <summary>
@@ -330,5 +347,10 @@ namespace Infrastructure.ObjectModel
             this.Velocity *= -1;
         }
         #endregion //Collision Handlers
+
+        public Sprite ShallowClone()
+        {
+            return this.MemberwiseClone() as Sprite;
+        }
     }
 }

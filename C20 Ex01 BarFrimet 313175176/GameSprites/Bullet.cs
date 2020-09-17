@@ -31,7 +31,7 @@ namespace GameSprites
         public override void Update(GameTime i_GameTime)
         {
             base.Update(i_GameTime);
-            if (this.Visible && isBulletHitBorder())
+            if (this.Enabled && isBulletHitBorder())
             {
                 DisableBullet();
             }
@@ -73,11 +73,13 @@ namespace GameSprites
         {
             this.Position = i_Position;
             this.Visible = true;
+            this.Enabled = true;
         }
 
         public void DisableBullet()
         {
             this.Visible = false;
+            this.Enabled = false;
         }
 
         public eBulletType eBulletType => r_eBulletType;

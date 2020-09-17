@@ -58,6 +58,7 @@ namespace GameSprites
             if (bullet != null && this.Visible)
             {
                 bullet.DisableBullet();
+                this.Visible = false;
                 this.Game.Components.Remove(this);
             }
         }

@@ -46,7 +46,8 @@ namespace SpaceInvaders
 
         public override void Update(GameTime i_GameTime)
         {
-            if (m_EnemyThatLeftToFinishGame == 0)
+
+            if (EnemyArmy.EnemyThatLeft == 0)
             {
                 ShowScoreAndEndGame(Game);
             } 
