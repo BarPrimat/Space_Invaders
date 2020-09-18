@@ -4,7 +4,7 @@ using System.Text;
 using Infrastructure.ObjectModel.Animators;
 using Microsoft.Xna.Framework;
 
-namespace Animators
+namespace Infrastructure.ObjectModel.Animators.ConcreteAnimators
 {
     public class RotateAnimator : SpriteAnimator
     {
@@ -25,6 +25,7 @@ namespace Animators
             m_NumberOfRotatePerSec = i_NumberOfRotatePerSec;
             m_AnimationLength = i_AnimationLength;
             m_eDirection = i_Direction;
+            m_AngularVelocity = (float)MathHelper.TwoPi * (float)m_NumberOfRotatePerSec * (int) m_eDirection;
         }
 
         public RotateAnimator(TimeSpan i_AnimationLength, float i_NumberOfRotatePerSec, eDirectionMove i_Direction)
@@ -34,16 +35,12 @@ namespace Animators
 
         protected override void RevertToOriginal()
         {
-            this.BoundSprite.Scales = this.m_OriginalSpriteInfo.Scales;
-            this.BoundSprite.Rotation = 0;
+           this.BoundSprite.AngularVelocity = 0;
         }
 
         protected override void DoFrame(GameTime i_GameTime)
         {
-            float rotationVelocity = this.m_NumberOfRotatePerSec * MathHelper.TwoPi * (int) m_eDirection;
-            var currentTime = (float)this.m_AnimationLength.TotalSeconds - (float)i_GameTime.ElapsedGameTime.TotalSeconds;
-
-            this.BoundSprite.Rotation += rotationVelocity * currentTime;
+            this.BoundSprite.AngularVelocity = m_AngularVelocity;
         }
     }
 }

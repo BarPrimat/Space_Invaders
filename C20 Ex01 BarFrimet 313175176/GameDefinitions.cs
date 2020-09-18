@@ -27,8 +27,8 @@ namespace SpaceInvaders
         private const float k_EnemyMaxTimeForShoot = 3;
         private const float k_NumberOfJumpInSec = 2;
         private const float k_TimeBetweenJumpsInSec = 1 / k_NumberOfJumpInSec;
-        private const int k_NumberOfEnemyInRow = 5;
-        private const int k_NumberOfEnemyInColumn = 9;
+        private const int k_NumberOfEnemyInRow = 5; // 5
+        private const int k_NumberOfEnemyInColumn = 9; // 9
         private const int k_EnemyArmyMaxOfBullet = 400;
         private const int k_NumberOfEnemyKilledToIncreaseSpeed = 5;
 
@@ -36,10 +36,14 @@ namespace SpaceInvaders
         private static readonly Color sr_PinkEnemyTint = Color.Pink;
         private static readonly Color sr_LightBlueEnemyTint = Color.LightBlue;
         private static readonly Color sr_YellowEnemyTint = Color.Yellow;
-        private const float k_EnemySize = 32;
         private const int k_EnemyMaxOfBullet = 1;
+        private const int k_EnemyNumberOfAssetInRow = 2;
+        private const float k_EnemySize = 32;
         private const float k_EnemySizeWidth = k_EnemySize;
         private const float k_EnemySizeHeight = k_EnemySize;
+        private const float k_EnemyAnimationLengthInSec = 1.7f;
+        private const float k_EnemyNumberOfRotateInSec = 5;
+        private const float k_EnemyNumberOfAssetChangesInSec = 0.5f;
 
         // Life definitions
         private const int k_SpaceBetweenLife = 32;
@@ -60,6 +64,10 @@ namespace SpaceInvaders
         private const int k_SpaceshipMaxOfBullet = 100;  // 2
         private const float k_SpaceshipSpeed = 140;
         private const float k_SpaceshipSize = 32;
+        private const float k_SpaceshipAnimationLengthInSec = 2.6f;
+        private const float k_SpaceshipNumberOfRotateInSec = 6;
+        private const float k_SpaceshipAnimationLengthWhenBulletHitInSec = 2f;
+        private const float k_SpaceshipNumberOfBlinkingWhenBulletHitInSec = 1f / (8 * k_SpaceshipAnimationLengthWhenBulletHitInSec);
         private const float k_SpaceshipYStartPosition = k_PreferredBackBufferHeight - k_SpaceshipSize - 10; // View point - Offset - put it a little bit higher
         private static readonly Color sr_SpaceshipTint = Color.White;
 
@@ -69,6 +77,8 @@ namespace SpaceInvaders
         // MotherShip definitions
         private const float k_MotherShipSpeed = 95;
         private const int k_MotherShipMaxTimeToNextAppearsInSec = 15;
+        private const float k_MotherShipAnimationLengthInSec = 3;
+        private const float k_MotherShipNumberOfBlinkInAnimation = 0.3f;
 
         // Player definitions
         private const Keys k_FirstPlayerKeyToRight = Keys.P;
@@ -204,5 +214,25 @@ namespace SpaceInvaders
         public static float SpaceshipYStartPosition => k_SpaceshipYStartPosition;
 
         public static float VerticalSpaceBetweenSpaceshipAndBarrier => k_VerticalSpaceBetweenSpaceshipAndBarrier;
+
+        public static float EnemyAnimationLengthInSec => k_EnemyAnimationLengthInSec;
+
+        public static float EnemyNumberOfRotateInSec => k_EnemyNumberOfRotateInSec;
+
+        public static float SpaceshipAnimationLengthInSec => k_SpaceshipAnimationLengthInSec;
+
+        public static float SpaceshipNumberOfRotateInSec => k_SpaceshipNumberOfRotateInSec;
+
+        public static float MotherShipAnimationLengthInSec => k_MotherShipAnimationLengthInSec;
+
+        public static float MotherShipNumberOfBlinkInAnimation => k_MotherShipNumberOfBlinkInAnimation;
+
+        public static float SpaceshipNumberOfBlinkingWhenBulletHitInSec => k_SpaceshipNumberOfBlinkingWhenBulletHitInSec;
+
+        public static float SpaceshipAnimationLengthWhenBulletHitInSec => k_SpaceshipAnimationLengthWhenBulletHitInSec;
+
+        public static float EnemyNumberOfAssetChangesInSec => k_EnemyNumberOfAssetChangesInSec;
+
+        public static int EnemyNumberOfAssetInRow => k_EnemyNumberOfAssetInRow;
     }
 }

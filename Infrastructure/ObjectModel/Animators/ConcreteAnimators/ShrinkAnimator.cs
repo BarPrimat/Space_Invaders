@@ -4,7 +4,7 @@ using System.Text;
 using Infrastructure.ObjectModel.Animators;
 using Microsoft.Xna.Framework;
 
-namespace Animators
+namespace Infrastructure.ObjectModel.Animators.ConcreteAnimators
 {
     public class ShrinkAnimator : SpriteAnimator
     {
@@ -24,6 +24,7 @@ namespace Animators
         protected override void RevertToOriginal()
         {
             this.BoundSprite.Scales = m_OriginalSpriteInfo.Scales;
+            m_CurrentTimeToFinish = (float) this.AnimationLength.TotalSeconds;
         }
 
         protected override void DoFrame(GameTime i_GameTime)

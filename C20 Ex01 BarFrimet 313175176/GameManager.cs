@@ -38,7 +38,7 @@ namespace SpaceInvaders
                 Keys leftKey = i == 0 ? GameDefinitions.FirstPlayerKeyToLeft : GameDefinitions.SecondPlayerKeyToLeft;
                 Keys rightKey = i == 0 ? GameDefinitions.FirstPlayerKeyToRight : GameDefinitions.SecondPlayerKeyToRight;
                 Keys shootKey = i == 0 ? GameDefinitions.FirstPlayerKeyToShoot : GameDefinitions.SecondPlayerKeyToShoot;
-                sr_PlayersList.Add(new Player(i_Game, "P " + i, assetPath, i, rightKey, leftKey, shootKey));
+                sr_PlayersList.Add(new Player(i_Game, "P " + (i + 1), assetPath, i, rightKey, leftKey, shootKey));
             }
 
             i_Game.Components.Add(this);
@@ -68,22 +68,6 @@ namespace SpaceInvaders
                 }
             }
         }
-
-        /*
-        public static Player GetPlayerComponent(Game i_Game, int i_GunSerialNumber, Sprite i_Sprite)
-        {
-            foreach (Player player in sr_PlayersList)
-            {
-                if (player.SerialNumber == i_GunSerialNumber)
-                {
-                    UpdateScore(i_Sprite,);
-                }
-            }
-
-            return player;
-        }
-
-        */
 
         public static void UpdateScore(Sprite i_Sprite, int i_NumberOfPlayer)
         {
@@ -127,7 +111,7 @@ namespace SpaceInvaders
             }
         }
 
-        public void ShowScoreAndEndGame(Game i_Game)
+        public static void ShowScoreAndEndGame(Game i_Game)
         {
             string endGameText = sr_PlayersList.Count < 2 ? string.Format("{0}{1}{2}: {3}", GameDefinitions.EndGameText1Player, sr_PlayersList[0].Name, sr_PlayersList[0].CurrentScore) 
                                      : GameDefinitions.EndGameTextMoreThen1Player;

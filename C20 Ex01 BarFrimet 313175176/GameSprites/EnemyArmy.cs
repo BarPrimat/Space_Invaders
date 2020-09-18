@@ -79,6 +79,8 @@ namespace GameSprites
         {
             string texturePath = null;
             Color colorAsset = Color.White;
+            int rowIndexInPicture = 0;
+            int columnIndexInPicture = 0;
 
             // The number represent the line number
             switch (i_Row)
@@ -86,20 +88,28 @@ namespace GameSprites
                 case 0:
                     texturePath = SpritesDefinition.PinkEnemyAsset;
                     colorAsset = GameDefinitions.PinkEnemyTint;
+                    rowIndexInPicture = 0;
                     break;
                 case 1:
                 case 2:
                     texturePath = SpritesDefinition.LightBlueEnemyAsset;
                     colorAsset = GameDefinitions.LightBlueEnemyTint;
+                    rowIndexInPicture = 1;
                     break;
                 case 3:
                 case 4:
                     texturePath = SpritesDefinition.YellowEnemyAsset;
                     colorAsset = GameDefinitions.YellowEnemyTint;
+                    rowIndexInPicture = 2;
                     break;
             }
 
-            r_EnemyArray[i_Row, i_Column] = new Enemy(Game, texturePath, colorAsset);
+            if(i_Row % 2 == 1)
+            {
+                columnIndexInPicture = 1;
+            }
+
+            r_EnemyArray[i_Row, i_Column] = new Enemy(Game, texturePath, colorAsset, rowIndexInPicture, columnIndexInPicture, GameDefinitions.EnemyNumberOfAssetChangesInSec, GameDefinitions.EnemyNumberOfAssetInRow);
         }
 
         public override void Update(GameTime i_GameTime)
@@ -112,7 +122,7 @@ namespace GameSprites
             InitPosition();
             if(isEnemyReachSpaceShipHeight())
             {
-              //  GameManager.ShowScoreAndEndGame(Game);
+                GameManager.ShowScoreAndEndGame(Game);
             }
         }
 
@@ -135,12 +145,10 @@ namespace GameSprites
                     if (!m_MoveStepDown && (PreferredBackBufferWidth <= rightGroupBorder + Math.Max(EnemySizeWidth, newMoveToAdd)) && m_eDirectionMove == eDirectionMove.Right)
                     {
                         newMoveToAdd = PreferredBackBufferWidth - rightGroupBorder;
-                      //  m_MoveStepDown = true;
                     }
                     else if (!m_MoveStepDown && (leftGroupBorder - Math.Max(EnemySizeWidth, newMoveToAdd) <= 0) && m_eDirectionMove == eDirectionMove.Left)
                     {
                         newMoveToAdd = leftGroupBorder;
-                       //  m_MoveStepDown = true;
                     }
 
                     m_MoveStepDown = (PreferredBackBufferWidth < rightGroupBorder + EnemySizeWidth && m_eDirectionMove == eDirectionMove.Right)
@@ -160,9 +168,9 @@ namespace GameSprites
             {
                 int randomizeEnemyRow = r_Random.Next(NumberOfEnemyInRow);
                 int randomizeEnemyColumn = r_Random.Next(NumberOfEnemyInColumn);
-                if (r_EnemyArray[randomizeEnemyRow, randomizeEnemyColumn].Visible)
+                if (r_EnemyArray[randomizeEnemyRow, randomizeEnemyColumn].Visible && !r_EnemyArray[randomizeEnemyRow, randomizeEnemyColumn].IsDying)
                 {
-                    r_EnemyArray[randomizeEnemyRow, randomizeEnemyColumn].Shoot(r_EnemyArray[randomizeEnemyRow, randomizeEnemyColumn].Position);
+                    r_EnemyArray[randomizeEnemyRow, randomizeEnemyColumn].Shoot();
                 }
 
                 m_EnemyNextTimeToShoot = r_Random.Next((int)GameDefinitions.EnemyMaxTimeForShoot);
@@ -172,11 +180,11 @@ namespace GameSprites
 
         private void checkAndChangeMoveDirection()
         {
-            if (GraphicsDevice.Viewport.Width <= getRightGroupBorder() + r_EnemyArray[0, 0].Texture.Width)
+            if (GraphicsDevice.Viewport.Width <= getRightGroupBorder() + r_EnemyArray[0, 0].WidthBeforeScale)
             {
                 m_eDirectionMove = eDirectionMove.Left;
             }
-            else if (0 >= getLeftGroupBorder() - r_EnemyArray[0, 0].Texture.Width)
+            else if (0 >= getLeftGroupBorder() - r_EnemyArray[0, 0].WidthBeforeScale)
             {
                 m_eDirectionMove = eDirectionMove.Right;
             }
@@ -193,7 +201,7 @@ namespace GameSprites
                 {
                     if (r_EnemyArray[row, column].Visible)
                     {
-                        rightBorderXPosition = r_EnemyArray[row, column].Position.X + r_EnemyArray[row, column].Texture.Width;
+                        rightBorderXPosition = r_EnemyArray[row, column].Position.X + r_EnemyArray[row, column].WidthBeforeScale;
                         isFound = true;
                     }
                 }
@@ -227,18 +235,8 @@ namespace GameSprites
             
             bool isEnemyHitWasSomething = false;
             Rectangle spaceShipRectangle = default;
-            float spaceShipYPosition = 0;
+            float spaceShipYPosition = GameDefinitions.SpaceshipYStartPosition;
             bool findHit = false;
-            /*
-
-            // Find Spaceship sprite her for better efficiency
-            foreach (Sprite sprite in SpaceInvadersGame.ListOfSprites)
-            {
-                if (sprite is Spaceship)
-                {
-                    spaceShipYPosition = sprite.Position.Y;
-                }
-            }
 
             // No need to enter the loop is the enemy army can not hit nothing
             if (m_CurrentTopLeftY + NumberOfEnemyInColumn * NumberOfEnemyInRow + spaceShipYPosition >= GraphicsDevice.Viewport.Height)
@@ -247,14 +245,14 @@ namespace GameSprites
                 {
                     for(int column = 0; column < NumberOfEnemyInColumn && !findHit; column++)
                     {
-                        if (r_EnemyArray[row, column].Visible && (r_EnemyArray[row, column].Position.Y + r_EnemyArray[row, column].Texture.Height >= spaceShipYPosition))
+                        if (r_EnemyArray[row, column].Visible && !r_EnemyArray[row, column].IsDying && (r_EnemyArray[row, column].Position.Y + r_EnemyArray[row, column].Height >= spaceShipYPosition))
                         {
                             findHit = !findHit;
                         }
                     }
                 }
             }
-            */
+            
             return findHit;
         }
 
@@ -262,8 +260,9 @@ namespace GameSprites
         {
             bool isEnemyHitSomething = false;
 
-            if (r_EnemyArray[i_Row, i_Column].Visible){
-                if (r_EnemyArray[i_Row, i_Column].Position.Y + r_EnemyArray[i_Row, i_Column].Texture.Height >= GraphicsDevice.Viewport.Height)
+            if (r_EnemyArray[i_Row, i_Column].Visible && !r_EnemyArray[i_Row, i_Column].IsDying)
+            {
+                if (r_EnemyArray[i_Row, i_Column].Position.Y + r_EnemyArray[i_Row, i_Column].Height >= GraphicsDevice.Viewport.Height)
                 {
                     isEnemyHitSomething = !isEnemyHitSomething;
                 }

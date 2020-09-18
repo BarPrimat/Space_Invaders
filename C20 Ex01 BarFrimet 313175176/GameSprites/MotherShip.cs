@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Infrastructure.ObjectModel.Animators;
+using Infrastructure.ObjectModel.Animators.ConcreteAnimators;
 using Infrastructure.ServiceInterfaces;
 using SpaceInvaders;
 using Microsoft.Xna.Framework;
@@ -14,6 +16,7 @@ namespace GameSprites
         private int m_RandomTimeToNextAppears;
         private readonly Random r_Random;
         private float m_TimeDeltaCounter = 0;
+        private bool m_IsDying = false;
 
         public MotherShip(Game i_Game, string i_TexturePath, Color i_Tint) : base(i_TexturePath, i_Game)
         {
@@ -25,7 +28,13 @@ namespace GameSprites
         public override void Initialize()
         {
             base.Initialize();
+            this.initAnimations();
             initPosition();
+        }
+
+        protected override void InitOrigins()
+        {
+            this.m_RotationOrigin = new Vector2(this.Texture.Width / 2, this.Texture.Height / 2);
         }
 
         private void initPosition()
@@ -39,11 +48,10 @@ namespace GameSprites
             m_TimeDeltaCounter += (float)i_GameTime.ElapsedGameTime.TotalSeconds;
             if (m_TimeDeltaCounter >= m_RandomTimeToNextAppears)
             {
-                if (this.Position.X >= GraphicsDevice.Viewport.Width || this.Position.X < 0)
+                if (this.Position.X >= GraphicsDevice.Viewport.Width || (this.Position.X + this.Width) <= 0)
                 {
                     initPosition();
                     this.Velocity = new Vector2(MotherShipSpeed, 0);
-                    setupTimeDeltaAndRandomTime();
                 }
             }
         }
@@ -52,13 +60,13 @@ namespace GameSprites
         {
             Bullet bullet = i_Collidable as Bullet;
 
-            if (bullet != null)
+            if (bullet != null && !m_IsDying)
             {
                 GameManager.UpdateScore(this, bullet.FirearmSerialNumber);
                 bullet.DisableBullet();
+                m_IsDying = true;
                 this.Velocity = Vector2.Zero;
-                setupTimeDeltaAndRandomTime();
-                initPosition();
+                this.Animations.Restart();
             }
         }
 
@@ -66,6 +74,27 @@ namespace GameSprites
         {
             m_TimeDeltaCounter = 0;
             m_RandomTimeToNextAppears = r_Random.Next(0, MotherShipMaxTimeToNextAppearsInSec);
+        }
+
+        private void initAnimations()
+        {
+            TimeSpan timeSpan = TimeSpan.FromSeconds(GameDefinitions.MotherShipAnimationLengthInSec);
+            FadeoutAnimator fadeoutAnimator = new FadeoutAnimator("FadeoutAnimator", timeSpan);
+            ShrinkAnimator shrinkAnimator = new ShrinkAnimator("ShrinkAnimator", timeSpan);
+            BlinkAnimator blinkAnimator = new BlinkAnimator ("blinkAnimator", TimeSpan.FromSeconds(GameDefinitions.MotherShipNumberOfBlinkInAnimation), timeSpan);
+            CompositeAnimator dyingMotherShip = new CompositeAnimator("DyingMotherShip", timeSpan, this, fadeoutAnimator, shrinkAnimator, blinkAnimator);
+
+            this.Animations.Add(dyingMotherShip);
+            this.Animations.Enabled = true;
+            this.Animations.Pause();
+            dyingMotherShip.Finished += animations_Finished;
+        }
+
+        private void animations_Finished(object i_Sender, EventArgs i_EventArgs)
+        {
+            setupTimeDeltaAndRandomTime();
+            initPosition();
+            m_IsDying = false;
         }
     }
 }

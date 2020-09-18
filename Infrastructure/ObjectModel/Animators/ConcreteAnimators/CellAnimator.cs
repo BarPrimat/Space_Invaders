@@ -23,6 +23,13 @@ namespace Infrastructure.ObjectModel.Animators.ConcreteAnimators
             m_Loop = i_AnimationLength == TimeSpan.Zero;
         }
 
+        // CTORs if needed to start with Cell that not start with 0
+        public CellAnimator(TimeSpan i_CellTime, int i_NumOfCells, TimeSpan i_AnimationLength, int i_StartCellIdx)
+            : this( i_CellTime, i_NumOfCells, i_AnimationLength)
+        {
+            m_CurrCellIdx = i_StartCellIdx;
+        }
+
         private void goToNextFrame()
         {
             m_CurrCellIdx++;

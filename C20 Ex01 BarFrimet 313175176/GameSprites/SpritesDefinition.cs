@@ -10,9 +10,9 @@ namespace GameSprites
         private const string k_SpaceshipUser1Asset = @"Sprites\Ship01_32x32";
         private const string k_SpaceshipUser2Asset = @"Sprites\Ship02_32x32";
         private const string k_BackgroundAsset = @"Sprites\BG_Space01_1024x768";
-        private const string k_PinkEnemyAsset = @"Sprites\Enemy0101_32x32";
-        private const string k_LightBlueEnemyAsset = @"Sprites\Enemy0201_32x32";
-        private const string k_YellowEnemyAsset = @"Sprites\Enemy0301_32x32";
+        private const string k_PinkEnemyAsset = @"Sprites\EnemyCollection_64x96";
+        private const string k_LightBlueEnemyAsset = k_PinkEnemyAsset;
+        private const string k_YellowEnemyAsset = k_PinkEnemyAsset;
         private const string k_LifeUser1Asset = @"Sprites\Ship01_32x32";
         private const string k_LifeUser2Asset = @"Sprites\Ship02_32x32";
         private const string k_BulletAsset = @"Sprites\Bullet";

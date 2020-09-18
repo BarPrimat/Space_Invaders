@@ -22,6 +22,7 @@ namespace GameSprites
         private readonly LifeManager r_LifeManager;
         private float m_SpaceshipSpeed;
         private int m_NumberOfTheSpaceship;
+        private bool m_IsDying = false;
         private static float s_YPosition;
 
         public Spaceship(Game i_Game, string i_TexturePath, int i_NumberOfSpaceship, LifeManager i_LifeManager) : base (i_TexturePath, i_Game)
@@ -55,7 +56,7 @@ namespace GameSprites
 
         public void Shoot()
         {
-            if(this.Visible)
+            if(this.Visible && !m_IsDying)
             {
                 r_Firearm.Shoot(new Vector2(this.Position.X + Texture.Width / 2, this.Position.Y));
             }
@@ -71,22 +72,21 @@ namespace GameSprites
         {
             Bullet bullet = i_Collidable as Bullet;
 
-            if(bullet != null && this.Visible)
+            if(bullet != null && this.Visible && !m_IsDying)
             {
                 if(bullet.eBulletType != eBulletType.SpaceShipBullet)
                 {
                     GameManager.UpdateScore(this, r_Firearm.FirearmSerialNumber);
                     r_LifeManager.RemoveOneLife();
+                    m_IsDying = true;
                     if (r_LifeManager.IsNoMoreLifeRemains())
                     {
-                        this.Visible = false;
+                        this.Animations["DyingSpaceship"].Restart();
                     }
                     else
                     {
-                        // RotateAnimator rotateAnimator = new RotateAnimator(5, RotateAnimator.eDirection.Right, TimeSpan.FromSeconds(1.5));
-
-                        this.Animations["BlinkAnimator"].Reset();
-                        this.Animations["BlinkAnimator"].Resume();
+                        m_IsDying = true;
+                        this.Animations["HittingSpaceship"].Restart();
                     }
 
                     bullet.DisableBullet();
@@ -96,18 +96,37 @@ namespace GameSprites
 
         private void initAnimations()
         {
-            // RotateAnimator rotateAnimator = new RotateAnimator(5, RotateAnimator.eDirection.Right, TimeSpan.FromSeconds(1.5));
-            BlinkAnimator blinkAnimator = new BlinkAnimator("BlinkAnimator", TimeSpan.FromSeconds(0.2), TimeSpan.FromSeconds(2));
-            this.Animations.Add(blinkAnimator);
-            this.Animations.Enabled = true;
+            // Animator when space ship dying
+            TimeSpan timeSpanDyingSpaceship = TimeSpan.FromSeconds(GameDefinitions.SpaceshipAnimationLengthInSec);
+            RotateAnimator rotateAnimator = new RotateAnimator("RotateAnimator", timeSpanDyingSpaceship, GameDefinitions.SpaceshipNumberOfRotateInSec, RotateAnimator.eDirectionMove.Right);
+            FadeoutAnimator fadeoutAnimator = new FadeoutAnimator("ShrinkAnimator", timeSpanDyingSpaceship);
+            CompositeAnimator dyingSpaceship = new CompositeAnimator("DyingSpaceship", timeSpanDyingSpaceship, this, rotateAnimator, fadeoutAnimator);
 
-            blinkAnimator.Finished += animations_Finished;
-            this.Animations["BlinkAnimator"].Pause();
+            // Animator when space ship hit by a bullet
+            TimeSpan timeSpanHittingSpaceship = TimeSpan.FromSeconds(GameDefinitions.SpaceshipAnimationLengthWhenBulletHitInSec);
+            BlinkAnimator blinkBulletHit = new BlinkAnimator("BlinkBulletHit", TimeSpan.FromSeconds(GameDefinitions.SpaceshipNumberOfBlinkingWhenBulletHitInSec), timeSpanHittingSpaceship);
+            // Not necessary need it but maybe in the further, we may need it
+            CompositeAnimator hittingSpaceship = new CompositeAnimator("HittingSpaceship", timeSpanHittingSpaceship, this, blinkBulletHit);
+
+            this.Animations.Add(dyingSpaceship);
+            this.Animations.Add(hittingSpaceship);
+            this.Animations.Enabled = true;
+            this.Animations["DyingSpaceship"].Pause();
+            this.Animations["HittingSpaceship"].Pause();
+            dyingSpaceship.Finished += animationsDying_Finished;
+            hittingSpaceship.Finished += animationsHit_Finished;
         }
 
-        private void animations_Finished(object sender, EventArgs e)
+        private void animationsDying_Finished(object i_Sender, EventArgs i_EventArgs)
+        {
+            this.Visible = false;
+            this.Enabled = false;
+        }
+
+        private void animationsHit_Finished(object i_Sender, EventArgs i_EventArgs)
         {
             initPosition();
+            m_IsDying = false;
         }
 
         public float SpaceshipSpeed => m_SpaceshipSpeed;

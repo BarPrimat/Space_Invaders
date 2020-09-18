@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Animators;
 using Infrastructure.ObjectModel.Animators;
 using Infrastructure.ObjectModel.Animators.ConcreteAnimators;
 using Infrastructure.ServiceInterfaces;
@@ -14,14 +13,28 @@ namespace GameSprites
 {
     public class Enemy : Infrastructure.ObjectModel.Sprite, ICollidable2D
     {
-        private readonly Firearm r_Firearm;
         private bool m_IsDying;
+        private readonly Firearm r_Firearm;
+        private readonly TimeSpan r_TimeUntilNextAssetChangesInSec;
+        private readonly int r_RowIndexInPicture;
+        private readonly int r_NumberOfAssetChange;
+        private readonly int r_ColumnIndexInPicture;
 
-        public Enemy(Game i_Game, string i_TexturePath, Color i_Tint) : base(i_TexturePath, i_Game)
+        public Enemy(Game i_Game, string i_TexturePath, Color i_Tint, int i_RowIndexInPicture, int i_ColumnIndexInPicture, float i_TimeUntilNextAssetChangesInSec, int i_NumberOfAssetChange) : base(i_TexturePath, i_Game)
         {
             this.TintColor = i_Tint;
             m_IsDying = false;
             r_Firearm = new Firearm(i_Game, GameDefinitions.EnemyMaxOfBullet, Enum.eBulletType.EnemyBullet);
+            this.r_TimeUntilNextAssetChangesInSec = TimeSpan.FromSeconds(i_TimeUntilNextAssetChangesInSec);
+            r_NumberOfAssetChange = i_NumberOfAssetChange;
+            r_RowIndexInPicture = i_RowIndexInPicture;
+            r_ColumnIndexInPicture = i_ColumnIndexInPicture;
+        }
+
+        public bool IsDying
+        {
+            get => m_IsDying;
+            set => m_IsDying = value;
         }
 
         public override void Initialize()
@@ -32,7 +45,15 @@ namespace GameSprites
 
         protected override void InitOrigins()
         {
-            this.m_RotationOrigin = new Vector2(this.Texture.Width / 2, this.Texture.Height / 2);
+            this.m_WidthBeforeScale = (int)GameDefinitions.EnemySize;
+            this.m_HeightBeforeScale = (int)GameDefinitions.EnemySize;
+            this.m_RotationOrigin = new Vector2(this.Width / 2, this.Height / 2);
+        }
+
+        protected override void InitBounds()
+        {
+            base.InitBounds();
+            this.SourceRectangle = new Rectangle(0, (int)(r_RowIndexInPicture * GameDefinitions.EnemySize), (int) GameDefinitions.EnemySize, (int) GameDefinitions.EnemySize);
         }
 
         public override void Collided(ICollidable i_Collidable)
@@ -44,21 +65,7 @@ namespace GameSprites
                 if(bullet.eBulletType != Enum.eBulletType.EnemyBullet)
                 {
                     GameManager.UpdateScore(this, bullet.FirearmSerialNumber);
-                    EnemyArmy.SubtractionEnemyByOne();
-
-                    this.Animations.Enabled = true;
-
-
-                    /*
-                    this.Animations["FadeoutAnimator"].Reset();
-                    this.Animations["FadeoutAnimator"].Resume();
-
-                    this.Animations["RotateAnimator"].Reset();
-                    this.Animations["RotateAnimator"].Resume();
-
-                    this.Animations["ShrinkAnimator"].Reset();
-                    this.Animations["ShrinkAnimator"].Resume();
-                    */
+                    this.Animations["dyingEnemy"].Restart();
                     m_IsDying = true;
                     bullet.DisableBullet();
                 }
@@ -74,45 +81,31 @@ namespace GameSprites
 
         private void initAnimations()
         {
-            /*
-            RotateAnimator rotateAnimator = new RotateAnimator("RotateAnimator", TimeSpan.FromSeconds(5), 1f, RotateAnimator.eDirectionMove.Right);
-            ShrinkAnimator shrinkAnimator = new ShrinkAnimator("ShrinkAnimator", TimeSpan.FromSeconds(5));
-            FadeoutAnimator fadeoutAnimator = new FadeoutAnimator("FadeoutAnimator", TimeSpan.FromSeconds(3));
-            this.Animations.Add(shrinkAnimator);
-            this.Animations.Add(rotateAnimator);
-            this.Animations.Add(fadeoutAnimator);
+            TimeSpan timeSpan = TimeSpan.FromSeconds(GameDefinitions.EnemyAnimationLengthInSec);
+            RotateAnimator rotateAnimator = new RotateAnimator("RotateAnimator", timeSpan, GameDefinitions.EnemyNumberOfRotateInSec, RotateAnimator.eDirectionMove.Right);
+            ShrinkAnimator shrinkAnimator = new ShrinkAnimator("ShrinkAnimator", timeSpan);
+            CompositeAnimator dyingEnemy = new CompositeAnimator("dyingEnemy", timeSpan, this, rotateAnimator, shrinkAnimator);
+            CellAnimator enemyCellAnimation = new CellAnimator(r_TimeUntilNextAssetChangesInSec, r_NumberOfAssetChange, TimeSpan.Zero,r_ColumnIndexInPicture);
 
-            this.Animations.Enabled = true;
-            shrinkAnimator.Finished += animations_Finished;
-            this.Animations["FadeoutAnimator"].Pause();
-            this.Animations["RotateAnimator"].Pause();
-            this.Animations["ShrinkAnimator"].Pause();
-            */
-
-            RotateAnimator rotateAnimator = new RotateAnimator("RotateAnimator", TimeSpan.FromSeconds(5), 1f, RotateAnimator.eDirectionMove.Right);
-            ShrinkAnimator shrinkAnimator = new ShrinkAnimator("ShrinkAnimator", TimeSpan.FromSeconds(5));
-            FadeoutAnimator fadeoutAnimator = new FadeoutAnimator("FadeoutAnimator", TimeSpan.FromSeconds(5));
-
-            CompositeAnimator dyingEnemy = new CompositeAnimator("dyingEnemy", TimeSpan.FromSeconds(5), this, rotateAnimator, shrinkAnimator, fadeoutAnimator);
-          //  CellAnimator enemyCellAnimation = new CellAnimator(this.m_TimeUntilNextStepInSec, 2, TimeSpan.Zero, this.m_StartSqureIndex, true, this.m_Toggeler);
-
-           // this.Animations.Add(enemyCellAnimation);
+            this.Animations.Add(enemyCellAnimation);
             this.Animations.Add(dyingEnemy);
-
-
+            this.Animations.Enabled = true;
+            this.Animations["dyingEnemy"].Pause();
             dyingEnemy.Finished += animations_Finished;
         }
 
-        private void animations_Finished(object sender, EventArgs e)
+        private void animations_Finished(object i_Sender, EventArgs i_EventArgs)
         {
             RemoveComponent();
+            EnemyArmy.SubtractionEnemyByOne();
         }
 
-        public void Shoot(Vector2 i_Position)
+        public void Shoot()
         {
             if(!m_IsDying)
             {
-                r_Firearm.Shoot(i_Position);
+                Vector2 shootingPosition = new Vector2((this.Position.X + this.Width / 2), this.Position.Y + this.Height);
+                r_Firearm.Shoot(shootingPosition);
             }
         }
     }
