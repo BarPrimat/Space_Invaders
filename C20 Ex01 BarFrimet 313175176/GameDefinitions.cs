@@ -88,7 +88,10 @@ namespace SpaceInvaders
         private const Keys k_SecondPlayerKeyToLeft = Keys.W;
         private const Keys k_SecondPlayerKeyToShoot = Keys.D3;
         private const int k_PlayerThatAllowedToMouse = 0;
-
+        private const int k_SpaceBetweenTextInScoreBoard = 20;
+        private const int k_SpaceBetweenTopEdgeAndTextInScoreBoard = 10;
+        private const int k_SpaceBetweenLeftEdgeAndTextInScoreBoard = 10;
+        
         // Barrier definitions
         private const float k_BarrierSpeed = 35;
         private static readonly int sr_BarrierStartYPosition = PreferredBackBufferHeight;
@@ -234,5 +237,11 @@ namespace SpaceInvaders
         public static float EnemyNumberOfAssetChangesInSec => k_EnemyNumberOfAssetChangesInSec;
 
         public static int EnemyNumberOfAssetInRow => k_EnemyNumberOfAssetInRow;
+
+        public static int SpaceBetweenTextInScoreBoard => k_SpaceBetweenTextInScoreBoard;
+
+        public static int SpaceBetweenTopEdgeAndTextInScoreBoard => k_SpaceBetweenTopEdgeAndTextInScoreBoard;
+
+        public static int SpaceBetweenLeftEdgeAndTextInScoreBoard => k_SpaceBetweenLeftEdgeAndTextInScoreBoard;
     }
 }

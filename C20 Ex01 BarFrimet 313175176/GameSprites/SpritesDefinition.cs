@@ -17,6 +17,7 @@ namespace GameSprites
         private const string k_LifeUser2Asset = @"Sprites\Ship02_32x32";
         private const string k_BulletAsset = @"Sprites\Bullet";
         private const string k_BarrierAsset = @"Sprites\Barrier_44x32";
+        private const string k_TextBoardScoreFont = @"Fonts\Consolas";
 
         public static string SpaceshipUser1Asset => k_SpaceshipUser1Asset;
 
@@ -39,5 +40,7 @@ namespace GameSprites
         public static string LifeUser2Asset => k_LifeUser2Asset;
 
         public static string BarrierAsset => k_BarrierAsset;
+
+        public static string TextBoardScoreFont => k_TextBoardScoreFont;
     }
 }

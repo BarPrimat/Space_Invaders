@@ -14,6 +14,7 @@ namespace SpaceInvaders
     {
         private int m_CurrentScore = 0;
         private IInputManager m_InputManager;
+        private TextService m_ScoreBoardText;
         private readonly Spaceship r_Spaceship;
         private readonly bool r_MouseIsAllowed;
         private readonly string r_Name;
@@ -34,7 +35,16 @@ namespace SpaceInvaders
             r_LeftMoveKey = i_LeftMoveKey;
             r_ShootKey = i_ShootKey;
             r_MouseIsAllowed = r_SerialNumber == GameDefinitions.PlayerThatAllowedToMouse;
+            setupScoreBoardText();
             i_Game.Components.Add(this);
+        }
+
+        private void setupScoreBoardText()
+        {
+            Color colorOfText = r_SerialNumber == 0 ? Color.Blue : Color.Green;
+            Vector2 positionOfText = new Vector2(GameDefinitions.SpaceBetweenLeftEdgeAndTextInScoreBoard, (r_SerialNumber + 1) * GameDefinitions.SpaceBetweenTextInScoreBoard);
+            m_ScoreBoardText = new TextService(SpritesDefinition.TextBoardScoreFont, this.Game, positionOfText, colorOfText);
+            UpdateScoreBoardText();
         }
 
         public override void Initialize()
@@ -78,6 +88,16 @@ namespace SpaceInvaders
                 newXPosition = r_Spaceship.Position.X + m_InputManager.MousePositionDelta.X;
                 r_Spaceship.SetupNewPosition(newXPosition, maxBoundaryWithoutOffset);
             }
+        }
+
+        public void UpdateScoreBoardText()
+        {
+            m_ScoreBoardText.TextToPrint = ToString();
+        }
+
+        public string ToString()
+        {
+            return string.Format("{0}: {1}", r_Name, m_CurrentScore);
         }
 
         public LifeManager LifeManager => r_LifeManager;

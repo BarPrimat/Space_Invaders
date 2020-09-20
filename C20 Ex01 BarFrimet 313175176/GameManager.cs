@@ -89,6 +89,8 @@ namespace SpaceInvaders
                 {
                     sr_PlayersList[i_NumberOfPlayer].CurrentScore += (int)Enum.eScoreValue.MotherShip;
                 }
+
+                sr_PlayersList[i_NumberOfPlayer].UpdateScoreBoardText();
             }
         }
 
@@ -113,13 +115,13 @@ namespace SpaceInvaders
 
         public static void ShowScoreAndEndGame(Game i_Game)
         {
-            string endGameText = sr_PlayersList.Count < 2 ? string.Format("{0}{1}{2}: {3}", GameDefinitions.EndGameText1Player, sr_PlayersList[0].Name, sr_PlayersList[0].CurrentScore) 
-                                     : GameDefinitions.EndGameTextMoreThen1Player;
+            string endGameText = sr_PlayersList.Count < 2 ? GameDefinitions.EndGameText1Player : GameDefinitions.EndGameTextMoreThen1Player;
             string winnerText = "And the winner is:";
             string winnerNameText = String.Empty;
             int maxScore = -1; // There is no negative score
             bool isDraw = false;
 
+            endGameText = getStringUsersScore(endGameText);
             if (sr_PlayersList.Count > 1)
             {
                 foreach (Player player in sr_PlayersList)
@@ -144,6 +146,19 @@ namespace SpaceInvaders
 
             System.Windows.Forms.MessageBox.Show(endGameText, GameDefinitions.EndGameCaption);
             i_Game.Exit();
+        }
+
+        private static string getStringUsersScore(string i_EndGameText)
+        {
+            StringBuilder stringBuilder = new StringBuilder(i_EndGameText);
+
+            foreach (Player player in sr_PlayersList)
+            {
+                stringBuilder.Append(String.Format(@"
+    {0}", player.ToString()));
+            }
+
+            return stringBuilder.ToString();
         }
 
         public static List<Player> PlayersList => sr_PlayersList;
