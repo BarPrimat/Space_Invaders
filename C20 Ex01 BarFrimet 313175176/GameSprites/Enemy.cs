@@ -13,12 +13,15 @@ namespace GameSprites
 {
     public class Enemy : Infrastructure.ObjectModel.Sprite, ICollidable2D
     {
+        private CellAnimator m_EnemyCellAnimation;
+        private bool isInitialize = false;
         private bool m_IsDying;
         private readonly Firearm r_Firearm;
         private readonly TimeSpan r_TimeUntilNextAssetChangesInSec;
         private readonly int r_RowIndexInPicture;
         private readonly int r_NumberOfAssetChange;
         private readonly int r_ColumnIndexInPicture;
+        private const bool k_ThereIsDummyPixel = true;
 
         public Enemy(Game i_Game, string i_TexturePath, Color i_Tint, int i_RowIndexInPicture, int i_ColumnIndexInPicture, float i_TimeUntilNextAssetChangesInSec, int i_NumberOfAssetChange) : base(i_TexturePath, i_Game)
         {
@@ -41,6 +44,7 @@ namespace GameSprites
         {
             base.Initialize();
             this.initAnimations();
+            isInitialize = true;
         }
 
         protected override void InitOrigins()
@@ -53,7 +57,8 @@ namespace GameSprites
         protected override void InitBounds()
         {
             base.InitBounds();
-            this.SourceRectangle = new Rectangle(0, (int)(r_RowIndexInPicture * GameDefinitions.EnemySize), (int) GameDefinitions.EnemySize, (int) GameDefinitions.EnemySize);
+            // The pulse 1 is to handle that in the texture there is 1 dummy pixel between every 2 enemies (that on purpose because of the crop defect)
+            this.SourceRectangle = new Rectangle(0, (int)(r_RowIndexInPicture * (GameDefinitions.EnemySize + 1)), (int)GameDefinitions.EnemySize, (int)GameDefinitions.EnemySize);
         }
 
         public override void Collided(ICollidable i_Collidable)
@@ -79,15 +84,23 @@ namespace GameSprites
             Game.Components.Remove(this);
         }
 
+        protected override void OnPositionChanged()
+        {
+            if(EnemyArmy.IsTimeBetweenJumpsChanged && isInitialize)
+            {
+                m_EnemyCellAnimation.CellTime = TimeSpan.FromSeconds(EnemyArmy.TimeBetweenJumpsInSec);
+            }
+        }
+
         private void initAnimations()
         {
             TimeSpan timeSpan = TimeSpan.FromSeconds(GameDefinitions.EnemyAnimationLengthInSec);
             RotateAnimator rotateAnimator = new RotateAnimator("RotateAnimator", timeSpan, GameDefinitions.EnemyNumberOfRotateInSec, RotateAnimator.eDirectionMove.Right);
             ShrinkAnimator shrinkAnimator = new ShrinkAnimator("ShrinkAnimator", timeSpan);
             CompositeAnimator dyingEnemy = new CompositeAnimator("dyingEnemy", timeSpan, this, rotateAnimator, shrinkAnimator);
-            CellAnimator enemyCellAnimation = new CellAnimator(r_TimeUntilNextAssetChangesInSec, r_NumberOfAssetChange, TimeSpan.Zero,r_ColumnIndexInPicture);
+            m_EnemyCellAnimation = new CellAnimator(r_TimeUntilNextAssetChangesInSec, r_NumberOfAssetChange, TimeSpan.Zero,r_ColumnIndexInPicture, k_ThereIsDummyPixel);
 
-            this.Animations.Add(enemyCellAnimation);
+            this.Animations.Add(m_EnemyCellAnimation);
             this.Animations.Add(dyingEnemy);
             this.Animations.Enabled = true;
             this.Animations["dyingEnemy"].Pause();

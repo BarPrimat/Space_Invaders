@@ -10,32 +10,31 @@ using static SpaceInvaders.Enum;
 
 namespace GameSprites
 {
-    public class EnemyArmy : DrawableGameComponent
+    public class EnemyArmy : GameComponent
     {
         private readonly Enemy[,] r_EnemyArray;
-        private readonly Firearm r_Firearm;
         private readonly Random r_Random;
         private float m_CurrentTopLeftX;
         private float m_CurrentTopLeftY;
         private float m_TimeDeltaCounterToShoot;
         private float m_EnemyNextTimeToShoot;
         private float m_TimeDeltaCounterToMove;
-
         private bool m_FirstTimeSetup = true;
         private bool m_MoveStepDown = false;
         private eDirectionMove m_eDirectionMove;
-        private int m_CounterOfEnemyBulletInAir = 0;
         private static float s_CurrentSpeed = 1;
+        private static float s_TimeBetweenJumpsInSec;
         private static int s_EnemyThatLeft = 0;
+        private static bool s_IsTimeBetweenJumpsChanged = false;
 
         public EnemyArmy(Game i_Game) : base(i_Game)
         {
             r_EnemyArray = new Enemy[GameDefinitions.NumberOfEnemyInRow, GameDefinitions.NumberOfEnemyInColumn];
             s_EnemyThatLeft = GameDefinitions.NumberOfEnemyInRow * GameDefinitions.NumberOfEnemyInColumn;
             m_eDirectionMove = eDirectionMove.Right;
-            r_Firearm = new Firearm(i_Game, EnemyArmyMaxOfBullet, eBulletType.EnemyBullet);
             r_Random = new Random();
             m_EnemyNextTimeToShoot = r_Random.Next((int) EnemyMaxTimeForShoot);
+            s_TimeBetweenJumpsInSec = GameDefinitions.StartTimeBetweenJumpsInSec;
             i_Game.Components.Add(this);
         }
 
@@ -72,6 +71,11 @@ namespace GameSprites
 
                 yPosition += VerticalSpaceBetweenEnemy + EnemySizeHeight;
                 xPosition = tempCurrentXPosition;
+            }
+
+            if(s_IsTimeBetweenJumpsChanged)
+            {
+                s_IsTimeBetweenJumpsChanged = false;
             }
         }
 
@@ -114,31 +118,33 @@ namespace GameSprites
 
         public override void Update(GameTime i_GameTime)
         {
-            m_TimeDeltaCounterToMove += (float)i_GameTime.ElapsedGameTime.TotalSeconds;
-            m_TimeDeltaCounterToShoot += (float)i_GameTime.ElapsedGameTime.TotalSeconds;
+            m_TimeDeltaCounterToMove += (float) i_GameTime.ElapsedGameTime.TotalSeconds;
+            m_TimeDeltaCounterToShoot += (float) i_GameTime.ElapsedGameTime.TotalSeconds;
             enemyArmyMove(i_GameTime);
-            enemyArmyTryToShoot();
-            // checkAndChangeMoveDirection();
             InitPosition();
-            if(isEnemyReachSpaceShipHeight())
+            enemyArmyTryToShoot();
+            if (isEnemyReachSpaceShipHeight())
             {
-                GameManager.ShowScoreAndEndGame(Game);
+                GameManager.ShowScoreAndEndGame(this.Game);
             }
         }
 
+
         private void enemyArmyMove(GameTime i_GameTime)
         {
-            if (m_TimeDeltaCounterToMove >= TimeBetweenJumpsInSec)
+            if (m_TimeDeltaCounterToMove >= s_TimeBetweenJumpsInSec)
             {
                 if (m_MoveStepDown)
                 {
                     m_CurrentTopLeftY += EnemyStepDown;
                     s_CurrentSpeed += EnemyIncreaseSpeedGoingDown;
+                    s_TimeBetweenJumpsInSec -= s_TimeBetweenJumpsInSec * IncreaseTimeBetweenJumpsInSec;
                     m_MoveStepDown = false;
+                    s_IsTimeBetweenJumpsChanged = true;
                 }
                 else
                 {
-                    float newMoveToAdd = EnemyStartSpeedInSec * TimeBetweenJumpsInSec * s_CurrentSpeed;
+                    float newMoveToAdd = EnemyStartSpeedInSec * s_TimeBetweenJumpsInSec * s_CurrentSpeed;
                     float rightGroupBorder = getRightGroupBorder();
                     float leftGroupBorder = getLeftGroupBorder();
 
@@ -158,7 +164,7 @@ namespace GameSprites
                     checkAndChangeMoveDirection();
                 }
 
-                m_TimeDeltaCounterToMove -= TimeBetweenJumpsInSec;
+                m_TimeDeltaCounterToMove -= StartTimeBetweenJumpsInSec;
             }
         }
 
@@ -173,14 +179,14 @@ namespace GameSprites
                     r_EnemyArray[randomizeEnemyRow, randomizeEnemyColumn].Shoot();
                 }
 
-                m_EnemyNextTimeToShoot = r_Random.Next((int)GameDefinitions.EnemyMaxTimeForShoot);
+                m_EnemyNextTimeToShoot = r_Random.Next((int) GameDefinitions.EnemyMaxTimeForShoot);
                 m_TimeDeltaCounterToShoot -= m_TimeDeltaCounterToShoot;
             }
         }
 
         private void checkAndChangeMoveDirection()
         {
-            if (GraphicsDevice.Viewport.Width <= getRightGroupBorder() + r_EnemyArray[0, 0].WidthBeforeScale)
+            if (this.Game.GraphicsDevice.Viewport.Width <= getRightGroupBorder() + r_EnemyArray[0, 0].WidthBeforeScale)
             {
                 m_eDirectionMove = eDirectionMove.Left;
             }
@@ -232,14 +238,11 @@ namespace GameSprites
 
         private bool isEnemyReachSpaceShipHeight()
         {
-            
-            bool isEnemyHitWasSomething = false;
-            Rectangle spaceShipRectangle = default;
             float spaceShipYPosition = GameDefinitions.SpaceshipYStartPosition;
             bool findHit = false;
 
             // No need to enter the loop is the enemy army can not hit nothing
-            if (m_CurrentTopLeftY + NumberOfEnemyInColumn * NumberOfEnemyInRow + spaceShipYPosition >= GraphicsDevice.Viewport.Height)
+            if (m_CurrentTopLeftY + NumberOfEnemyInColumn * NumberOfEnemyInRow + spaceShipYPosition >= this.Game.GraphicsDevice.Viewport.Height)
             {
                 for (int row = NumberOfEnemyInRow - 1; row >= 0 && !findHit; row--)
                 {
@@ -254,21 +257,6 @@ namespace GameSprites
             }
             
             return findHit;
-        }
-
-        private bool isEnemyHitSomething(int i_Row, int i_Column)
-        {
-            bool isEnemyHitSomething = false;
-
-            if (r_EnemyArray[i_Row, i_Column].Visible && !r_EnemyArray[i_Row, i_Column].IsDying)
-            {
-                if (r_EnemyArray[i_Row, i_Column].Position.Y + r_EnemyArray[i_Row, i_Column].Height >= GraphicsDevice.Viewport.Height)
-                {
-                    isEnemyHitSomething = !isEnemyHitSomething;
-                }
-            }
-
-            return isEnemyHitSomething;
         }
 
         private static void increaseSpeedIfEnemyKilled()
@@ -289,6 +277,16 @@ namespace GameSprites
         {
             get => s_EnemyThatLeft;
             set => s_EnemyThatLeft = value;
+        }
+        public static float TimeBetweenJumpsInSec
+        {
+            get => s_TimeBetweenJumpsInSec;
+            set => s_TimeBetweenJumpsInSec = value;
+        }
+        public static bool IsTimeBetweenJumpsChanged
+        {
+            get => s_IsTimeBetweenJumpsChanged;
+            set => s_IsTimeBetweenJumpsChanged = value;
         }
     }
 }

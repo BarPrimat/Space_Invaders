@@ -56,7 +56,7 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/Bullet.png
 
-#begin Sprites/EnemyCollection_64x96.png
+#begin Sprites/EnemyCollection_65x98.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -66,7 +66,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Sprites/EnemyCollection_64x96.png
+/build:Sprites/EnemyCollection_65x98.png
 
 #begin Sprites/MotherShip_32x120.png
 /importer:TextureImporter

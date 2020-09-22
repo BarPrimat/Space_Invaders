@@ -23,7 +23,6 @@ namespace GameSprites
         private float m_SpaceshipSpeed;
         private int m_NumberOfTheSpaceship;
         private bool m_IsDying = false;
-        private static float s_YPosition;
 
         public Spaceship(Game i_Game, string i_TexturePath, int i_NumberOfSpaceship, LifeManager i_LifeManager) : base (i_TexturePath, i_Game)
         {
@@ -130,10 +129,5 @@ namespace GameSprites
         }
 
         public float SpaceshipSpeed => m_SpaceshipSpeed;
-
-        public static float YPosition
-        {
-            get => s_YPosition;
-        }
     }
 }

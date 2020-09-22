@@ -22,7 +22,7 @@ namespace SpaceInvaders
         {
             PinkEnemy = 300,
             LightBlueEnemy = 200,
-            YellowEnemy = 100,
+            YellowEnemy = 70,
             MotherShip = 600,
             LoseLife = -600
         }

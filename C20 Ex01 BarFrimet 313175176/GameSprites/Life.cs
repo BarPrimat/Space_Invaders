@@ -15,7 +15,7 @@ namespace GameSprites
         {
             m_StartPosition = i_Position;
             this.Opacity = GameDefinitions.Opacity;
-            this.Scales = new Vector2(0.5f, 0.5f);
+            this.Scales = new Vector2(GameDefinitions.LifeScales, GameDefinitions.LifeScales);
         }
 
         protected override void InitOrigins()

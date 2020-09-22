@@ -24,19 +24,19 @@ namespace SpaceInvaders
         private const float k_EnemyStartSpeedInSec = 60;
         private const float k_EnemyIncreaseSpeedEveryXDead = 0.03f;
         private const float k_EnemyIncreaseSpeedGoingDown = 0.06f;
-        private const float k_EnemyMaxTimeForShoot = 3;
+        private const float k_EnemyMaxTimeForShoot = 3f; 
         private const float k_NumberOfJumpInSec = 2;
-        private const float k_TimeBetweenJumpsInSec = 1 / k_NumberOfJumpInSec;
-        private const int k_NumberOfEnemyInRow = 5; // 5
-        private const int k_NumberOfEnemyInColumn = 9; // 9
-        private const int k_EnemyArmyMaxOfBullet = 400;
+        private const float k_StartTimeBetweenJumpsInSec = 1 / k_NumberOfJumpInSec;
+        private const float k_IncreaseTimeBetweenJumpsInSec = 0.05f;
+        private const int k_NumberOfEnemyInRow = 5;
+        private const int k_NumberOfEnemyInColumn = 9; 
         private const int k_NumberOfEnemyKilledToIncreaseSpeed = 5;
 
         // Enemy definitions
         private static readonly Color sr_PinkEnemyTint = Color.Pink;
         private static readonly Color sr_LightBlueEnemyTint = Color.LightBlue;
         private static readonly Color sr_YellowEnemyTint = Color.Yellow;
-        private const int k_EnemyMaxOfBullet = 1;
+        private const int k_EnemyMaxOfBullet = 1; 
         private const int k_EnemyNumberOfAssetInRow = 2;
         private const float k_EnemySize = 32;
         private const float k_EnemySizeWidth = k_EnemySize;
@@ -52,16 +52,17 @@ namespace SpaceInvaders
         private const int k_LifeSize = 32;
         private const int k_NumberOfLifeToStart = 3;
         private const float k_Opacity = 0.5f;
+        private const float k_LifeScales = 0.5f;
         private static readonly Color sr_LifeTint = Color.White;
 
         // Bullet definitions
         private const int k_BulletStartSpeedInSec = 140;
-        private const float k_ChanceBallDeleteWithHittingAnotherBall = 1f; // 0.5f
+        private const float k_ChanceBallDeleteWithHittingAnotherBall = 0.5f;
         public static readonly Color sr_EnemyBulletTint = Color.Blue;
         public static readonly Color sr_SpaceshipBulletTint = Color.Red;
 
         // SpaceShip definitions
-        private const int k_SpaceshipMaxOfBullet = 100;  // 2
+        private const int k_SpaceshipMaxOfBullet = 2;
         private const float k_SpaceshipSpeed = 140;
         private const float k_SpaceshipSize = 32;
         private const float k_SpaceshipAnimationLengthInSec = 2.6f;
@@ -94,7 +95,7 @@ namespace SpaceInvaders
         
         // Barrier definitions
         private const float k_BarrierSpeed = 35;
-        private static readonly int sr_BarrierStartYPosition = PreferredBackBufferHeight;
+        private const float k_BarrierPercentageThatBallEats = 0.35f;
         private const Enum.eDirectionMove k_BarrierStartDirectionToMove = Enum.eDirectionMove.Right;
 
         // BarrierGroup definitions
@@ -152,8 +153,6 @@ namespace SpaceInvaders
 
         public static int NumberOfEnemyInColumn => k_NumberOfEnemyInColumn;
 
-        public static int EnemyArmyMaxOfBullet => k_EnemyArmyMaxOfBullet;
-
         public static int StartLifePositionWidth => k_StartLifePositionWidth;
 
         public static int StartLifePositionHeight => k_StartLifePositionHeight;
@@ -178,9 +177,7 @@ namespace SpaceInvaders
 
         public static float EnemyStepDown => k_EnemyStepDown;
 
-        public static float NumberOfJumpInSec => k_NumberOfJumpInSec;
-
-        public static float TimeBetweenJumpsInSec => k_TimeBetweenJumpsInSec;
+        public static float StartTimeBetweenJumpsInSec => k_StartTimeBetweenJumpsInSec;
 
         public static string EndGameTextMoreThen1Player => k_EndGameTextMoreThen1Player;
 
@@ -210,8 +207,6 @@ namespace SpaceInvaders
 
         public static float SpaceBetweenBarrier => k_SpaceBetweenBarrier;
 
-        public static int BarrierStartYPosition => sr_BarrierStartYPosition;
-
         public static int NumberOfBarrier => k_NumberOfBarrier;
 
         public static float SpaceshipYStartPosition => k_SpaceshipYStartPosition;
@@ -240,8 +235,12 @@ namespace SpaceInvaders
 
         public static int SpaceBetweenTextInScoreBoard => k_SpaceBetweenTextInScoreBoard;
 
-        public static int SpaceBetweenTopEdgeAndTextInScoreBoard => k_SpaceBetweenTopEdgeAndTextInScoreBoard;
-
         public static int SpaceBetweenLeftEdgeAndTextInScoreBoard => k_SpaceBetweenLeftEdgeAndTextInScoreBoard;
+
+        public static float BarrierPercentageThatBallEats => k_BarrierPercentageThatBallEats;
+
+        public static float IncreaseTimeBetweenJumpsInSec => k_IncreaseTimeBetweenJumpsInSec;
+
+        public static float LifeScales => k_LifeScales;
     }
 }

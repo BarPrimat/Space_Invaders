@@ -11,6 +11,7 @@ namespace Infrastructure.ObjectModel.Animators.ConcreteAnimators
         private bool m_Loop = true;
         private int m_CurrCellIdx = 0;
         private readonly int r_NumOfCells = 1;
+        private readonly bool r_IsThereDummyPixel = false;
 
         // CTORs
         public CellAnimator(TimeSpan i_CellTime, int i_NumOfCells, TimeSpan i_AnimationLength)
@@ -24,10 +25,21 @@ namespace Infrastructure.ObjectModel.Animators.ConcreteAnimators
         }
 
         // CTORs if needed to start with Cell that not start with 0
-        public CellAnimator(TimeSpan i_CellTime, int i_NumOfCells, TimeSpan i_AnimationLength, int i_StartCellIdx)
+        public CellAnimator(TimeSpan i_CellTime, int i_NumOfCells, TimeSpan i_AnimationLength, int i_StartCellIdx, bool i_IsThereDummyPixel)
             : this( i_CellTime, i_NumOfCells, i_AnimationLength)
         {
             m_CurrCellIdx = i_StartCellIdx;
+            r_IsThereDummyPixel = i_IsThereDummyPixel;
+        }
+
+        public TimeSpan CellTime
+        {
+            get => m_CellTime;
+            set
+            {
+                m_CellTime = value;
+                m_TimeLeftForCell = m_CellTime;
+            }
         }
 
         private void goToNextFrame()
@@ -65,8 +77,9 @@ namespace Infrastructure.ObjectModel.Animators.ConcreteAnimators
                 }
             }
 
+            int offSet = r_IsThereDummyPixel && m_CurrCellIdx != 0 ? 1 : 0;
             this.BoundSprite.SourceRectangle = new Rectangle(
-                m_CurrCellIdx * this.BoundSprite.SourceRectangle.Width,
+                m_CurrCellIdx * this.BoundSprite.SourceRectangle.Width + offSet,
                 this.BoundSprite.SourceRectangle.Top,
                 this.BoundSprite.SourceRectangle.Width,
                 this.BoundSprite.SourceRectangle.Height);
