@@ -43,7 +43,6 @@ namespace GameSprites
             return r_LifeList.Count == 0;
         }
 
-
         public void RemoveOneLife()
         {
             r_LifeList[r_LifeList.Count - 1].RemoveComponent();

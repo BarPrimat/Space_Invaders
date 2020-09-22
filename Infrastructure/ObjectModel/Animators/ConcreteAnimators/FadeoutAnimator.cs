@@ -11,13 +11,11 @@ namespace Infrastructure.ObjectModel.Animators.ConcreteAnimators
         private float m_CurrentTimeToFinish = 0;
         private const float k_MinimumValueToFadeout = 0;
 
-
         public FadeoutAnimator(string i_Name, TimeSpan i_AnimationLength)
             : base(i_Name, i_AnimationLength)
         {
             m_CurrentTimeToFinish = (float) i_AnimationLength.TotalSeconds;
         }
-
 
         public FadeoutAnimator(TimeSpan i_AnimationLength)
             : this("Fadeout", i_AnimationLength)

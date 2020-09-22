@@ -9,7 +9,6 @@ namespace Infrastructure.ObjectModel.Animators.ConcreteAnimators
     public class RotateAnimator : SpriteAnimator
     {
         private float m_NumberOfRotatePerSec;
-        private TimeSpan m_AnimationLength;
         private eDirectionMove m_eDirection;
         private float m_AngularVelocity;
 
@@ -23,7 +22,6 @@ namespace Infrastructure.ObjectModel.Animators.ConcreteAnimators
             : base(i_Name, i_AnimationLength)
         {
             m_NumberOfRotatePerSec = i_NumberOfRotatePerSec;
-            m_AnimationLength = i_AnimationLength;
             m_eDirection = i_Direction;
             m_AngularVelocity = (float)MathHelper.TwoPi * (float)m_NumberOfRotatePerSec * (int) m_eDirection;
         }

@@ -30,7 +30,8 @@ namespace SpaceInvaders
             r_Game = i_Game;
         }
 
-        public Firearm(Game i_Game, int i_EnemyMaxOfBullet, eBulletType i_EBulletType) : this(i_Game, i_EnemyMaxOfBullet, i_EBulletType, k_DefaultSerialNumber)
+        public Firearm(Game i_Game, int i_EnemyMaxOfBullet, eBulletType i_EBulletType) 
+            : this(i_Game, i_EnemyMaxOfBullet, i_EBulletType, k_DefaultSerialNumber)
         {
         }
 

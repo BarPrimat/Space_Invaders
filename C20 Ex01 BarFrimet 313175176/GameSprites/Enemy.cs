@@ -23,7 +23,8 @@ namespace GameSprites
         private readonly int r_ColumnIndexInPicture;
         private const bool k_ThereIsDummyPixel = true;
 
-        public Enemy(Game i_Game, string i_TexturePath, Color i_Tint, int i_RowIndexInPicture, int i_ColumnIndexInPicture, float i_TimeUntilNextAssetChangesInSec, int i_NumberOfAssetChange) : base(i_TexturePath, i_Game)
+        public Enemy(Game i_Game, string i_TexturePath, Color i_Tint, int i_RowIndexInPicture, int i_ColumnIndexInPicture, float i_TimeUntilNextAssetChangesInSec, int i_NumberOfAssetChange) 
+            : base(i_TexturePath, i_Game)
         {
             this.TintColor = i_Tint;
             m_IsDying = false;
@@ -49,8 +50,8 @@ namespace GameSprites
 
         protected override void InitOrigins()
         {
-            this.m_WidthBeforeScale = (int)GameDefinitions.EnemySize;
-            this.m_HeightBeforeScale = (int)GameDefinitions.EnemySize;
+            this.m_WidthBeforeScale = (int) GameDefinitions.EnemySize;
+            this.m_HeightBeforeScale = (int) GameDefinitions.EnemySize;
             this.m_RotationOrigin = new Vector2(this.Width / 2, this.Height / 2);
         }
 
@@ -58,7 +59,7 @@ namespace GameSprites
         {
             base.InitBounds();
             // The pulse 1 is to handle that in the texture there is 1 dummy pixel between every 2 enemies (that on purpose because of the crop defect)
-            this.SourceRectangle = new Rectangle(0, (int)(r_RowIndexInPicture * (GameDefinitions.EnemySize + 1)), (int)GameDefinitions.EnemySize, (int)GameDefinitions.EnemySize);
+            this.SourceRectangle = new Rectangle(0, (int)(r_RowIndexInPicture * (GameDefinitions.EnemySize + 1)), (int) GameDefinitions.EnemySize, (int) GameDefinitions.EnemySize);
         }
 
         public override void Collided(ICollidable i_Collidable)
@@ -70,7 +71,7 @@ namespace GameSprites
                 if(bullet.eBulletType != Enum.eBulletType.EnemyBullet)
                 {
                     GameManager.UpdateScore(this, bullet.FirearmSerialNumber);
-                    this.Animations["dyingEnemy"].Restart();
+                    this.Animations["DyingEnemy"].Restart();
                     m_IsDying = true;
                     bullet.DisableBullet();
                 }
@@ -81,7 +82,7 @@ namespace GameSprites
         {
             this.Visible = false;
             this.Enabled = false;
-            Game.Components.Remove(this);
+            this.Game.Components.Remove(this);
         }
 
         protected override void OnPositionChanged()
@@ -97,13 +98,13 @@ namespace GameSprites
             TimeSpan timeSpan = TimeSpan.FromSeconds(GameDefinitions.EnemyAnimationLengthInSec);
             RotateAnimator rotateAnimator = new RotateAnimator("RotateAnimator", timeSpan, GameDefinitions.EnemyNumberOfRotateInSec, RotateAnimator.eDirectionMove.Right);
             ShrinkAnimator shrinkAnimator = new ShrinkAnimator("ShrinkAnimator", timeSpan);
-            CompositeAnimator dyingEnemy = new CompositeAnimator("dyingEnemy", timeSpan, this, rotateAnimator, shrinkAnimator);
+            CompositeAnimator dyingEnemy = new CompositeAnimator("DyingEnemy", timeSpan, this, rotateAnimator, shrinkAnimator);
             m_EnemyCellAnimation = new CellAnimator(r_TimeUntilNextAssetChangesInSec, r_NumberOfAssetChange, TimeSpan.Zero,r_ColumnIndexInPicture, k_ThereIsDummyPixel);
 
             this.Animations.Add(m_EnemyCellAnimation);
             this.Animations.Add(dyingEnemy);
             this.Animations.Enabled = true;
-            this.Animations["dyingEnemy"].Pause();
+            this.Animations["DyingEnemy"].Pause();
             dyingEnemy.Finished += animations_Finished;
         }
 

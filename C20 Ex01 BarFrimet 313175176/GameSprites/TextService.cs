@@ -22,7 +22,6 @@ namespace SpaceInvaders
         protected override void LoadContent()
         {
             m_Font = Game.Content.Load<SpriteFont>(SpritesDefinition.TextBoardScoreFont);
-
             if (m_SpriteBatch == null)
             {
                 m_SpriteBatch = this.Game.Services.GetService(typeof(SpriteBatch)) as SpriteBatch;

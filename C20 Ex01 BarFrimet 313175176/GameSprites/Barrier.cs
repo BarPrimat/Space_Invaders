@@ -18,13 +18,12 @@ namespace GameSprites
     {
         private Color[] m_Pixels;
         private Vector2 m_StartPosition;
-        private static bool s_TextureUsed = false;
+        private static bool s_TextureIsUsed = false;
 
         public Barrier(Game i_Game, string i_AssetName, Enum.eDirectionMove i_eDirectionMove) : base(i_AssetName, i_Game)
         {
             float moveOnXAxis = i_eDirectionMove == Enum.eDirectionMove.Right ? GameDefinitions.BarrierSpeed : -1 * GameDefinitions.BarrierSpeed;
-            this.Velocity = new Vector2(moveOnXAxis, 0);
-            // this.Scales = new Vector2(2, 2);
+            this.Velocity = new Vector2(moveOnXAxis, 0); // Move only on X axis
         }
 
         protected override void InitOrigins()
@@ -36,17 +35,16 @@ namespace GameSprites
         protected override void LoadContent()
         {
             base.LoadContent();
-
             m_Pixels = new Color[Texture.Width * Texture.Height];
             this.Texture.GetData<Color>(m_Pixels);
-            if (s_TextureUsed)
+            if (s_TextureIsUsed)
             {
-                this.Texture = new Texture2D(Game.GraphicsDevice, Texture.Width, Texture.Height);
+                this.Texture = new Texture2D(this.Game.GraphicsDevice, this.Texture.Width, this.Texture.Height);
                 this.Texture.SetData<Color>(m_Pixels);
             }
             else
             {
-                s_TextureUsed = true;
+                s_TextureIsUsed = true;
             }
         }
 
@@ -71,21 +69,21 @@ namespace GameSprites
             Bullet bullet = i_Collidable as Bullet;
             Enemy enemy = i_Collidable as Enemy;
             List<Vector2> collidedPoints;
-            bool v_AllowedToClear = true;
+            const bool v_AllowedToClear = true;
 
             if (enemy != null)
             {
-                IsPixelsIntersects(enemy, out collidedPoints, v_AllowedToClear);
+                isPixelsIntersects(enemy, out collidedPoints, v_AllowedToClear);
             }
 
-            if (bullet != null && IsPixelsIntersects(bullet, out collidedPoints, !v_AllowedToClear))
+            if (bullet != null && isPixelsIntersects(bullet, out collidedPoints, !v_AllowedToClear))
             {
-                ClearPixelsInBulletCollision(collidedPoints, bullet, (int) Math.Round(bullet.Height * GameDefinitions.BarrierPercentageThatBallEats));
+                clearPixelsInBulletCollision(collidedPoints, bullet, (int) Math.Round(bullet.Height * GameDefinitions.BarrierPercentageThatBallEats));
                 bullet.DisableBullet();
             }
         }
 
-        public bool IsPixelsIntersects(Sprite i_CollisionSprite, out List<Vector2> o_PointsThatCollided, bool i_AllowedToClear)
+        private bool isPixelsIntersects(Sprite i_CollisionSprite, out List<Vector2> o_PointsThatCollided, bool i_AllowedToClear)
         {
             bool isCollided = false;
             o_PointsThatCollided = new List<Vector2>();
@@ -124,7 +122,7 @@ namespace GameSprites
             return isCollided;
         }
 
-        public void ClearPixelsInBulletCollision(List<Vector2> i_StartPixelPositions, Bullet i_Bullet, int i_Length)
+        private void clearPixelsInBulletCollision(List<Vector2> i_StartPixelPositions, Bullet i_Bullet, int i_Length)
         {
             // The intersection must be between the maximum of the left and the minimum of the right
             int leftBoarder = Math.Max(this.Bounds.Left, i_Bullet.Bounds.Left);
@@ -155,11 +153,12 @@ namespace GameSprites
             this.Texture.SetData(m_Pixels);
         }
 
-        private void clearPixelsCollision(List<Vector2> i_StartPixelPositions, int i_Length)
+        private void clearPixelsCollision(List<Vector2> i_CollidedPointsList, int i_Length)
         {
-            foreach (Vector2 position in i_StartPixelPositions)
+            foreach (Vector2 position in i_CollidedPointsList)
             {
                 int index = (int)((position.X - this.Bounds.Left) + ((position.Y - this.Bounds.Top) * this.Bounds.Width));
+
                 if (i_Length > 0)
                 {
                     m_Pixels[index] = new Color(0, 0, 0, 0);

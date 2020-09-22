@@ -15,6 +15,7 @@ namespace SpaceInvaders
         private const string k_EndGameCaption = "Game Over";
         private const int k_PreferredBackBufferWidth = 750;
         private const int k_PreferredBackBufferHeight = 550;
+        private const int k_NumberOfPlayers = 2;
 
         // EnemyArmy definitions
         private const float k_HorizontalSpaceBetweenEnemy = 32 * 0.6f;
@@ -51,7 +52,7 @@ namespace SpaceInvaders
         private const int k_StartLifePositionHeight = 32;
         private const int k_LifeSize = 32;
         private const int k_NumberOfLifeToStart = 3;
-        private const float k_Opacity = 0.5f;
+        private const float k_LifeStartOpacity = 0.5f;
         private const float k_LifeScales = 0.5f;
         private static readonly Color sr_LifeTint = Color.White;
 
@@ -143,6 +144,46 @@ namespace SpaceInvaders
 
         public static float MotherShipSpeed => k_MotherShipSpeed;
 
+        public static float EnemyStepDown => k_EnemyStepDown;
+
+        public static float StartTimeBetweenJumpsInSec => k_StartTimeBetweenJumpsInSec;
+
+        public static float BarrierSpeed => k_BarrierSpeed;
+
+        public static float LifeStartOpacity => k_LifeStartOpacity;
+
+        public static float ChanceBallDeleteWithHittingAnotherBall => k_ChanceBallDeleteWithHittingAnotherBall;
+
+        public static float SpaceBetweenBarrier => k_SpaceBetweenBarrier;
+
+        public static float SpaceshipYStartPosition => k_SpaceshipYStartPosition;
+
+        public static float VerticalSpaceBetweenSpaceshipAndBarrier => k_VerticalSpaceBetweenSpaceshipAndBarrier;
+
+        public static float EnemyAnimationLengthInSec => k_EnemyAnimationLengthInSec;
+
+        public static float EnemyNumberOfRotateInSec => k_EnemyNumberOfRotateInSec;
+
+        public static float SpaceshipAnimationLengthInSec => k_SpaceshipAnimationLengthInSec;
+
+        public static float SpaceshipNumberOfRotateInSec => k_SpaceshipNumberOfRotateInSec;
+
+        public static float MotherShipAnimationLengthInSec => k_MotherShipAnimationLengthInSec;
+
+        public static float MotherShipNumberOfBlinkInAnimation => k_MotherShipNumberOfBlinkInAnimation;
+
+        public static float SpaceshipNumberOfBlinkingWhenBulletHitInSec => k_SpaceshipNumberOfBlinkingWhenBulletHitInSec;
+
+        public static float SpaceshipAnimationLengthWhenBulletHitInSec => k_SpaceshipAnimationLengthWhenBulletHitInSec;
+
+        public static float EnemyNumberOfAssetChangesInSec => k_EnemyNumberOfAssetChangesInSec;
+
+        public static float BarrierPercentageThatBallEats => k_BarrierPercentageThatBallEats;
+
+        public static float IncreaseTimeBetweenJumpsInSec => k_IncreaseTimeBetweenJumpsInSec;
+
+        public static float LifeScales => k_LifeScales;
+
         public static int PreferredBackBufferWidth => k_PreferredBackBufferWidth;
 
         public static int PreferredBackBufferHeight => k_PreferredBackBufferHeight;
@@ -169,19 +210,27 @@ namespace SpaceInvaders
 
         public static int MotherShipMaxTimeToNextAppearsInSec => k_MotherShipMaxTimeToNextAppearsInSec;
 
+        public static int EnemyNumberOfAssetInRow => k_EnemyNumberOfAssetInRow;
+
+        public static int SpaceBetweenTextInScoreBoard => k_SpaceBetweenTextInScoreBoard;
+
+        public static int SpaceBetweenLeftEdgeAndTextInScoreBoard => k_SpaceBetweenLeftEdgeAndTextInScoreBoard;
+
+        public static int EnemyMaxOfBullet => k_EnemyMaxOfBullet;
+
+        public static int PlayerThatAllowedToMouse => k_PlayerThatAllowedToMouse;
+
+        public static int NumberOfBarrier => k_NumberOfBarrier;
+
+        public static int NumberOfPlayers => k_NumberOfPlayers;
+
         public static string GameName => k_GameName;
 
         public static string EndGameText1Player => k_EndGameText1Player;
 
         public static string EndGameCaption => k_EndGameCaption;
 
-        public static float EnemyStepDown => k_EnemyStepDown;
-
-        public static float StartTimeBetweenJumpsInSec => k_StartTimeBetweenJumpsInSec;
-
         public static string EndGameTextMoreThen1Player => k_EndGameTextMoreThen1Player;
-
-        public static float Opacity => k_Opacity;
 
         public static Keys FirstPlayerKeyToRight => k_FirstPlayerKeyToRight;
 
@@ -195,52 +244,6 @@ namespace SpaceInvaders
 
         public static Keys SecondPlayerKeyToShoot => k_SecondPlayerKeyToShoot;
 
-        public static int PlayerThatAllowedToMouse => k_PlayerThatAllowedToMouse;
-
-        public static float ChanceBallDeleteWithHittingAnotherBall => k_ChanceBallDeleteWithHittingAnotherBall;
-
-        public static int EnemyMaxOfBullet => k_EnemyMaxOfBullet;
-
-        public static float BarrierSpeed => k_BarrierSpeed;
-
         public static Enum.eDirectionMove BarrierStartDirectionToMove => k_BarrierStartDirectionToMove;
-
-        public static float SpaceBetweenBarrier => k_SpaceBetweenBarrier;
-
-        public static int NumberOfBarrier => k_NumberOfBarrier;
-
-        public static float SpaceshipYStartPosition => k_SpaceshipYStartPosition;
-
-        public static float VerticalSpaceBetweenSpaceshipAndBarrier => k_VerticalSpaceBetweenSpaceshipAndBarrier;
-
-        public static float EnemyAnimationLengthInSec => k_EnemyAnimationLengthInSec;
-
-        public static float EnemyNumberOfRotateInSec => k_EnemyNumberOfRotateInSec;
-
-        public static float SpaceshipAnimationLengthInSec => k_SpaceshipAnimationLengthInSec;
-
-        public static float SpaceshipNumberOfRotateInSec => k_SpaceshipNumberOfRotateInSec;
-
-        public static float MotherShipAnimationLengthInSec => k_MotherShipAnimationLengthInSec;
-
-        public static float MotherShipNumberOfBlinkInAnimation => k_MotherShipNumberOfBlinkInAnimation;
-
-        public static float SpaceshipNumberOfBlinkingWhenBulletHitInSec => k_SpaceshipNumberOfBlinkingWhenBulletHitInSec;
-
-        public static float SpaceshipAnimationLengthWhenBulletHitInSec => k_SpaceshipAnimationLengthWhenBulletHitInSec;
-
-        public static float EnemyNumberOfAssetChangesInSec => k_EnemyNumberOfAssetChangesInSec;
-
-        public static int EnemyNumberOfAssetInRow => k_EnemyNumberOfAssetInRow;
-
-        public static int SpaceBetweenTextInScoreBoard => k_SpaceBetweenTextInScoreBoard;
-
-        public static int SpaceBetweenLeftEdgeAndTextInScoreBoard => k_SpaceBetweenLeftEdgeAndTextInScoreBoard;
-
-        public static float BarrierPercentageThatBallEats => k_BarrierPercentageThatBallEats;
-
-        public static float IncreaseTimeBetweenJumpsInSec => k_IncreaseTimeBetweenJumpsInSec;
-
-        public static float LifeScales => k_LifeScales;
     }
 }

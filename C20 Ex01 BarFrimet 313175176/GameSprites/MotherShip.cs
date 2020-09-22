@@ -51,7 +51,7 @@ namespace GameSprites
                 if (this.Position.X >= GraphicsDevice.Viewport.Width || (this.Position.X + this.Width) <= 0)
                 {
                     initPosition();
-                    this.Velocity = new Vector2(MotherShipSpeed, 0);
+                    this.Velocity = new Vector2(MotherShipSpeed, 0); // Move only on X axis
                 }
             }
         }

@@ -9,18 +9,18 @@ namespace GameSprites
 {
     public class Life : Infrastructure.ObjectModel.Sprite
     {
-        private Vector2 m_StartPosition;
+        private readonly Vector2 r_StartPosition;
 
         public Life(Game i_Game, string i_TexturePath, Vector2 i_Position) : base(i_TexturePath, i_Game)
         {
-            m_StartPosition = i_Position;
-            this.Opacity = GameDefinitions.Opacity;
+            r_StartPosition = i_Position;
+            this.Opacity = GameDefinitions.LifeStartOpacity;
             this.Scales = new Vector2(GameDefinitions.LifeScales, GameDefinitions.LifeScales);
         }
 
         protected override void InitOrigins()
         {
-            this.Position = m_StartPosition;
+            this.Position = r_StartPosition;
             base.InitOrigins(); 
         }
 

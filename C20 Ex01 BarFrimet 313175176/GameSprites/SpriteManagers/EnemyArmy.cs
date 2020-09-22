@@ -164,7 +164,7 @@ namespace GameSprites
                     checkAndChangeMoveDirection();
                 }
 
-                m_TimeDeltaCounterToMove -= StartTimeBetweenJumpsInSec;
+                m_TimeDeltaCounterToMove -= s_TimeBetweenJumpsInSec;
             }
         }
 

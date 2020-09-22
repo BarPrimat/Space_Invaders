@@ -57,7 +57,7 @@ namespace GameSprites
         {
             if(this.Visible && !m_IsDying)
             {
-                r_Firearm.Shoot(new Vector2(this.Position.X + Texture.Width / 2, this.Position.Y));
+                r_Firearm.Shoot(new Vector2(this.Position.X + this.Texture.Width / 2, this.Position.Y));
             }
         }
 

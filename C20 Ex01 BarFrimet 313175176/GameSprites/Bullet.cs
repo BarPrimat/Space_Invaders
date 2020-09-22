@@ -6,7 +6,6 @@ using Infrastructure.ServiceInterfaces;
 using SpaceInvaders;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
-using static SpaceInvaders.GameDefinitions;
 using static SpaceInvaders.Enum;
 
 
@@ -18,13 +17,14 @@ namespace GameSprites
         private readonly int r_FirearmSerialNumber;
         private static readonly Random sr_Random = new Random();
 
-        public Bullet(Game i_Game, string i_TexturePath, Color i_Tint, Vector2 i_CurrentPosition, eBulletType i_eBulletType, int i_FirearmSerialNumber) : base(i_TexturePath, i_Game)
+        public Bullet(Game i_Game, string i_TexturePath, Color i_Tint, Vector2 i_CurrentPosition, eBulletType i_eBulletType, int i_FirearmSerialNumber)
+            : base(i_TexturePath, i_Game)
         {
             r_FirearmSerialNumber = i_FirearmSerialNumber;
             r_eBulletType = i_eBulletType;
             this.TintColor = i_Tint;
             this.Position = i_CurrentPosition;
-            float velocityAxisY = BulletStartSpeedInSec * (i_eBulletType == eBulletType.EnemyBullet ? 1 : -1);
+            float velocityAxisY = GameDefinitions.BulletStartSpeedInSec * (i_eBulletType == eBulletType.EnemyBullet ? 1 : -1);
             this.Velocity = new Vector2(0, velocityAxisY);
         }
 
@@ -48,7 +48,6 @@ namespace GameSprites
             return this.Position.Y > Game.GraphicsDevice.Viewport.Height || 0 > (this.Position.Y + this.Texture.Height);
         }
 
-
         public override void Collided(ICollidable i_Collidable)
         {
             Bullet bullet = i_Collidable as Bullet;
@@ -61,7 +60,7 @@ namespace GameSprites
                     {
                         this.DisableBullet();
                     }
-                    else if (sr_Random.NextDouble() < ChanceBallDeleteWithHittingAnotherBall)
+                    else if (sr_Random.NextDouble() < GameDefinitions.ChanceBallDeleteWithHittingAnotherBall)
                     {
                         this.DisableBullet();
                     }

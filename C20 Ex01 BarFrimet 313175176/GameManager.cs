@@ -46,7 +46,6 @@ namespace SpaceInvaders
 
         public override void Update(GameTime i_GameTime)
         {
-
             if (EnemyArmy.EnemyThatLeft == 0)
             {
                 ShowScoreAndEndGame(Game);
@@ -75,7 +74,7 @@ namespace SpaceInvaders
             {
                 if (i_Sprite is Spaceship)
                 {
-                    sr_PlayersList[i_NumberOfPlayer].CurrentScore += (int)Enum.eScoreValue.LoseLife;
+                    sr_PlayersList[i_NumberOfPlayer].CurrentScore += (int) Enum.eScoreValue.LoseLife;
                     if (sr_PlayersList[i_NumberOfPlayer].CurrentScore < 0)
                     {
                         sr_PlayersList[i_NumberOfPlayer].CurrentScore = 0;
@@ -87,7 +86,7 @@ namespace SpaceInvaders
                 }
                 else if (i_Sprite is MotherShip)
                 {
-                    sr_PlayersList[i_NumberOfPlayer].CurrentScore += (int)Enum.eScoreValue.MotherShip;
+                    sr_PlayersList[i_NumberOfPlayer].CurrentScore += (int) Enum.eScoreValue.MotherShip;
                 }
 
                 sr_PlayersList[i_NumberOfPlayer].UpdateScoreBoardText();
@@ -100,15 +99,15 @@ namespace SpaceInvaders
             {
                 if (i_Sprite.TintColor == Color.Pink)
                 {
-                    sr_PlayersList[i_NumberOfPlayer].CurrentScore += (int)Enum.eScoreValue.PinkEnemy;
+                    sr_PlayersList[i_NumberOfPlayer].CurrentScore += (int) Enum.eScoreValue.PinkEnemy;
                 }
                 else if (i_Sprite.TintColor == Color.LightBlue)
                 {
-                    sr_PlayersList[i_NumberOfPlayer].CurrentScore += (int)Enum.eScoreValue.LightBlueEnemy;
+                    sr_PlayersList[i_NumberOfPlayer].CurrentScore += (int) Enum.eScoreValue.LightBlueEnemy;
                 }
                 else if (i_Sprite.TintColor == Color.Yellow)
                 {
-                    sr_PlayersList[i_NumberOfPlayer].CurrentScore += (int)Enum.eScoreValue.YellowEnemy;
+                    sr_PlayersList[i_NumberOfPlayer].CurrentScore += (int) Enum.eScoreValue.YellowEnemy;
                 }
             }
         }
