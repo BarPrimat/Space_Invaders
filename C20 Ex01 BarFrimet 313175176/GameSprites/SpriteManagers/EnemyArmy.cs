@@ -141,6 +141,7 @@ namespace GameSprites
                     s_TimeBetweenJumpsInSec -= s_TimeBetweenJumpsInSec * IncreaseTimeBetweenJumpsInSec;
                     m_MoveStepDown = false;
                     s_IsTimeBetweenJumpsChanged = true;
+                    m_TimeDeltaCounterToMove = 0;
                 }
                 else
                 {
@@ -162,9 +163,8 @@ namespace GameSprites
 
                     m_CurrentTopLeftX += m_eDirectionMove == eDirectionMove.Right ? newMoveToAdd * 1 : newMoveToAdd * -1;
                     checkAndChangeMoveDirection();
+                    m_TimeDeltaCounterToMove -= s_TimeBetweenJumpsInSec;
                 }
-
-                m_TimeDeltaCounterToMove -= s_TimeBetweenJumpsInSec;
             }
         }
 
