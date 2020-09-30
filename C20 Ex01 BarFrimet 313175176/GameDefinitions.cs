@@ -15,7 +15,11 @@ namespace SpaceInvaders
         private const string k_EndGameCaption = "Game Over";
         private const int k_PreferredBackBufferWidth = 750;
         private const int k_PreferredBackBufferHeight = 550;
-        private const int k_NumberOfPlayers = 2;
+        private const int k_NumberOfPlayers = 1;
+
+        // Level definitions
+        private const int k_MaxOfDifficultyLevel = 4;
+        private const int k_NumberOfIncreaseScoreInEachLevel = 100;
 
         // EnemyArmy definitions
         private const float k_HorizontalSpaceBetweenEnemy = 32 * 0.6f;
@@ -223,6 +227,10 @@ namespace SpaceInvaders
         public static int NumberOfBarrier => k_NumberOfBarrier;
 
         public static int NumberOfPlayers => k_NumberOfPlayers;
+
+        public static int MaxOfDifficultyLevel => k_MaxOfDifficultyLevel;
+
+        public static int NumberOfIncreaseScoreInEachLevel => k_NumberOfIncreaseScoreInEachLevel;
 
         public static string GameName => k_GameName;
 

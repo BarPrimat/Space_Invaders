@@ -1,8 +1,9 @@
-//*** Guy Ronen � 2008-2011 ***//
+﻿//*** Guy Ronen © 2008-2011 ***//
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Infrastructure.ServiceInterfaces;
 using Infrastructure.ObjectModel.Animators;
+using Infrastructure.ObjectModel.Screens;
 
 namespace Infrastructure.ObjectModel
 {
@@ -183,6 +184,55 @@ namespace Infrastructure.ObjectModel
             set { m_SpriteEffects = value; }
         }
 
+        protected SpriteSortMode m_SortMode = SpriteSortMode.Deferred;
+        public SpriteSortMode SortMode
+        {
+            get { return m_SortMode; }
+            set { m_SortMode = value; }
+        }
+
+        protected BlendState m_BlendState = BlendState.AlphaBlend;
+        public BlendState BlendState
+        {
+            get { return m_BlendState; }
+            set { m_BlendState = value; }
+        }
+
+        protected SamplerState m_SamplerState = null;
+        public SamplerState SamplerState
+        {
+            get { return m_SamplerState; }
+            set { m_SamplerState = value; }
+        }
+
+        protected DepthStencilState m_DepthStencilState = null;
+        public DepthStencilState DepthStencilState
+        {
+            get { return m_DepthStencilState; }
+            set { m_DepthStencilState = value; }
+        }
+
+        protected RasterizerState m_RasterizerState = null;
+        public RasterizerState RasterizerState
+        {
+            get { return m_RasterizerState; }
+            set { m_RasterizerState = value; }
+        }
+
+        protected Effect m_Shader = null;
+        public Effect Shader
+        {
+            get { return m_Shader; }
+            set { m_Shader = value; }
+        }
+
+        protected Matrix m_TransformMatrix = Matrix.Identity;
+        public Matrix TransformMatrix
+        {
+            get { return m_TransformMatrix; }
+            set { m_TransformMatrix = value; }
+        }
+
         protected Vector2 m_Velocity = Vector2.Zero;
         /// <summary>
         /// Pixels per Second on 2 axis
@@ -203,16 +253,16 @@ namespace Infrastructure.ObjectModel
             set { m_AngularVelocity = value; }
         }
 
-        public Sprite(string i_AssetName, Game i_Game, int i_UpdateOrder, int i_DrawOrder)
-            : base(i_AssetName, i_Game, i_UpdateOrder, i_DrawOrder)
+        public Sprite(string i_AssetName, GameScreen i_GameScreen, int i_UpdateOrder, int i_DrawOrder)
+            : base(i_AssetName, i_GameScreen, i_UpdateOrder, i_DrawOrder)
         { }
 
-        public Sprite(string i_AssetName, Game i_Game, int i_CallsOrder)
-            : base(i_AssetName, i_Game, i_CallsOrder)
+        public Sprite(string i_AssetName, GameScreen i_GameScreen, int i_CallsOrder)
+            : base(i_AssetName, i_GameScreen, i_CallsOrder)
         { }
 
-        public Sprite(string i_AssetName, Game i_Game)
-            : base(i_AssetName, i_Game, int.MaxValue)
+        public Sprite(string i_AssetName, GameScreen i_GameScreen)
+            : base(i_AssetName, i_GameScreen, int.MaxValue)
         { }
 
         /// <summary>
@@ -242,8 +292,7 @@ namespace Infrastructure.ObjectModel
         }
 
 
-        private bool m_UseSharedBatch = true;
-
+        private bool m_UseSharedBatch = false;
         protected SpriteBatch m_SpriteBatch;
         public SpriteBatch SpriteBatch
         {
@@ -299,15 +348,50 @@ namespace Infrastructure.ObjectModel
             this.Animations.Update(gameTime);
         }
 
-        /// <summary>
-        /// Basic texture draw behavior, using a shared/own sprite batch
-        /// </summary>
-        /// <param name="gameTime"></param>
+        class DeviceStates
+        {
+            public BlendState BlendState;
+            public SamplerState SamplerState;
+            public DepthStencilState DepthStencilState;
+            public RasterizerState RasterizerState;
+        }
+
+        DeviceStates m_SavedDeviceStates = new DeviceStates();
+        protected void saveDeviceStates()
+        {
+            m_SavedDeviceStates.BlendState = GraphicsDevice.BlendState;
+            m_SavedDeviceStates.SamplerState = GraphicsDevice.SamplerStates[0];
+            m_SavedDeviceStates.DepthStencilState = GraphicsDevice.DepthStencilState;
+            m_SavedDeviceStates.RasterizerState = GraphicsDevice.RasterizerState;
+        }
+
+        private void restoreDeviceStates()
+        {
+            GraphicsDevice.BlendState = m_SavedDeviceStates.BlendState;
+            GraphicsDevice.SamplerStates[0] = m_SavedDeviceStates.SamplerState;
+            GraphicsDevice.DepthStencilState = m_SavedDeviceStates.DepthStencilState;
+            GraphicsDevice.RasterizerState = m_SavedDeviceStates.RasterizerState;
+        }
+
+        protected bool m_SaveAndRestoreDeviceState = false;
+        public bool SaveAndRestoreDeviceState
+        {
+            get { return m_SaveAndRestoreDeviceState; }
+            set { m_SaveAndRestoreDeviceState = value; }
+        }
+
         public override void Draw(GameTime gameTime)
         {
             if (!m_UseSharedBatch)
             {
-                m_SpriteBatch.Begin();
+                if (SaveAndRestoreDeviceState)
+                {
+                    saveDeviceStates();
+                }
+
+                m_SpriteBatch.Begin(
+                    SortMode, BlendState, SamplerState,
+                    DepthStencilState, RasterizerState, Shader, TransformMatrix);
             }
 
             m_SpriteBatch.Draw(m_Texture, this.PositionForDraw,
@@ -318,6 +402,11 @@ namespace Infrastructure.ObjectModel
             if (!m_UseSharedBatch)
             {
                 m_SpriteBatch.End();
+
+                if (SaveAndRestoreDeviceState)
+                {
+                    restoreDeviceStates();
+                }
             }
 
             base.Draw(gameTime);

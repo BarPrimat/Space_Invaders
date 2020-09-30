@@ -4,6 +4,7 @@ using System.Text;
 using Infrastructure.Managers;
 using Infrastructure.ObjectModel.Animators;
 using Infrastructure.ObjectModel.Animators.ConcreteAnimators;
+using Infrastructure.ObjectModel.Screens;
 using Infrastructure.ServiceInterfaces;
 using SpaceInvaders;
 using Microsoft.Xna.Framework;
@@ -24,10 +25,10 @@ namespace GameSprites
         private int m_NumberOfTheSpaceship;
         private bool m_IsDying = false;
 
-        public Spaceship(Game i_Game, string i_TexturePath, int i_NumberOfSpaceship, LifeManager i_LifeManager) : base (i_TexturePath, i_Game)
+        public Spaceship(GameScreen i_GameScreen, string i_TexturePath, int i_NumberOfSpaceship, LifeManager i_LifeManager) : base (i_TexturePath, i_GameScreen)
         {
             this.TintColor = GameDefinitions.SpaceshipTint;
-            r_Firearm = new Firearm(i_Game, SpaceshipMaxOfBullet, eBulletType.SpaceShipBullet, i_NumberOfSpaceship);
+            r_Firearm = new Firearm(i_GameScreen, SpaceshipMaxOfBullet, eBulletType.SpaceShipBullet, i_NumberOfSpaceship);
             m_SpaceshipSpeed = GameDefinitions.SpaceshipSpeed;
             m_NumberOfTheSpaceship = i_NumberOfSpaceship;
             r_LifeManager = i_LifeManager;

@@ -17,6 +17,14 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Content\Screens\**" />
+    <Compile Remove="Content\Sprites\Screens\**" />
+    <EmbeddedResource Remove="Content\Screens\**" />
+    <EmbeddedResource Remove="Content\Sprites\Screens\**" />
+    <None Remove="Content\Screens\**" />
+    <None Remove="Content\Sprites\Screens\**" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="SpaceInvaders" />
   </ItemGroup>
   <ItemGroup>
@@ -29,6 +37,11 @@
   </ItemGroup>
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Content\Screens\blank.png" />
+    <None Include="Content\Screens\gradient.png" />
+    <None Include="Content\Screens\SpaceInvadersTitle.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Infrastructure.Managers;
+using Infrastructure.ObjectModel.Screens;
 using Infrastructure.ServiceInterfaces;
 using SpaceInvaders;
 using Microsoft.Xna.Framework;
@@ -17,8 +18,8 @@ namespace GameSprites
         private readonly int r_FirearmSerialNumber;
         private static readonly Random sr_Random = new Random();
 
-        public Bullet(Game i_Game, string i_TexturePath, Color i_Tint, Vector2 i_CurrentPosition, eBulletType i_eBulletType, int i_FirearmSerialNumber)
-            : base(i_TexturePath, i_Game)
+        public Bullet(GameScreen i_GameScreen, string i_TexturePath, Color i_Tint, Vector2 i_CurrentPosition, eBulletType i_eBulletType, int i_FirearmSerialNumber)
+            : base(i_TexturePath, i_GameScreen)
         {
             r_FirearmSerialNumber = i_FirearmSerialNumber;
             r_eBulletType = i_eBulletType;

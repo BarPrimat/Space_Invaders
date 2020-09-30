@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 using GameSprites;
+using Infrastructure.ObjectModel.Screens;
 using Infrastructure.ServiceInterfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -23,27 +24,29 @@ namespace SpaceInvaders
         private readonly Keys r_LeftMoveKey;
         private readonly Keys r_ShootKey;
         private readonly int r_SerialNumber;
+        private readonly GameScreen r_GameScreen;
 
-        public Player(Game i_Game, string i_Name, string i_TextureSpaceshipPath, int i_SerialNumberOfPlayer, Keys i_RightMoveKey, Keys i_LeftMoveKey, Keys i_ShootKey)
-            : base(i_Game)
+        public Player(GameScreen i_GameScreen, string i_Name, string i_TextureSpaceshipPath, int i_SerialNumberOfPlayer, Keys i_RightMoveKey, Keys i_LeftMoveKey, Keys i_ShootKey)
+            : base(i_GameScreen.Game)
         {
             r_SerialNumber = i_SerialNumberOfPlayer;
             r_Name = i_Name;
-            r_LifeManager = new LifeManager(i_Game, i_TextureSpaceshipPath, GameDefinitions.NumberOfLifeToStart, r_SerialNumber * GameDefinitions.StartLifePositionHeight);
-            r_Spaceship = new Spaceship(i_Game, i_TextureSpaceshipPath, r_SerialNumber, r_LifeManager);
+            r_LifeManager = new LifeManager(i_GameScreen, i_TextureSpaceshipPath, GameDefinitions.NumberOfLifeToStart, r_SerialNumber * GameDefinitions.StartLifePositionHeight);
+            r_Spaceship = new Spaceship(i_GameScreen, i_TextureSpaceshipPath, r_SerialNumber, r_LifeManager);
             r_RightMoveKey = i_RightMoveKey;
             r_LeftMoveKey = i_LeftMoveKey;
             r_ShootKey = i_ShootKey;
             r_MouseIsAllowed = r_SerialNumber == GameDefinitions.PlayerThatAllowedToMouse;
+            r_GameScreen = i_GameScreen;
             setupScoreBoardText();
-            i_Game.Components.Add(this);
+            i_GameScreen.Game.Components.Add(this);
         }
 
         private void setupScoreBoardText()
         {
             Color colorOfText = r_SerialNumber == 0 ? Color.Blue : Color.Green;
             Vector2 positionOfText = new Vector2(GameDefinitions.SpaceBetweenLeftEdgeAndTextInScoreBoard, (r_SerialNumber + 1) * GameDefinitions.SpaceBetweenTextInScoreBoard);
-            m_ScoreBoardText = new TextService(SpritesDefinition.TextBoardScoreFont, this.Game, positionOfText, colorOfText);
+            m_ScoreBoardText = new TextService(SpritesDefinition.TextBoardScoreFont, r_GameScreen, positionOfText, colorOfText);
             UpdateScoreBoardText();
         }
 

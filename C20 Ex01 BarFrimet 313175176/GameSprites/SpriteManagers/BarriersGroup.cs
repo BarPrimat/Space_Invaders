@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Infrastructure.ObjectModel.Screens;
 using Microsoft.Xna.Framework;
 using SpaceInvaders;
 
@@ -11,17 +12,17 @@ namespace GameSprites
         private readonly List<Barrier> r_ListOfBarriers = new List<Barrier>();
         private readonly int r_NumberOfWalls;
 
-        public BarriersGroup(Game i_Game, string i_TexturePath, int i_NumberOfWalls) : base(i_Game)
+        public BarriersGroup(GameScreen i_GameScreen, string i_TexturePath, int i_NumberOfWalls) : base(i_GameScreen.Game)
         {
             if(i_NumberOfWalls > 0)
             {
                 r_NumberOfWalls = i_NumberOfWalls;
                 for (int i = 0; i < i_NumberOfWalls; i++)
                 {
-                    r_ListOfBarriers.Add(new Barrier(i_Game, i_TexturePath, GameDefinitions.BarrierStartDirectionToMove));
+                    r_ListOfBarriers.Add(new Barrier(i_GameScreen, i_TexturePath, GameDefinitions.BarrierStartDirectionToMove));
                 }
 
-                i_Game.Components.Add(this);
+                i_GameScreen.Add(this);
             }
         }
 

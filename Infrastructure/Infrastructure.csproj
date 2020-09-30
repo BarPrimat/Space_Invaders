@@ -11,6 +11,11 @@
     <AssemblyName>Infrastructure</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Content\Screens\**" />
+    <EmbeddedResource Remove="Content\Screens\**" />
+    <None Remove="Content\Screens\**" />
+  </ItemGroup>
+  <ItemGroup>
     <TrimmerRootAssembly Include="Microsoft.Xna.Framework.Content.ContentTypeReader" Visible="false" />
   </ItemGroup>
   <ItemGroup>

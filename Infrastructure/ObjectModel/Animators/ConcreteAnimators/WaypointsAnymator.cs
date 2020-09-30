@@ -8,7 +8,7 @@ namespace Infrastructure.ObjectModel.Animators.ConcreteAnimators
     {
         private float m_VelocityPerSecond;
         private Vector2[] m_Waypoints;
-        private int m_CurrentWaypointIdx = 0;
+        private int m_CurrentWaypoint = 0;
         private bool m_Loop = false;
 
         // CTORs
@@ -48,7 +48,7 @@ namespace Infrastructure.ObjectModel.Animators.ConcreteAnimators
             float maxDistance = (float)i_GameTime.ElapsedGameTime.TotalSeconds * m_VelocityPerSecond;
 
             // The vector that is left to get to the current waypoint
-            Vector2 remainingVector = m_Waypoints[m_CurrentWaypointIdx] - this.BoundSprite.Position;
+            Vector2 remainingVector = m_Waypoints[m_CurrentWaypoint] - this.BoundSprite.Position;
             if (remainingVector.Length() > maxDistance)
             {
                 // The vector is longer than we can travel,
@@ -76,19 +76,19 @@ namespace Infrastructure.ObjectModel.Animators.ConcreteAnimators
             else
             {
                 // We have more waypoints to go. NEXT!
-                m_CurrentWaypointIdx++;
-                m_CurrentWaypointIdx %= m_Waypoints.Length;
+                m_CurrentWaypoint++;
+                m_CurrentWaypoint %= m_Waypoints.Length;
             }
         }
 
         private bool reachedLastWaypoint()
         {
-            return (m_CurrentWaypointIdx == m_Waypoints.Length - 1);
+            return (m_CurrentWaypoint == m_Waypoints.Length - 1);
         }
 
         private bool reachedCurrentWaypoint()
         {
-            return (this.BoundSprite.Position == m_Waypoints[m_CurrentWaypointIdx]);
+            return (this.BoundSprite.Position == m_Waypoints[m_CurrentWaypoint]);
         }
     }
 }

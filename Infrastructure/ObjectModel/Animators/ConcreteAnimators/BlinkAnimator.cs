@@ -8,6 +8,7 @@ namespace Infrastructure.ObjectModel.Animators.ConcreteAnimators
     {
         private TimeSpan m_BlinkLength;
         private TimeSpan m_TimeLeftForNextBlink;
+        private bool m_IsVisible = true;
 
         public TimeSpan BlinkLength
         {
@@ -36,10 +37,11 @@ namespace Infrastructure.ObjectModel.Animators.ConcreteAnimators
             if (m_TimeLeftForNextBlink.TotalSeconds < 0)
             {
                 // we have elapsed, so blink
-                this.BoundSprite.Visible = !this.BoundSprite.Visible;
+                m_IsVisible = !m_IsVisible;
                 m_TimeLeftForNextBlink = m_BlinkLength;
             }
 
+            this.BoundSprite.Visible = m_IsVisible;
         }
 
         protected override void RevertToOriginal()

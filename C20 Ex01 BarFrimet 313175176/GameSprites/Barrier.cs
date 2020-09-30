@@ -5,6 +5,7 @@ using System.Numerics;
 using System.Text;
 using FarseerPhysics.Dynamics;
 using Infrastructure.ObjectModel;
+using Infrastructure.ObjectModel.Screens;
 using Infrastructure.ServiceInterfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -20,7 +21,7 @@ namespace GameSprites
         private Vector2 m_StartPosition;
         private static bool s_TextureIsUsed = false;
 
-        public Barrier(Game i_Game, string i_AssetName, Enum.eDirectionMove i_eDirectionMove) : base(i_AssetName, i_Game)
+        public Barrier(GameScreen i_GameScreen, string i_AssetName, Enum.eDirectionMove i_eDirectionMove) : base(i_AssetName, i_GameScreen)
         {
             float moveOnXAxis = i_eDirectionMove == Enum.eDirectionMove.Right ? GameDefinitions.BarrierSpeed : -1 * GameDefinitions.BarrierSpeed;
             this.Velocity = new Vector2(moveOnXAxis, 0); // Move only on X axis

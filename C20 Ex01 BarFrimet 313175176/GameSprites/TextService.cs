@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using GameSprites;
+using Infrastructure.ObjectModel.Screens;
+using Infrastructure.ServiceInterfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -11,9 +13,10 @@ namespace SpaceInvaders
     {
         private SpriteFont m_Font;
         private string m_TextToPrint;
+        private bool m_IsShareSpriteBatch = true;
 
-        public TextService(string i_AssetName, Game i_Game, Vector2 i_Position, Color i_ColorOfText)
-            : base(i_AssetName, i_Game)
+        public TextService(string i_AssetName, GameScreen i_GameScreen, Vector2 i_Position, Color i_ColorOfText)
+            : base(i_AssetName, i_GameScreen)
         {
             TintColor = i_ColorOfText;
             this.Position = i_Position;
@@ -31,6 +34,7 @@ namespace SpaceInvaders
                     m_SpriteBatch = new SpriteBatch(this.Game.GraphicsDevice);
                 }
             }
+            
         }
 
         protected override void InitBounds()
@@ -39,9 +43,16 @@ namespace SpaceInvaders
 
         public override void Draw(GameTime i_GameTime)
         {
-            this.m_SpriteBatch.Begin();
-            this.m_SpriteBatch.DrawString(m_Font, m_TextToPrint, this.Position, TintColor);
-            this.m_SpriteBatch.End();
+            if(!m_IsShareSpriteBatch)
+            {
+                this.m_SpriteBatch.Begin();
+            }
+
+            this.m_SpriteBatch.DrawString(m_Font, m_TextToPrint, this.Position, TintColor, this.Rotation, this.PositionOrigin, this.Scales, this.SpriteEffects, this.LayerDepth);
+            if(!m_IsShareSpriteBatch)
+            {
+                this.m_SpriteBatch.End();
+            }
         }
 
         public string TextToPrint

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Infrastructure.ObjectModel.Animators;
 using Infrastructure.ObjectModel.Animators.ConcreteAnimators;
+using Infrastructure.ObjectModel.Screens;
 using Infrastructure.ServiceInterfaces;
 using SpaceInvaders;
 using Microsoft.Xna.Framework;
@@ -23,12 +24,12 @@ namespace GameSprites
         private readonly int r_ColumnIndexInPicture;
         private const bool k_ThereIsDummyPixel = true;
 
-        public Enemy(Game i_Game, string i_TexturePath, Color i_Tint, int i_RowIndexInPicture, int i_ColumnIndexInPicture, float i_TimeUntilNextAssetChangesInSec, int i_NumberOfAssetChange) 
-            : base(i_TexturePath, i_Game)
+        public Enemy(GameScreen i_GameScreen, string i_TexturePath, Color i_Tint, int i_RowIndexInPicture, int i_ColumnIndexInPicture, float i_TimeUntilNextAssetChangesInSec, int i_NumberOfAssetChange) 
+            : base(i_TexturePath, i_GameScreen)
         {
             this.TintColor = i_Tint;
             m_IsDying = false;
-            r_Firearm = new Firearm(i_Game, GameDefinitions.EnemyMaxOfBullet, Enum.eBulletType.EnemyBullet);
+            r_Firearm = new Firearm(i_GameScreen, GameDefinitions.EnemyMaxOfBullet, Enum.eBulletType.EnemyBullet);
             this.r_TimeUntilNextAssetChangesInSec = TimeSpan.FromSeconds(i_TimeUntilNextAssetChangesInSec);
             r_NumberOfAssetChange = i_NumberOfAssetChange;
             r_RowIndexInPicture = i_RowIndexInPicture;

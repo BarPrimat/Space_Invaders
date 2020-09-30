@@ -1,8 +1,9 @@
-//*** Guy Ronen © 2008-2011 ***//
+//*** Guy Ronen ? 2008-2011 ***//
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Infrastructure.ServiceInterfaces;
 using System;
+using Infrastructure.ObjectModel.Screens;
 
 namespace Infrastructure.ObjectModel
 {
@@ -57,28 +58,30 @@ namespace Infrastructure.ObjectModel
         }
 
         public LoadableDrawableComponent(
-            string i_AssetName, Game i_Game, int i_UpdateOrder, int i_DrawOrder)
-            : base(i_Game)
+            string i_AssetName, GameScreen i_GameScreen, int i_UpdateOrder, int i_DrawOrder)
+            : base(i_GameScreen.Game)
         {
             this.AssetName = i_AssetName;
             this.UpdateOrder = i_UpdateOrder;
             this.DrawOrder = i_DrawOrder;
 
+            // register in the screen:
+            i_GameScreen.Add(this);
             // register in the game:
-            this.Game.Components.Add(this);
+            // this.Game.Components.Add(this);
         }
 
         public LoadableDrawableComponent(
             string i_AssetName,
-            Game i_Game,
+            GameScreen i_GameScreen,
             int i_CallsOrder)
-            : this(i_AssetName, i_Game, i_CallsOrder, i_CallsOrder)
+            : this(i_AssetName, i_GameScreen, i_CallsOrder, i_CallsOrder)
         { }
 
         public override void Initialize()
         {
             base.Initialize();
-            
+
             // TODO 12: Register in the collisions manager:
             if (this is ICollidable)
             {

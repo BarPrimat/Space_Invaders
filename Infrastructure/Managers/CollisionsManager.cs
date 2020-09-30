@@ -12,9 +12,9 @@ namespace Infrastructure.Managers
     {
         protected readonly List<ICollidable> m_Collidables = new List<ICollidable>();
 
-        public CollisionsManager(Game i_Game) : 
+        public CollisionsManager(Game i_Game) :
             base(i_Game, int.MaxValue)
-        {} 
+        { }
 
         protected override void RegisterAsService()
         {
@@ -57,7 +57,7 @@ namespace Infrastructure.Managers
                 checkCollision(sender as ICollidable);
             }
         }
-        
+
         private void checkCollision(ICollidable i_Source)
         {
             if (i_Source.Visible)

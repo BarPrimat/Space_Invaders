@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Infrastructure.ObjectModel.Screens;
 using SpaceInvaders;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using static SpaceInvaders.GameDefinitions;
 using static SpaceInvaders.Enum;
-//using Sprite = Infrastructure.ObjectModel.Sprite;
 
 namespace GameSprites
 {
@@ -26,16 +26,22 @@ namespace GameSprites
         private static float s_TimeBetweenJumpsInSec;
         private static int s_EnemyThatLeft = 0;
         private static bool s_IsTimeBetweenJumpsChanged = false;
+        private readonly int r_NumberOfRow;
+        private readonly int r_NumberOfColumn;
+        private readonly GameScreen r_GameScreen;
 
-        public EnemyArmy(Game i_Game) : base(i_Game)
+        public EnemyArmy(GameScreen i_GameScreen, int i_NumberOfRow, int i_NumberOfColumn) : base(i_GameScreen.Game)
         {
-            r_EnemyArray = new Enemy[GameDefinitions.NumberOfEnemyInRow, GameDefinitions.NumberOfEnemyInColumn];
-            s_EnemyThatLeft = GameDefinitions.NumberOfEnemyInRow * GameDefinitions.NumberOfEnemyInColumn;
+            r_GameScreen = i_GameScreen;
+            r_NumberOfRow = i_NumberOfRow;
+            r_NumberOfColumn = i_NumberOfColumn;
+            r_EnemyArray = new Enemy[r_NumberOfRow, r_NumberOfColumn];
+            s_EnemyThatLeft = r_NumberOfRow * r_NumberOfColumn;
             m_eDirectionMove = eDirectionMove.Right;
             r_Random = new Random();
             m_EnemyNextTimeToShoot = r_Random.Next((int) EnemyMaxTimeForShoot);
             s_TimeBetweenJumpsInSec = GameDefinitions.StartTimeBetweenJumpsInSec;
-            i_Game.Components.Add(this);
+            i_GameScreen.Add(this);
         }
 
         public override void Initialize()
@@ -53,9 +59,9 @@ namespace GameSprites
             float xPosition = m_CurrentTopLeftX;
             float yPosition = m_CurrentTopLeftY;
 
-            for (int i = 0; i < NumberOfEnemyInRow; i++)
+            for (int i = 0; i < r_NumberOfRow; i++)
             {
-                for (int j = 0; j < NumberOfEnemyInColumn; j++)
+                for (int j = 0; j < r_NumberOfColumn; j++)
                 {
                     Vector2 position = new Vector2(xPosition, yPosition);
 
@@ -113,7 +119,7 @@ namespace GameSprites
                 columnIndexInPicture = 1;
             }
 
-            r_EnemyArray[i_Row, i_Column] = new Enemy(Game, texturePath, colorAsset, rowIndexInPicture, columnIndexInPicture, GameDefinitions.EnemyNumberOfAssetChangesInSec, GameDefinitions.EnemyNumberOfAssetInRow);
+            r_EnemyArray[i_Row, i_Column] = new Enemy(r_GameScreen, texturePath, colorAsset, rowIndexInPicture, columnIndexInPicture, GameDefinitions.EnemyNumberOfAssetChangesInSec, GameDefinitions.EnemyNumberOfAssetInRow);
         }
 
         public override void Update(GameTime i_GameTime)
@@ -172,8 +178,8 @@ namespace GameSprites
         {
             if(m_EnemyNextTimeToShoot <= m_TimeDeltaCounterToShoot)
             {
-                int randomizeEnemyRow = r_Random.Next(NumberOfEnemyInRow);
-                int randomizeEnemyColumn = r_Random.Next(NumberOfEnemyInColumn);
+                int randomizeEnemyRow = r_Random.Next(r_NumberOfRow);
+                int randomizeEnemyColumn = r_Random.Next(r_NumberOfColumn);
                 if (r_EnemyArray[randomizeEnemyRow, randomizeEnemyColumn].Visible && !r_EnemyArray[randomizeEnemyRow, randomizeEnemyColumn].IsDying)
                 {
                     r_EnemyArray[randomizeEnemyRow, randomizeEnemyColumn].Shoot();
@@ -201,9 +207,9 @@ namespace GameSprites
             float rightBorderXPosition = 0;
             bool isFound = false;
 
-            for (int column = NumberOfEnemyInColumn - 1; column >= 0 && !isFound; column--)
+            for (int column = r_NumberOfColumn - 1; column >= 0 && !isFound; column--)
             {
-                for (int row = 0; row < NumberOfEnemyInRow; row++)
+                for (int row = 0; row < r_NumberOfRow; row++)
                 {
                     if (r_EnemyArray[row, column].Visible)
                     {
@@ -221,9 +227,9 @@ namespace GameSprites
             float leftBorderXPosition = 0;
             bool isFound = false;
 
-            for (int column = 0; column < NumberOfEnemyInColumn && !isFound; column++)
+            for (int column = 0; column < r_NumberOfColumn && !isFound; column++)
             {
-                for (int row = 0; row < NumberOfEnemyInRow; row++)
+                for (int row = 0; row < r_NumberOfRow; row++)
                 {
                     if (r_EnemyArray[row, column].Visible)
                     {
@@ -242,11 +248,11 @@ namespace GameSprites
             bool findHit = false;
 
             // No need to enter the loop is the enemy army can not hit nothing
-            if (m_CurrentTopLeftY + NumberOfEnemyInColumn * NumberOfEnemyInRow + spaceShipYPosition >= this.Game.GraphicsDevice.Viewport.Height)
+            if (m_CurrentTopLeftY + r_NumberOfColumn * r_NumberOfRow + spaceShipYPosition >= this.Game.GraphicsDevice.Viewport.Height)
             {
-                for (int row = NumberOfEnemyInRow - 1; row >= 0 && !findHit; row--)
+                for (int row = r_NumberOfRow - 1; row >= 0 && !findHit; row--)
                 {
-                    for(int column = 0; column < NumberOfEnemyInColumn && !findHit; column++)
+                    for(int column = 0; column < r_NumberOfColumn && !findHit; column++)
                     {
                         if (r_EnemyArray[row, column].Visible && !r_EnemyArray[row, column].IsDying && (r_EnemyArray[row, column].Position.Y + r_EnemyArray[row, column].Height >= spaceShipYPosition))
                         {
