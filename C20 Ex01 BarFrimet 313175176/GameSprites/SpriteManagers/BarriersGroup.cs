@@ -40,7 +40,7 @@ namespace GameSprites
             // If the number of Barriers is even find the closest right print if is it odd find the closest left print 
             float xPosition = r_ListOfBarriers.Count % 2 == 0 ? middleOfViewportWidth + spaceBetweenBarrier / 2
                                   : middleOfViewportWidth - (r_ListOfBarriers[0].Texture.Width / 2);
-            float yPosition = GameDefinitions.SpaceshipYStartPosition - (r_ListOfBarriers[0].Texture.Height * GameDefinitions.VerticalSpaceBetweenSpaceshipAndBarrier) - r_ListOfBarriers[0].Texture.Height;
+            float yPosition = this.Game.GraphicsDevice.Viewport.Height - GameDefinitions.SpaceshipYOffsetStartPosition - (r_ListOfBarriers[0].Texture.Height * GameDefinitions.VerticalSpaceBetweenSpaceshipAndBarrier) - r_ListOfBarriers[0].Texture.Height;
 
             spaceBetweenBarrier += r_ListOfBarriers[0].Texture.Width;
             // Go to the left most position to print the texture

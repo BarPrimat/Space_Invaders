@@ -155,16 +155,16 @@ namespace GameSprites
                     float rightGroupBorder = getRightGroupBorder();
                     float leftGroupBorder = getLeftGroupBorder();
 
-                    if (!m_MoveStepDown && (PreferredBackBufferWidth <= rightGroupBorder + Math.Max(EnemySizeWidth, newMoveToAdd)) && m_eDirectionMove == eDirectionMove.Right)
+                    if (!m_MoveStepDown && (this.Game.GraphicsDevice.Viewport.Width <= rightGroupBorder + Math.Max(EnemySizeWidth, newMoveToAdd)) && m_eDirectionMove == eDirectionMove.Right)
                     {
-                        newMoveToAdd = PreferredBackBufferWidth - rightGroupBorder;
+                        newMoveToAdd = this.Game.GraphicsDevice.Viewport.Width - rightGroupBorder;
                     }
                     else if (!m_MoveStepDown && (leftGroupBorder - Math.Max(EnemySizeWidth, newMoveToAdd) <= 0) && m_eDirectionMove == eDirectionMove.Left)
                     {
                         newMoveToAdd = leftGroupBorder;
                     }
 
-                    m_MoveStepDown = (PreferredBackBufferWidth < rightGroupBorder + EnemySizeWidth && m_eDirectionMove == eDirectionMove.Right)
+                    m_MoveStepDown = (this.Game.GraphicsDevice.Viewport.Width < rightGroupBorder + EnemySizeWidth && m_eDirectionMove == eDirectionMove.Right)
                                      || (leftGroupBorder - EnemySizeHeight < 0 && m_eDirectionMove == eDirectionMove.Left);
 
                     m_CurrentTopLeftX += m_eDirectionMove == eDirectionMove.Right ? newMoveToAdd * 1 : newMoveToAdd * -1;
@@ -244,7 +244,7 @@ namespace GameSprites
 
         private bool isEnemyReachSpaceShipHeight()
         {
-            float spaceShipYPosition = GameDefinitions.SpaceshipYStartPosition;
+            float spaceShipYPosition = this.Game.GraphicsDevice.Viewport.Height - GameDefinitions.SpaceshipYOffsetStartPosition;
             bool findHit = false;
 
             // No need to enter the loop is the enemy army can not hit nothing

@@ -8,6 +8,7 @@ using Infrastructure.ServiceInterfaces;
 using SpaceInvaders;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 using Enum = SpaceInvaders.Enum;
 
 namespace GameSprites
@@ -15,7 +16,7 @@ namespace GameSprites
     public class Enemy : Infrastructure.ObjectModel.Sprite, ICollidable2D
     {
         private CellAnimator m_EnemyCellAnimation;
-        private bool isInitialize = false;
+        private bool m_IsInitialize = false;
         private bool m_IsDying;
         private readonly Firearm r_Firearm;
         private readonly TimeSpan r_TimeUntilNextAssetChangesInSec;
@@ -46,7 +47,7 @@ namespace GameSprites
         {
             base.Initialize();
             this.initAnimations();
-            isInitialize = true;
+            m_IsInitialize = true;
         }
 
         protected override void InitOrigins()
@@ -88,7 +89,7 @@ namespace GameSprites
 
         protected override void OnPositionChanged()
         {
-            if(EnemyArmy.IsTimeBetweenJumpsChanged && isInitialize)
+            if(EnemyArmy.IsTimeBetweenJumpsChanged && m_IsInitialize)
             {
                 m_EnemyCellAnimation.CellTime = TimeSpan.FromSeconds(EnemyArmy.TimeBetweenJumpsInSec);
             }

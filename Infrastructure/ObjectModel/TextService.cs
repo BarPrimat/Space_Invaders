@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using GameSprites;
 using Infrastructure.ObjectModel.Screens;
 using Infrastructure.ServiceInterfaces;
 using Microsoft.Xna.Framework;
@@ -18,13 +17,24 @@ namespace SpaceInvaders
         public TextService(string i_AssetName, GameScreen i_GameScreen, Vector2 i_Position, Color i_ColorOfText)
             : base(i_AssetName, i_GameScreen)
         {
-            TintColor = i_ColorOfText;
+            m_TextToPrint = i_AssetName;
+            this.TintColor = i_ColorOfText;
             this.Position = i_Position;
+        }
+
+        public TextService(string i_AssetName, GameScreen i_GameScreen, Vector2 i_Position)
+            : this(i_AssetName, i_GameScreen, i_Position, Color.White)
+        {
+        }
+
+        public TextService(string i_AssetName, GameScreen i_GameScreen)
+            : this(i_AssetName, i_GameScreen, Vector2.Zero, Color.White)
+        {
         }
 
         protected override void LoadContent()
         {
-            m_Font = Game.Content.Load<SpriteFont>(SpritesDefinition.TextBoardScoreFont);
+            m_Font = Game.Content.Load<SpriteFont>(@"Fonts\Consolas");
             if (m_SpriteBatch == null)
             {
                 m_SpriteBatch = this.Game.Services.GetService(typeof(SpriteBatch)) as SpriteBatch;

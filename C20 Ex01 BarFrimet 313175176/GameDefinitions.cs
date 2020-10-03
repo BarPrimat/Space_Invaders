@@ -17,6 +17,14 @@ namespace SpaceInvaders
         private const int k_PreferredBackBufferHeight = 550;
         private const int k_NumberOfPlayers = 1;
 
+        // Screen definitions
+        private const int k_YOffsetOfMenuText = 30;
+        private const int k_XOffsetOfMenuText = 20;
+
+        // Sound start definitions
+        private const int k_StartBackgroundMusicVolume = 100;
+        private const int k_StartSoundsEffectsVolume = 100;
+
         // Level definitions
         private const int k_MaxOfDifficultyLevel = 4;
         private const int k_NumberOfIncreaseScoreInEachLevel = 100;
@@ -74,7 +82,7 @@ namespace SpaceInvaders
         private const float k_SpaceshipNumberOfRotateInSec = 6;
         private const float k_SpaceshipAnimationLengthWhenBulletHitInSec = 2f;
         private const float k_SpaceshipNumberOfBlinkingWhenBulletHitInSec = 1f / (8 * k_SpaceshipAnimationLengthWhenBulletHitInSec);
-        private const float k_SpaceshipYStartPosition = k_PreferredBackBufferHeight - k_SpaceshipSize - 10; // View point - Offset - put it a little bit higher
+        private const float k_SpaceshipYOffsetStartPosition = k_SpaceshipSize + 10; // View point - (Offset + put it a little bit higher)
         private static readonly Color sr_SpaceshipTint = Color.White;
 
         // Background definitions
@@ -87,7 +95,7 @@ namespace SpaceInvaders
         private const float k_MotherShipNumberOfBlinkInAnimation = 0.3f;
 
         // Player definitions
-        private const Keys k_FirstPlayerKeyToRight = Keys.P;
+        private const Keys k_FirstPlayerKeyToRight = Keys.O;
         private const Keys k_FirstPlayerKeyToLeft = Keys.I;
         private const Keys k_FirstPlayerKeyToShoot = Keys.D9;
         private const Keys k_SecondPlayerKeyToRight = Keys.R;
@@ -160,8 +168,6 @@ namespace SpaceInvaders
 
         public static float SpaceBetweenBarrier => k_SpaceBetweenBarrier;
 
-        public static float SpaceshipYStartPosition => k_SpaceshipYStartPosition;
-
         public static float VerticalSpaceBetweenSpaceshipAndBarrier => k_VerticalSpaceBetweenSpaceshipAndBarrier;
 
         public static float EnemyAnimationLengthInSec => k_EnemyAnimationLengthInSec;
@@ -187,6 +193,10 @@ namespace SpaceInvaders
         public static float IncreaseTimeBetweenJumpsInSec => k_IncreaseTimeBetweenJumpsInSec;
 
         public static float LifeScales => k_LifeScales;
+
+        public static float SpaceshipSize => k_SpaceshipSize;
+
+        public static float SpaceshipYOffsetStartPosition => k_SpaceshipYOffsetStartPosition;
 
         public static int PreferredBackBufferWidth => k_PreferredBackBufferWidth;
 
@@ -231,6 +241,14 @@ namespace SpaceInvaders
         public static int MaxOfDifficultyLevel => k_MaxOfDifficultyLevel;
 
         public static int NumberOfIncreaseScoreInEachLevel => k_NumberOfIncreaseScoreInEachLevel;
+
+        public static int YOffsetOfMenuText => k_YOffsetOfMenuText;
+
+        public static int XOffsetOfMenuText => k_XOffsetOfMenuText;
+
+        public static int StartBackgroundMusicVolume => k_StartBackgroundMusicVolume;
+
+        public static int StartSoundsEffectsVolume => k_StartSoundsEffectsVolume;
 
         public static string GameName => k_GameName;
 

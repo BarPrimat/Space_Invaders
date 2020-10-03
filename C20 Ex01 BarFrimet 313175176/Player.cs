@@ -39,7 +39,7 @@ namespace SpaceInvaders
             r_MouseIsAllowed = r_SerialNumber == GameDefinitions.PlayerThatAllowedToMouse;
             r_GameScreen = i_GameScreen;
             setupScoreBoardText();
-            i_GameScreen.Game.Components.Add(this);
+            i_GameScreen.Add(this);
         }
 
         private void setupScoreBoardText()

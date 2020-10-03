@@ -51,7 +51,8 @@ namespace GameSprites
         {
             // Init the ship position
             float x = m_NumberOfTheSpaceship * this.Texture.Width;
-            this.Position = new Vector2(x, SpaceshipYStartPosition);
+
+            this.Position = new Vector2(x, this.Game.GraphicsDevice.Viewport.Height - GameDefinitions.SpaceshipYOffsetStartPosition);
         }
 
         public void Shoot()

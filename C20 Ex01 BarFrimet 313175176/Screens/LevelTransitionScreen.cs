@@ -16,9 +16,9 @@ namespace Screens
         private TextService m_NextLevelTextService;
         private TextService m_TimeUntilNextLevelTextService;
 
-        public LevelTransitionScreen(Game i_Game, int i_Level) : base(i_Game)
+        public LevelTransitionScreen(Game i_Game) : base(i_Game)
         {
-            m_Level = i_Level;
+            m_Level = SettingsCollection.CurrentLevel;
             r_Background = new Background(this, SpritesDefinition.BackgroundAsset);
         }
 
@@ -32,9 +32,8 @@ namespace Screens
         {
             Vector2 nextLevelTextPosition = new Vector2(this.CenterOfViewPort.X - this.CenterOfViewPort.X / 4, this.CenterOfViewPort.Y);
             Vector2 timeUntilNextLevelTextPosition = new Vector2(this.CenterOfViewPort.X, this.CenterOfViewPort.Y + (this.CenterOfViewPort.Y / 4));
-
-            m_NextLevelTextService = new TextService(SpritesDefinition.TextFont, this, nextLevelTextPosition, Color.LightBlue);
-            m_NextLevelTextService.TextToPrint = "Level " + m_Level;
+            string nextLevelText = "Level " + m_Level;
+            m_NextLevelTextService = new TextService(nextLevelText, this, nextLevelTextPosition, Color.LightBlue);
             m_NextLevelTextService.Scales *= 2;
 
             m_TimeUntilNextLevelTextService = new TextService(SpritesDefinition.TextFont, this, timeUntilNextLevelTextPosition, Color.LightBlue);

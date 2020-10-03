@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using GameSprites;
 using Infrastructure.ObjectModel;
+using Infrastructure.ObjectModel.Animators.ConcreteAnimators;
 using Infrastructure.ObjectModel.Screens;
 using Infrastructure.ServiceInterfaces;
 using Microsoft.Xna.Framework;
@@ -14,10 +15,12 @@ namespace Screens
 {
     public class WelcomeScreen : GameScreen
     {
-        private const int k_LevelOne = 1;
+        private const float k_ScalePulseForTitle = 1.25f;
+        private const float k_PulsePerSecForTitle = 1f;
         private readonly Background r_Background;
         private readonly Sprite r_SpaceInvadersTitle;
         private IInputManager m_InputManager;
+        private TextService m_TextMenu;
 
         public WelcomeScreen(Game i_Game) : base(i_Game)
         {
@@ -30,6 +33,7 @@ namespace Screens
             base.Initialize();
             r_SpaceInvadersTitle.PositionOrigin = r_SpaceInvadersTitle.SourceRectangleCenter;
             r_SpaceInvadersTitle.Position = this.CenterOfViewPort;
+            initAnimations();
             initText();
             if (m_InputManager == null)
             {
@@ -37,17 +41,24 @@ namespace Screens
             }
         }
 
+        private void initAnimations()
+        {
+            PulseAnimator pulseAnimator = new PulseAnimator("PulseAnimator", TimeSpan.Zero, k_ScalePulseForTitle, k_PulsePerSecForTitle);
+
+            r_SpaceInvadersTitle.PositionOrigin = r_SpaceInvadersTitle.SourceRectangleCenter;
+            r_SpaceInvadersTitle.RotationOrigin = r_SpaceInvadersTitle.SourceRectangleCenter;
+            r_SpaceInvadersTitle.Animations.Add(pulseAnimator);
+            r_SpaceInvadersTitle.Animations.Restart();
+        }
+
         private void initText()
         {
             Vector2 position = new Vector2(this.CenterOfViewPort.X - (this.CenterOfViewPort.X / 2), this.CenterOfViewPort.Y + (this.CenterOfViewPort.Y / 2));
-            
-            TextService textMenu = new TextService(SpritesDefinition.TextFont, this, position, Color.DarkBlue);
             string textToPrint = string.Format(@"
 press Enter for a new game
 press M for main menu
 press Esc to exit");
-
-            textMenu.TextToPrint = textToPrint;
+            m_TextMenu = new TextService(textToPrint, this, position, Color.DarkBlue);
         }
 
         public override void Update(GameTime i_GameTime)
@@ -55,7 +66,7 @@ press Esc to exit");
             base.Update(i_GameTime);
             if(m_InputManager.KeyPressed(Keys.Enter))
             {
-                ScreensManager.SetCurrentScreen(new LevelTransitionScreen(this.Game, k_LevelOne));
+                ScreensManager.SetCurrentScreen(new LevelTransitionScreen(this.Game));
             }
             else if (m_InputManager.KeyPressed(Keys.Escape))
             {

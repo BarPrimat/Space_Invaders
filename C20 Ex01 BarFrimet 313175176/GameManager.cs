@@ -46,7 +46,7 @@ namespace SpaceInvaders
                 sr_PlayersList.Add(new Player(i_GameScreen, "P " + (i + 1), assetPath, i, rightKey, leftKey, shootKey));
             }
 
-            i_GameScreen.Game.Components.Add(this);
+            i_GameScreen.Add(this);
         }
 
         public override void Update(GameTime i_GameTime)

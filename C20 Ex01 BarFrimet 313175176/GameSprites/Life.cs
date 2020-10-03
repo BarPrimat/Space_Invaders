@@ -4,6 +4,7 @@ using System.Text;
 using Infrastructure.ObjectModel.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 using SpaceInvaders;
 
 namespace GameSprites
@@ -14,7 +15,8 @@ namespace GameSprites
 
         public Life(GameScreen i_GameScreen, string i_TexturePath, Vector2 i_Position) : base(i_TexturePath, i_GameScreen)
         {
-            r_StartPosition = i_Position;
+            r_StartPosition = i_Position; 
+            this.BlendState = BlendState.NonPremultiplied;
             this.Opacity = GameDefinitions.LifeStartOpacity;
             this.Scales = new Vector2(GameDefinitions.LifeScales, GameDefinitions.LifeScales);
         }

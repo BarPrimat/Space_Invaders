@@ -12,13 +12,14 @@ namespace GameSprites
         private readonly List<Life> r_LifeList;
         private readonly string r_TexturePath;
         private readonly GameScreen r_GameScreen;
+        private readonly int r_StartYPosition;
         private int m_CounterOfLife;
         private Vector2 m_CurrentPosition;
 
         public LifeManager(GameScreen i_GameScreen, string i_TexturePath, int i_CounterOfLife, int i_YPosition)
         {
             m_CounterOfLife = i_CounterOfLife;
-            m_CurrentPosition = new Vector2(GameDefinitions.StartLifePositionWidth - GameDefinitions.LifeSize, i_YPosition );
+            r_StartYPosition = i_YPosition;
             r_LifeList = new List<Life>();
             r_TexturePath = i_TexturePath;
             r_GameScreen = i_GameScreen;
@@ -27,6 +28,7 @@ namespace GameSprites
 
         public void Initialize()
         {
+            m_CurrentPosition = new Vector2(this.r_GameScreen.GraphicsDevice.Viewport.Width - GameDefinitions.LifeSize, r_StartYPosition);
             float currentXPosition = m_CurrentPosition.X;
 
             for (int i = 0; i < m_CounterOfLife; i++)
