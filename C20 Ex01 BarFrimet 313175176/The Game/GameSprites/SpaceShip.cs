@@ -32,6 +32,7 @@ namespace GameSprites
             m_SpaceshipSpeed = GameDefinitions.SpaceshipSpeed;
             m_NumberOfTheSpaceship = i_NumberOfSpaceship;
             r_LifeManager = i_LifeManager;
+            this.BlendState  = BlendState.NonPremultiplied;
         }
 
         public override void Initialize()

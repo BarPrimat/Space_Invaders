@@ -7,6 +7,7 @@ using Infrastructure.ObjectModel.Screens;
 using Infrastructure.ServiceInterfaces;
 using SpaceInvaders;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using static SpaceInvaders.GameDefinitions;
 using Enum = SpaceInvaders.Enum;
 
@@ -14,16 +15,20 @@ namespace GameSprites
 {
     public class MotherShip : Infrastructure.ObjectModel.Sprite, ICollidable
     {
-        private int m_RandomTimeToNextAppears;
         private readonly Random r_Random;
+        private readonly ISoundManager r_SoundManager;
+        private int m_RandomTimeToNextAppears;
         private float m_TimeDeltaCounter = 0;
         private bool m_IsDying = false;
+
 
         public MotherShip(GameScreen i_GameScreen, string i_TexturePath, Color i_Tint) : base(i_TexturePath, i_GameScreen)
         {
             this.TintColor = i_Tint;
             r_Random = new Random();
             m_RandomTimeToNextAppears = r_Random.Next(0, MotherShipMaxTimeToNextAppearsInSec);
+            this.BlendState = BlendState.NonPremultiplied;
+            r_SoundManager = i_GameScreen.Game.Services.GetService(typeof(ISoundManager)) as ISoundManager;
         }
 
         public override void Initialize()
@@ -68,6 +73,10 @@ namespace GameSprites
                 m_IsDying = true;
                 this.Velocity = Vector2.Zero;
                 this.Animations.Restart();
+                if (r_SoundManager != null)
+                {
+                    r_SoundManager.PlaySoundEffect(GameDefinitions.SoundNameForMotherShipKill);
+                }
             }
         }
 

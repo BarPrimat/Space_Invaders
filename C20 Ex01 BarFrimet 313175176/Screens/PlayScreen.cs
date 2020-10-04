@@ -32,13 +32,15 @@ namespace Screens
 
         private void initText()
         {
-            int xOffset = (int)(this.CenterOfViewPort.X / 5);
-            int yOffset = (int)(this.CenterOfViewPort.X / 1.5f);
+            int xOffset = (int) (this.CenterOfViewPort.X / 5);
+            int yOffset = (int) (this.CenterOfViewPort.X / 1.5f);
             Vector2 position = new Vector2(this.CenterOfViewPort.X - xOffset, this.CenterOfViewPort.Y - yOffset);
 
             m_PauseText = new TextService(SpritesDefinition.TextFont, this, position, Color.LightBlue);
             m_PauseText.TextToPrint = "P - To Resume Game";
         }
+
+
 
         public override void Update(GameTime i_GameTime)
         {

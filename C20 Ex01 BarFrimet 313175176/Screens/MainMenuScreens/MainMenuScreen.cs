@@ -24,7 +24,7 @@ namespace Screens.MainMenuScreens
         public override void Initialize()
         {
             base.Initialize();
-            m_ItemListManager = new ItemListManager(this.Game, GameDefinitions.XOffsetOfMenuText, GameDefinitions.YOffsetOfMenuText, this.CenterOfViewPort);
+            m_ItemListManager = new ItemListManager(this.Game, GameDefinitions.XOffsetOfMenuText, GameDefinitions.YOffsetOfMenuText, this.CenterOfViewPort, GameDefinitions.SoundNameForMenuMove);
             initMenuItems();
         }
 
@@ -60,7 +60,7 @@ namespace Screens.MainMenuScreens
 
         private void soundSettings_ItemIsClicked(object i_Sender, EventArgs i_EventArgs)
         {
-
+            ScreensManager.SetCurrentScreen(new SoundSettingsMenu(this.Game));
         }
 
         private void play_ItemIsClicked(object i_Sender, EventArgs i_EventArgs)

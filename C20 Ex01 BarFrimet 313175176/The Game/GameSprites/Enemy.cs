@@ -24,6 +24,7 @@ namespace GameSprites
         private readonly int r_NumberOfAssetChange;
         private readonly int r_ColumnIndexInPicture;
         private const bool k_ThereIsDummyPixel = true;
+        private readonly ISoundManager r_SoundManager;
 
         public Enemy(GameScreen i_GameScreen, string i_TexturePath, Color i_Tint, int i_RowIndexInPicture, int i_ColumnIndexInPicture, float i_TimeUntilNextAssetChangesInSec, int i_NumberOfAssetChange) 
             : base(i_TexturePath, i_GameScreen)
@@ -35,6 +36,7 @@ namespace GameSprites
             r_NumberOfAssetChange = i_NumberOfAssetChange;
             r_RowIndexInPicture = i_RowIndexInPicture;
             r_ColumnIndexInPicture = i_ColumnIndexInPicture;
+            r_SoundManager = i_GameScreen.Game.Services.GetService(typeof(ISoundManager)) as ISoundManager;
         }
 
         public bool IsDying
@@ -76,6 +78,10 @@ namespace GameSprites
                     this.Animations["DyingEnemy"].Restart();
                     m_IsDying = true;
                     bullet.DisableBullet();
+                    if(r_SoundManager != null)
+                    {
+                        r_SoundManager.PlaySoundEffect(GameDefinitions.SoundNameForEnemyKill);
+                    }
                 }
             }
         }

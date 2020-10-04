@@ -19,12 +19,15 @@ namespace GameSprites
     {
         private Color[] m_Pixels;
         private Vector2 m_StartPosition;
+        private readonly ISoundManager r_SoundManager;
         private static bool s_TextureIsUsed = false;
 
         public Barrier(GameScreen i_GameScreen, string i_AssetName, Enum.eDirectionMove i_eDirectionMove) : base(i_AssetName, i_GameScreen)
         {
             float moveOnXAxis = i_eDirectionMove == Enum.eDirectionMove.Right ? GameDefinitions.BarrierSpeed : -1 * GameDefinitions.BarrierSpeed;
             this.Velocity = new Vector2(moveOnXAxis, 0); // Move only on X axis
+            this.BlendState = BlendState.NonPremultiplied;
+            r_SoundManager = i_GameScreen.Game.Services.GetService(typeof(ISoundManager)) as ISoundManager;
         }
 
         protected override void InitOrigins()
@@ -80,6 +83,10 @@ namespace GameSprites
             if (bullet != null && isPixelsIntersects(bullet, out collidedPoints, !v_AllowedToClear))
             {
                 clearPixelsInBulletCollision(collidedPoints, bullet, (int) Math.Round(bullet.Height * GameDefinitions.BarrierPercentageThatBallEats));
+                if (r_SoundManager != null)
+                {
+                    r_SoundManager.PlaySoundEffect(GameDefinitions.SoundNameForBarrierHit);
+                }
                 bullet.DisableBullet();
             }
         }
@@ -109,7 +116,7 @@ namespace GameSprites
                         o_PointsThatCollided.Add(new Vector2(x, y));
                         if (i_AllowedToClear)
                         {
-                            m_Pixels[indexOfThisSprite] = new Color(0, 0, 0, 0);
+                            m_Pixels[indexOfThisSprite].A = 0;
                         }
                     }
                 }
@@ -147,7 +154,7 @@ namespace GameSprites
                         break;
                     }
 
-                    m_Pixels[index] = new Color(0, 0, 0, 0);
+                    m_Pixels[index].A = 0;
                 }
             }
 
@@ -162,7 +169,7 @@ namespace GameSprites
 
                 if (i_Length > 0)
                 {
-                    m_Pixels[index] = new Color(0, 0, 0, 0);
+                    m_Pixels[index].A = 0;
                 }
             }
         }

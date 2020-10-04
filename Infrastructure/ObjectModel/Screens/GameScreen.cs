@@ -103,8 +103,8 @@ namespace Infrastructure.ObjectModel.Screens
         }
 
         //PROPS:
-        protected IScreensMananger m_ScreensManager;
-        public IScreensMananger ScreensManager
+        protected IScreensManager m_ScreensManager;
+        public IScreensManager ScreensManager
         {
             get { return m_ScreensManager; }
             set { m_ScreensManager = value; }

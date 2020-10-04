@@ -13,16 +13,21 @@ namespace Infrastructure.ObjectModel.Screens
         private const bool k_SelectIsGoingDown = true;
         private readonly List<MenuItem> r_MenuItemsList = new List<MenuItem>();
         private readonly IInputManager r_InputManager;
+        private readonly ISoundManager r_SoundManager;
         private readonly int r_YOffsetForNewItem;
+        private readonly string r_SoundPath;
+
         private static double s_LastTimeThatUpdate = 0;
         private int m_NumberOfItemThatSelect = 0;
         private Vector2 m_NextPositionToAdd;
         private bool m_IsFirstInsertItem = true;
 
-        public ItemListManager(Game i_Game, int i_XOffset, int i_YOffset, Vector2 i_CenterOfViewPort)
+        public ItemListManager(Game i_Game, int i_XOffset, int i_YOffset, Vector2 i_CenterOfViewPort, string i_SoundPath)
         {
             r_YOffsetForNewItem = i_YOffset;
             m_NextPositionToAdd = new Vector2(i_XOffset, i_CenterOfViewPort.Y + i_YOffset);
+            r_SoundPath = i_SoundPath;
+            r_SoundManager = i_Game.Services.GetService(typeof(ISoundManager)) as ISoundManager;
             if (r_InputManager == null)
             {
                 r_InputManager = i_Game.Services.GetService(typeof(IInputManager)) as IInputManager;
@@ -35,24 +40,43 @@ namespace Infrastructure.ObjectModel.Screens
             bool isRunAlreadyInThisTime = s_LastTimeThatUpdate == i_GameTime.TotalGameTime.TotalSeconds;
             bool isSpecialItem = r_MenuItemsList[m_NumberOfItemThatSelect] is ToggleItem || r_MenuItemsList[m_NumberOfItemThatSelect] is RangeItem;
 
-            if (isSpecialItem && (r_InputManager.KeyPressed(Keys.PageUp) || r_InputManager.KeyPressed(Keys.PageDown)))
+            if(isSpecialItem && (r_InputManager.KeyPressed(Keys.PageUp) || r_InputManager.KeyPressed(Keys.PageDown)))
             {
-                r_MenuItemsList[m_NumberOfItemThatSelect].ItemWasClick();
+                someOfSpecialItemIsActive();
             }
-            else if ((r_InputManager.KeyPressed(Keys.Down)))
+            else if((r_InputManager.KeyPressed(Keys.Down)))
             {
                 selectGoingDownOrUp(k_SelectIsGoingDown);
             }
-            else if ((r_InputManager.KeyPressed(Keys.Up)))
+            else if((r_InputManager.KeyPressed(Keys.Up)))
             {
                 selectGoingDownOrUp(!k_SelectIsGoingDown);
             }
-            else if (!isSpecialItem && r_InputManager.KeyPressed(Keys.Enter) && !isRunAlreadyInThisTime)
+            else if(!isSpecialItem && r_InputManager.KeyPressed(Keys.Enter) && !isRunAlreadyInThisTime)
             {
                 r_MenuItemsList[m_NumberOfItemThatSelect].ItemWasClick();
             }
 
             s_LastTimeThatUpdate = i_GameTime.TotalGameTime.TotalSeconds;
+        }
+
+        private void someOfSpecialItemIsActive()
+        {
+            RangeItem rangeItem = r_MenuItemsList[m_NumberOfItemThatSelect] as RangeItem;
+            
+            if (rangeItem != null)
+            {
+                if (r_InputManager.KeyPressed(Keys.PageUp))
+                {
+                    rangeItem.ItemValue += rangeItem.ValueToDecreaseOrIncrease;
+                }
+                else if (r_InputManager.KeyPressed(Keys.PageDown))
+                {
+                    rangeItem.ItemValue -= rangeItem.ValueToDecreaseOrIncrease;
+                }
+            }
+
+            r_MenuItemsList[m_NumberOfItemThatSelect].ItemWasClick();
         }
 
         private void selectGoingDownOrUp(bool i_IsGoingDown)
@@ -86,6 +110,11 @@ namespace Infrastructure.ObjectModel.Screens
                 {
                     this.MenuItemsList[0].ItemIsSelect();
                     m_IsFirstInsertItem = !m_IsFirstInsertItem;
+                }
+
+                if(r_SoundManager != null)
+                {
+                    i_MenuItem.SoundPath = r_SoundPath;
                 }
             }
         }

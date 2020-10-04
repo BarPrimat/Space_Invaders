@@ -22,6 +22,8 @@ namespace SpaceInvaders
         private readonly EnemyArmy r_EnemyArmy;
         private readonly BarriersGroup r_BarriersGroup;
         private int m_EnemyThatLeftToFinishGame;
+        public event Action GameIsOver;
+        public event Action GoToNextLevel;
         private static int s_Level;
 
         public GameManager(GameScreen i_GameScreen, int i_NumberOfPlayers, int i_Level) : base(i_GameScreen.Game)

@@ -25,6 +25,31 @@ namespace SpaceInvaders
         private const int k_StartBackgroundMusicVolume = 100;
         private const int k_StartSoundsEffectsVolume = 100;
 
+        // Sound definitions
+        // Sound name for key in Dictionary
+        private const string k_SoundNameForSSGunShot = "SSGunShot";
+        private const string k_SoundNameForEnemyGunShot = "EnemyGunShot";
+        private const string k_SoundNameForEnemyKill = "EnemyKill";
+        private const string k_SoundNameForMotherShipKill = "MotherShipKill";
+        private const string k_SoundNameForBarrierHit = "BarrierHit";
+        private const string k_SoundNameForGameOver = "GameOver";
+        private const string k_SoundNameForLevelWin = "LevelWin";
+        private const string k_SoundNameForLifeDie = "LifeDie";
+        private const string k_SoundNameForMenuMove = "MenuMove";
+        private const string k_SoundNameForBGMusic = "BGMusic";
+        // Sound Path
+        private const string k_SoundMainPath = @"c:\temp\XNA_Assets\Ex03\Sounds\";
+        private const string k_SoundPathForSSGunShot = k_SoundMainPath + "SSGunShot";
+        private const string k_SoundPathForEnemyGunShot = k_SoundMainPath + "EnemyGunShot";
+        private const string k_SoundPathForEnemyKill = k_SoundMainPath + "EnemyKill";
+        private const string k_SoundPathForMotherShipKill = k_SoundMainPath + "MotherShipKill";
+        private const string k_SoundPathForBarrierHit = k_SoundMainPath + "BarrierHit";
+        private const string k_SoundPathForGameOver = k_SoundMainPath + "GameOver";
+        private const string k_SoundPathForLevelWin = k_SoundMainPath + "LevelWin";
+        private const string k_SoundPathForLifeDie = k_SoundMainPath + "LifeDie";
+        private const string k_SoundPathForMenuMove = k_SoundMainPath + "MenuMove";
+        private const string k_SoundPathForBGMusic = k_SoundMainPath + "BGMusic";
+
         // Level definitions
         private const int k_MaxOfDifficultyLevel = 4;
         private const int k_NumberOfIncreaseScoreInEachLevel = 100;
@@ -257,6 +282,46 @@ namespace SpaceInvaders
         public static string EndGameCaption => k_EndGameCaption;
 
         public static string EndGameTextMoreThen1Player => k_EndGameTextMoreThen1Player;
+
+        public static string SoundNameForSSGunShot => k_SoundNameForSSGunShot;
+
+        public static string SoundNameForEnemyGunShot => k_SoundNameForEnemyGunShot;
+
+        public static string SoundNameForEnemyKill => k_SoundNameForEnemyKill;
+
+        public static string SoundNameForMotherShipKill => k_SoundNameForMotherShipKill;
+
+        public static string SoundNameForBarrierHit => k_SoundNameForBarrierHit;
+
+        public static string SoundNameForGameOver => k_SoundNameForGameOver;
+
+        public static string SoundNameForLevelWin => k_SoundNameForLevelWin;
+
+        public static string SoundNameForLifeDie => k_SoundNameForLifeDie;
+
+        public static string SoundNameForMenuMove => k_SoundNameForMenuMove;
+
+        public static string SoundNameForBGMusic => k_SoundNameForBGMusic;
+
+        public static string SoundPathForSSGunShot => k_SoundPathForSSGunShot;
+
+        public static string SoundPathForEnemyGunShot => k_SoundPathForEnemyGunShot;
+
+        public static string SoundPathForEnemyKill => k_SoundPathForEnemyKill;
+
+        public static string SoundPathForMotherShipKill => k_SoundPathForMotherShipKill;
+
+        public static string SoundPathForBarrierHit => k_SoundPathForBarrierHit;
+
+        public static string SoundPathForGameOver => k_SoundPathForGameOver;
+
+        public static string SoundPathForLevelWin => k_SoundPathForLevelWin;
+
+        public static string SoundPathForLifeDie => k_SoundPathForLifeDie;
+
+        public static string SoundPathForMenuMove => k_SoundPathForMenuMove;
+
+        public static string SoundPathForBGMusic => k_SoundPathForBGMusic;
 
         public static Keys FirstPlayerKeyToRight => k_FirstPlayerKeyToRight;
 

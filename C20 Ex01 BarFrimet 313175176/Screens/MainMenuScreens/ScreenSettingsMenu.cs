@@ -23,7 +23,7 @@ namespace Screens.MainMenuScreens
         public override void Initialize()
         {
             base.Initialize();
-            m_ItemListManager = new ItemListManager(this.Game, GameDefinitions.XOffsetOfMenuText, GameDefinitions.YOffsetOfMenuText, this.CenterOfViewPort);
+            m_ItemListManager = new ItemListManager(this.Game, GameDefinitions.XOffsetOfMenuText, GameDefinitions.YOffsetOfMenuText, this.CenterOfViewPort, GameDefinitions.SoundNameForMenuMove);
             initMenuItems();
         }
 
