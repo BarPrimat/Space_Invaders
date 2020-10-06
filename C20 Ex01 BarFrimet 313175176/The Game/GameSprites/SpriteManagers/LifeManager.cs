@@ -13,29 +13,33 @@ namespace GameSprites
         private readonly string r_TexturePath;
         private readonly GameScreen r_GameScreen;
         private readonly int r_StartYPosition;
+        private readonly int r_StartNumberOfLife;
         private int m_CounterOfLife;
         private Vector2 m_CurrentPosition;
 
         public LifeManager(GameScreen i_GameScreen, string i_TexturePath, int i_CounterOfLife, int i_YPosition)
         {
-            m_CounterOfLife = i_CounterOfLife;
+            m_CounterOfLife = 0;
+            r_StartNumberOfLife = i_CounterOfLife;
             r_StartYPosition = i_YPosition;
             r_LifeList = new List<Life>();
             r_TexturePath = i_TexturePath;
             r_GameScreen = i_GameScreen;
+            m_CurrentPosition = new Vector2(this.r_GameScreen.GraphicsDevice.Viewport.Width - GameDefinitions.LifeSize, r_StartYPosition);
             Initialize();
         }
 
         public void Initialize()
         {
-            m_CurrentPosition = new Vector2(this.r_GameScreen.GraphicsDevice.Viewport.Width - GameDefinitions.LifeSize, r_StartYPosition);
             float currentXPosition = m_CurrentPosition.X;
 
-            for (int i = 0; i < m_CounterOfLife; i++)
+            for (int i = m_CounterOfLife; i < r_StartNumberOfLife; i++)
             {
                 Life life = new Life(r_GameScreen, r_TexturePath, m_CurrentPosition);
+                life.Position = m_CurrentPosition;
                 currentXPosition -= GameDefinitions.SpaceBetweenLife;
                 m_CurrentPosition = new Vector2(currentXPosition, m_CurrentPosition.Y);
+                m_CounterOfLife++;
                 r_LifeList.Add(life);
             }
         }
@@ -49,6 +53,7 @@ namespace GameSprites
         {
             r_LifeList[r_LifeList.Count - 1].RemoveComponent();
             r_LifeList.RemoveAt(r_LifeList.Count - 1);
+            m_CurrentPosition = new Vector2(m_CurrentPosition.X + GameDefinitions.SpaceBetweenLife, m_CurrentPosition.Y);
             m_CounterOfLife--;
         }
 
@@ -59,6 +64,13 @@ namespace GameSprites
         {
             r_LifeList.Add(new Life(r_GameScreen, r_TexturePath, m_CurrentPosition));
             m_CounterOfLife++;
+            float currentXPosition = m_CurrentPosition.X - GameDefinitions.SpaceBetweenLife;
+            m_CurrentPosition = new Vector2(currentXPosition, m_CurrentPosition.Y);
+        }
+
+        public void InitForNextLevel()
+        {
+            Initialize();
         }
     }
 }

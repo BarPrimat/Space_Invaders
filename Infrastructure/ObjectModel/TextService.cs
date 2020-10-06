@@ -10,6 +10,7 @@ namespace SpaceInvaders
 {
     public class TextService : Infrastructure.ObjectModel.Sprite
     {
+        private int m_SizeOfText = 14;
         private SpriteFont m_Font;
         private string m_TextToPrint;
         private bool m_IsShareSpriteBatch = true;
@@ -17,9 +18,10 @@ namespace SpaceInvaders
         public TextService(string i_AssetName, GameScreen i_GameScreen, Vector2 i_Position, Color i_ColorOfText)
             : base(i_AssetName, i_GameScreen)
         {
-            m_TextToPrint = i_AssetName;
             this.TintColor = i_ColorOfText;
             this.Position = i_Position;
+            this.Height = m_SizeOfText;
+            TextToPrint = i_AssetName;
         }
 
         public TextService(string i_AssetName, GameScreen i_GameScreen, Vector2 i_Position)
@@ -68,7 +70,21 @@ namespace SpaceInvaders
         public string TextToPrint
         {
             get => m_TextToPrint;
-            set => m_TextToPrint = value;
+            set
+            {
+                m_TextToPrint = value;
+                this.Width = m_SizeOfText * m_TextToPrint.Length;
+            }
+        }
+        public int SizeOfText
+        {
+            get => m_SizeOfText;
+            set
+            {
+                m_SizeOfText = value;
+                this.Width = m_SizeOfText * m_TextToPrint.Length;
+                this.Height = m_SizeOfText;
+            }
         }
     }
 }

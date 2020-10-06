@@ -46,6 +46,7 @@ namespace SpaceInvaders
         {
             Color colorOfText = r_SerialNumber == 0 ? Color.Blue : Color.Green;
             Vector2 positionOfText = new Vector2(GameDefinitions.SpaceBetweenLeftEdgeAndTextInScoreBoard, (r_SerialNumber + 1) * GameDefinitions.SpaceBetweenTextInScoreBoard);
+
             m_ScoreBoardText = new TextService(SpritesDefinition.TextBoardScoreFont, r_GameScreen, positionOfText, colorOfText);
             UpdateScoreBoardText();
         }
@@ -58,6 +59,11 @@ namespace SpaceInvaders
             }
 
             base.Initialize();
+        }
+
+        public void InitForNextLevel()
+        {
+            r_Spaceship.InitForNextLevel();
         }
 
         public override void Update(GameTime i_GameTime)
@@ -116,5 +122,11 @@ namespace SpaceInvaders
         public Spaceship Spaceship => r_Spaceship;
 
         public int SerialNumber => r_SerialNumber;
+
+        public TextService ScoreBoardText
+        {
+            get => m_ScoreBoardText;
+            set => m_ScoreBoardText = value;
+        }
     }
 }

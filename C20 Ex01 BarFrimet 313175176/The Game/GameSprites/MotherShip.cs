@@ -48,6 +48,12 @@ namespace GameSprites
             this.Position = new Vector2(-this.Texture.Width, this.Texture.Height);
         }
 
+        public void InitForNextLevel()
+        {
+            m_RandomTimeToNextAppears = r_Random.Next(0, MotherShipMaxTimeToNextAppearsInSec);
+            initPosition();
+        }
+
         public override void Update(GameTime i_GameTime)
         {
             base.Update(i_GameTime);

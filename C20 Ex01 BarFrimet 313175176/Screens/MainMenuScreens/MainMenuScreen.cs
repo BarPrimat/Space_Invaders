@@ -65,7 +65,7 @@ namespace Screens.MainMenuScreens
 
         private void play_ItemIsClicked(object i_Sender, EventArgs i_EventArgs)
         {
-            ScreensManager.SetCurrentScreen(new LevelTransitionScreen(this.Game));
+            ScreensManager.SetCurrentScreen(new PlayScreen(this.Game));
         }
 
         private void quit_ItemIsClicked(object i_Sender, EventArgs i_EventArgs)

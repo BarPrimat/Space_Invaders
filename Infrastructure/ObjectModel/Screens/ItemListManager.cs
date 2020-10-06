@@ -16,7 +16,7 @@ namespace Infrastructure.ObjectModel.Screens
         private readonly ISoundManager r_SoundManager;
         private readonly int r_YOffsetForNewItem;
         private readonly string r_SoundPath;
-
+        private readonly Game r_Game;
         private static double s_LastTimeThatUpdate = 0;
         private int m_NumberOfItemThatSelect = 0;
         private Vector2 m_NextPositionToAdd;
@@ -28,6 +28,7 @@ namespace Infrastructure.ObjectModel.Screens
             m_NextPositionToAdd = new Vector2(i_XOffset, i_CenterOfViewPort.Y + i_YOffset);
             r_SoundPath = i_SoundPath;
             r_SoundManager = i_Game.Services.GetService(typeof(ISoundManager)) as ISoundManager;
+            r_Game = i_Game;
             if (r_InputManager == null)
             {
                 r_InputManager = i_Game.Services.GetService(typeof(IInputManager)) as IInputManager;
@@ -40,24 +41,43 @@ namespace Infrastructure.ObjectModel.Screens
             bool isRunAlreadyInThisTime = s_LastTimeThatUpdate == i_GameTime.TotalGameTime.TotalSeconds;
             bool isSpecialItem = r_MenuItemsList[m_NumberOfItemThatSelect] is ToggleItem || r_MenuItemsList[m_NumberOfItemThatSelect] is RangeItem;
 
-            if(isSpecialItem && (r_InputManager.KeyPressed(Keys.PageUp) || r_InputManager.KeyPressed(Keys.PageDown)))
+            moveWithMouse();
+            if(isSpecialItem && (r_InputManager.KeyPressed(Keys.PageUp) || r_InputManager.KeyPressed(Keys.PageDown) || isUserMouseWantChangeItem()))
             {
                 someOfSpecialItemIsActive();
             }
-            else if((r_InputManager.KeyPressed(Keys.Down)))
+            else if(r_InputManager.KeyPressed(Keys.Down))
             {
                 selectGoingDownOrUp(k_SelectIsGoingDown);
             }
-            else if((r_InputManager.KeyPressed(Keys.Up)))
+            else if(r_InputManager.KeyPressed(Keys.Up))
             {
                 selectGoingDownOrUp(!k_SelectIsGoingDown);
             }
-            else if(!isSpecialItem && r_InputManager.KeyPressed(Keys.Enter) && !isRunAlreadyInThisTime)
+            else if(!isSpecialItem && !isRunAlreadyInThisTime && isUserWantEnterItem()
             {
                 r_MenuItemsList[m_NumberOfItemThatSelect].ItemWasClick();
             }
 
             s_LastTimeThatUpdate = i_GameTime.TotalGameTime.TotalSeconds;
+        }
+
+        private void moveWithMouse()
+        {
+            Vector2 mousePosition = new Vector2(r_InputManager.MouseState.X, r_InputManager.MouseState.Y);
+            int newItemToSelect = 0;
+
+            foreach (MenuItem menuItem in r_MenuItemsList)
+            {
+                if(menuItem.Bounds.Contains(mousePosition) && !menuItem.IsActive && r_Game.IsMouseVisible)
+                {
+                    r_MenuItemsList[m_NumberOfItemThatSelect].ItemIsInactive();
+                    m_NumberOfItemThatSelect = newItemToSelect;
+                    r_MenuItemsList[m_NumberOfItemThatSelect].ItemIsActive();
+                }
+
+                newItemToSelect++;
+            }
         }
 
         private void someOfSpecialItemIsActive()
@@ -66,17 +86,37 @@ namespace Infrastructure.ObjectModel.Screens
             
             if (rangeItem != null)
             {
-                if (r_InputManager.KeyPressed(Keys.PageUp))
+                if (r_InputManager.KeyPressed(Keys.PageUp) || isMouseScrollWheelUp())
                 {
                     rangeItem.ItemValue += rangeItem.ValueToDecreaseOrIncrease;
                 }
-                else if (r_InputManager.KeyPressed(Keys.PageDown))
+                else if (r_InputManager.KeyPressed(Keys.PageDown) || isMouseScrollWheelDown() || r_InputManager.ButtonPressed(eInputButtons.Right))
                 {
                     rangeItem.ItemValue -= rangeItem.ValueToDecreaseOrIncrease;
                 }
             }
 
             r_MenuItemsList[m_NumberOfItemThatSelect].ItemWasClick();
+        }
+
+        private bool isUserWantEnterItem()
+        {
+            return r_InputManager.KeyPressed(Keys.Enter) || (r_InputManager.ButtonPressed(eInputButtons.Left) && r_Game.IsMouseVisible);
+        }
+
+        private bool isUserMouseWantChangeItem()
+        {
+            return r_Game.IsMouseVisible && (r_InputManager.ButtonPressed(eInputButtons.Right) || isMouseScrollWheelDown() || isMouseScrollWheelUp());
+        }
+
+        private bool isMouseScrollWheelDown()
+        {
+            return r_InputManager.ScrollWheelDelta < 0 && r_Game.IsMouseVisible;
+        }
+
+        private bool isMouseScrollWheelUp()
+        {
+            return r_InputManager.ScrollWheelDelta > 0 && r_Game.IsMouseVisible;
         }
 
         private void selectGoingDownOrUp(bool i_IsGoingDown)
@@ -96,7 +136,7 @@ namespace Infrastructure.ObjectModel.Screens
                 }
             }
 
-            r_MenuItemsList[m_NumberOfItemThatSelect].ItemIsSelect();
+            r_MenuItemsList[m_NumberOfItemThatSelect].ItemIsActive();
         }
 
         public void AddNewItem(MenuItem i_MenuItem)
@@ -108,7 +148,7 @@ namespace Infrastructure.ObjectModel.Screens
                 m_NextPositionToAdd = new Vector2(m_NextPositionToAdd.X, m_NextPositionToAdd.Y + r_YOffsetForNewItem);
                 if (m_IsFirstInsertItem)
                 {
-                    this.MenuItemsList[0].ItemIsSelect();
+                    this.MenuItemsList[0].ItemIsActive();
                     m_IsFirstInsertItem = !m_IsFirstInsertItem;
                 }
 

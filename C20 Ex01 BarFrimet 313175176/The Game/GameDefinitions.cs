@@ -16,6 +16,7 @@ namespace SpaceInvaders
         private const int k_PreferredBackBufferWidth = 750;
         private const int k_PreferredBackBufferHeight = 550;
         private const int k_NumberOfPlayers = 1;
+        private static readonly Color sr_TextColor = Color.White;
 
         // Screen definitions
         private const int k_YOffsetOfMenuText = 30;
@@ -156,6 +157,8 @@ namespace SpaceInvaders
         public static Color YellowEnemyTint => sr_YellowEnemyTint;
 
         public static Color BackgroundTint => sr_BackgroundTint;
+
+        public static Color TextColor => sr_TextColor;
 
         public static float HorizontalSpaceBetweenEnemy => k_HorizontalSpaceBetweenEnemy;
 

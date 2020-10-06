@@ -15,14 +15,15 @@ namespace Screens
         private const float k_PulsePerSecForTitle = 1f;
         private const float k_TimeOfPulseInSec = 2.5f;
         private readonly Background r_Background;
-        private int m_Level;
+        private readonly int r_Level;
         private float m_TimeUntilNextLevelInSec = 3f;
         private TextService m_NextLevelTextService;
         private TextService m_TimeUntilNextLevelTextService;
 
         public LevelTransitionScreen(Game i_Game) : base(i_Game)
         {
-            m_Level = SettingsCollection.CurrentLevel;
+            this.IsModal = true;
+            r_Level = GameManager.CurrentLevel;
             r_Background = new Background(this, SpritesDefinition.BackgroundAsset);
         }
 
@@ -37,7 +38,7 @@ namespace Screens
         {
             Vector2 nextLevelTextPosition = new Vector2(this.CenterOfViewPort.X - this.CenterOfViewPort.X / 4, this.CenterOfViewPort.Y);
             Vector2 timeUntilNextLevelTextPosition = new Vector2(this.CenterOfViewPort.X, this.CenterOfViewPort.Y + (this.CenterOfViewPort.Y / 4));
-            string nextLevelText = "Level " + m_Level;
+            string nextLevelText = "Level " + r_Level;
 
             m_NextLevelTextService = new TextService(nextLevelText, this, nextLevelTextPosition, Color.LightBlue);
             m_NextLevelTextService.Scales *= 2;
@@ -65,7 +66,6 @@ namespace Screens
             if(m_TimeUntilNextLevelInSec <= 0)
             {
                 this.ExitScreen();
-                ScreensManager.SetCurrentScreen(new PlayScreen(this.Game, m_Level));
             }
 
             if (lastTimeUntilNextLevel > currentTimeUntilNextLevel)

@@ -19,7 +19,6 @@ namespace Screens
         private const float k_PulsePerSecForTitle = 1f;
         private readonly Background r_Background;
         private readonly Sprite r_SpaceInvadersTitle;
-        private IInputManager m_InputManager;
         private TextService m_TextMenu;
 
         public WelcomeScreen(Game i_Game) : base(i_Game)
@@ -35,10 +34,6 @@ namespace Screens
             r_SpaceInvadersTitle.Position = this.CenterOfViewPort;
             initAnimations();
             initText();
-            if (m_InputManager == null)
-            {
-                m_InputManager = this.Game.Services.GetService(typeof(IInputManager)) as IInputManager;
-            }
         }
 
         private void initAnimations()
@@ -56,23 +51,24 @@ namespace Screens
             Vector2 position = new Vector2(this.CenterOfViewPort.X - (this.CenterOfViewPort.X / 2), this.CenterOfViewPort.Y + (this.CenterOfViewPort.Y / 2));
             string textToPrint = string.Format(@"
 press Enter for a new game
-press M for main menu
-press Esc to exit");
+press Esc to exit
+press M for main menu");
+
             m_TextMenu = new TextService(textToPrint, this, position, Color.DarkBlue);
         }
 
         public override void Update(GameTime i_GameTime)
         {
             base.Update(i_GameTime);
-            if(m_InputManager.KeyPressed(Keys.Enter))
+            if(InputManager.KeyPressed(Keys.Enter))
             {
-                ScreensManager.SetCurrentScreen(new LevelTransitionScreen(this.Game));
+                ScreensManager.SetCurrentScreen(new PlayScreen(this.Game));
             }
-            else if (m_InputManager.KeyPressed(Keys.Escape))
+            else if (InputManager.KeyPressed(Keys.Escape))
             {
                 this.Game.Exit();
             }
-            else if(m_InputManager.KeyPressed(Keys.M))
+            else if(InputManager.KeyPressed(Keys.M))
             {
                 ScreensManager.SetCurrentScreen(new MainMenuScreen(this.Game));
             }

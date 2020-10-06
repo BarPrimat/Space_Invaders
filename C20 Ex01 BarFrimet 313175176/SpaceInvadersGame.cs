@@ -30,6 +30,7 @@ namespace SpaceInvaders
             r_InputManager = new InputManager(this);
             r_ScreensManager = new ScreensManager(this);
             r_SoundManager = new SoundManager(this);
+            new CollisionsManager(this);
             r_ScreensManager.SetCurrentScreen(new WelcomeScreen(this));
         }
 

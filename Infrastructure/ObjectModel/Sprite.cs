@@ -255,15 +255,21 @@ namespace Infrastructure.ObjectModel
 
         public Sprite(string i_AssetName, GameScreen i_GameScreen, int i_UpdateOrder, int i_DrawOrder)
             : base(i_AssetName, i_GameScreen, i_UpdateOrder, i_DrawOrder)
-        { }
+        {
+            this.r_GameScreen = i_GameScreen;
+        }
 
         public Sprite(string i_AssetName, GameScreen i_GameScreen, int i_CallsOrder)
             : base(i_AssetName, i_GameScreen, i_CallsOrder)
-        { }
+        {
+            this.r_GameScreen = i_GameScreen;
+        }
 
         public Sprite(string i_AssetName, GameScreen i_GameScreen)
             : base(i_AssetName, i_GameScreen, int.MaxValue)
-        { }
+        {
+            this.r_GameScreen = i_GameScreen;
+        }
 
         /// <summary>
         /// Default initialization of bounds
@@ -378,6 +384,19 @@ namespace Infrastructure.ObjectModel
         {
             get { return m_SaveAndRestoreDeviceState; }
             set { m_SaveAndRestoreDeviceState = value; }
+        }
+
+        private GameScreen r_GameScreen;
+        public GameScreen GameScreen
+        {
+            get => r_GameScreen;
+            set => r_GameScreen = value;
+        }
+
+        public void RemoveComponentInGameAndGameScreen()
+        {
+            this.r_GameScreen.Remove(this);
+            this.Game.Components.Remove(this);
         }
 
         public override void Draw(GameTime gameTime)

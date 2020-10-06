@@ -9,6 +9,7 @@ using Infrastructure.ObjectModel.Screens;
 using Infrastructure.ServiceInterfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Screens;
 using SpaceInvaders;
 using Enum = SpaceInvaders.Enum;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
@@ -21,13 +22,22 @@ namespace GameSprites
         private Vector2 m_StartPosition;
         private readonly ISoundManager r_SoundManager;
         private static bool s_TextureIsUsed = false;
+        private readonly Enum.eDirectionMove r_eStartDirectionMove;
+        private Color[] m_OriginPixels;
 
-        public Barrier(GameScreen i_GameScreen, string i_AssetName, Enum.eDirectionMove i_eDirectionMove) : base(i_AssetName, i_GameScreen)
+        public Barrier(GameScreen i_GameScreen, string i_AssetName, Enum.eDirectionMove i_eStartDirectionMove) : base(i_AssetName, i_GameScreen)
         {
-            float moveOnXAxis = i_eDirectionMove == Enum.eDirectionMove.Right ? GameDefinitions.BarrierSpeed : -1 * GameDefinitions.BarrierSpeed;
-            this.Velocity = new Vector2(moveOnXAxis, 0); // Move only on X axis
+            setupNewVelocity();
+            r_eStartDirectionMove = i_eStartDirectionMove;
             this.BlendState = BlendState.NonPremultiplied;
             r_SoundManager = i_GameScreen.Game.Services.GetService(typeof(ISoundManager)) as ISoundManager;
+        }
+
+        private void setupNewVelocity()
+        {
+            float moveOnXAxis = r_eStartDirectionMove == Enum.eDirectionMove.Right ? GameDefinitions.BarrierSpeed : -1 * GameDefinitions.BarrierSpeed;
+
+            this.Velocity = new Vector2(moveOnXAxis * ((GameManager.CurrentLevel - 1) % GameDefinitions.MaxOfDifficultyLevel), 0); // Move only on X axis
         }
 
         protected override void InitOrigins()
@@ -36,11 +46,19 @@ namespace GameSprites
             base.InitOrigins();
         }
 
+        public void InitForNextLevel()
+        {
+            setupNewVelocity();
+            m_Pixels = m_OriginPixels;
+            this.Texture.SetData(m_Pixels);
+        }
+
         protected override void LoadContent()
         {
             base.LoadContent();
             m_Pixels = new Color[Texture.Width * Texture.Height];
             this.Texture.GetData<Color>(m_Pixels);
+            this.m_OriginPixels = (Color[]) m_Pixels.Clone();
             if (s_TextureIsUsed)
             {
                 this.Texture = new Texture2D(this.Game.GraphicsDevice, this.Texture.Width, this.Texture.Height);

@@ -21,16 +21,17 @@ namespace GameSprites
     {
         private readonly Firearm r_Firearm;
         private readonly LifeManager r_LifeManager;
-        private float m_SpaceshipSpeed;
-        private int m_NumberOfTheSpaceship;
+        private readonly float r_SpaceshipSpeed;
+        private readonly int r_NumberOfTheSpaceship;
         private bool m_IsDying = false;
+        public event Action SpaceShipIsDead;
 
         public Spaceship(GameScreen i_GameScreen, string i_TexturePath, int i_NumberOfSpaceship, LifeManager i_LifeManager) : base (i_TexturePath, i_GameScreen)
         {
             this.TintColor = GameDefinitions.SpaceshipTint;
             r_Firearm = new Firearm(i_GameScreen, SpaceshipMaxOfBullet, eBulletType.SpaceShipBullet, i_NumberOfSpaceship);
-            m_SpaceshipSpeed = GameDefinitions.SpaceshipSpeed;
-            m_NumberOfTheSpaceship = i_NumberOfSpaceship;
+            r_SpaceshipSpeed = GameDefinitions.SpaceshipSpeed;
+            r_NumberOfTheSpaceship = i_NumberOfSpaceship;
             r_LifeManager = i_LifeManager;
             this.BlendState  = BlendState.NonPremultiplied;
         }
@@ -51,9 +52,15 @@ namespace GameSprites
         private void initPosition()
         {
             // Init the ship position
-            float x = m_NumberOfTheSpaceship * this.Texture.Width;
+            float x = r_NumberOfTheSpaceship * this.Texture.Width;
 
             this.Position = new Vector2(x, this.Game.GraphicsDevice.Viewport.Height - GameDefinitions.SpaceshipYOffsetStartPosition);
+        }
+
+        public void InitForNextLevel()
+        {
+            r_LifeManager.InitForNextLevel();
+            initPosition();
         }
 
         public void Shoot()
@@ -123,6 +130,7 @@ namespace GameSprites
         {
             this.Visible = false;
             this.Enabled = false;
+            SpaceShipIsDead?.Invoke();
         }
 
         private void animationsHit_Finished(object i_Sender, EventArgs i_EventArgs)
@@ -131,6 +139,6 @@ namespace GameSprites
             m_IsDying = false;
         }
 
-        public float SpaceshipSpeed => m_SpaceshipSpeed;
+        public float SpaceshipSpeed => r_SpaceshipSpeed;
     }
 }

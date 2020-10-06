@@ -32,6 +32,16 @@ namespace GameSprites
             initPosition();
         }
 
+        public void InitForNextLevel()
+        {
+            foreach(Barrier barrier in r_ListOfBarriers)
+            {
+                barrier.InitForNextLevel();
+            }
+
+            initPosition();
+        }
+
         private void initPosition()
         {
             float middleOfViewportWidth = this.Game.GraphicsDevice.Viewport.Width / 2;

@@ -17,6 +17,8 @@ namespace Infrastructure.ObjectModel.Screens
         private readonly ISoundManager r_SoundManager;
         protected readonly string r_MenuText;
         private string m_SoundPath;
+        private bool m_IsActive = false;
+
         public event EventHandler ItemIsClicked;
 
         public MenuItem(string i_MenuText, GameScreen i_GameScreen, Vector2 i_Position)
@@ -52,10 +54,11 @@ namespace Infrastructure.ObjectModel.Screens
             }
         }
 
-        public void ItemIsSelect()
+        public void ItemIsActive()
         {
             this.Animations.Restart();
             this.TintColor = r_ActiveColor;
+            m_IsActive = true;
             if (r_SoundManager != null && !string.IsNullOrEmpty(m_SoundPath))
             {
                 r_SoundManager.PlaySoundEffect(m_SoundPath);
@@ -65,6 +68,7 @@ namespace Infrastructure.ObjectModel.Screens
         public void ItemIsInactive()
         {
             this.Animations.Pause();
+            m_IsActive = false;
             this.TintColor = r_InactiveColor;
         }
 
@@ -72,6 +76,11 @@ namespace Infrastructure.ObjectModel.Screens
         {
             get => m_SoundPath;
             set => m_SoundPath = value;
+        }
+        public bool IsActive
+        {
+            get => m_IsActive;
+            set => m_IsActive = value;
         }
     }
 }

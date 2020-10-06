@@ -24,10 +24,15 @@ namespace GameSprites
             r_SoundManager = i_GameScreen.Game.Services.GetService(typeof(ISoundManager)) as ISoundManager;
         }
 
-        protected override void InitOrigins()
+        public override void Initialize()
+        {
+            base.Initialize();
+            this.initPosition();
+        }
+
+        private void initPosition()
         {
             this.Position = r_StartPosition;
-            base.InitOrigins(); 
         }
 
         public void RemoveComponent()
@@ -38,7 +43,7 @@ namespace GameSprites
                 r_SoundManager.PlaySoundEffect(GameDefinitions.SoundNameForLifeDie);
             }
 
-            Game.Components.Remove(this);
+            this.RemoveComponentInGameAndGameScreen();
         }
     }
 }
