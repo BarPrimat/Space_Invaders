@@ -60,7 +60,7 @@ namespace SpaceInvaders
         private const float k_VerticalSpaceBetweenEnemy = 32 * 0.6f;
         private const float k_VerticalSpaceBetweenEnemyAndTopEdge = 32 * 3f;
         private const float k_EnemyStepDown = k_EnemySizeHeight / 2;
-        private const float k_EnemyStartSpeedInSec = 60;
+        private const float k_EnemyStartSpeedInSec = 60; // 60
         private const float k_EnemyIncreaseSpeedEveryXDead = 0.03f;
         private const float k_EnemyIncreaseSpeedGoingDown = 0.06f;
         private const float k_EnemyMaxTimeForShoot = 3f; 
@@ -101,7 +101,7 @@ namespace SpaceInvaders
         public static readonly Color sr_SpaceshipBulletTint = Color.Red;
 
         // SpaceShip definitions
-        private const int k_SpaceshipMaxOfBullet = 2;
+        private const int k_SpaceshipMaxOfBullet = 200; // 2
         private const float k_SpaceshipSpeed = 140;
         private const float k_SpaceshipSize = 32;
         private const float k_SpaceshipAnimationLengthInSec = 2.6f;

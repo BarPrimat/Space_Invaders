@@ -10,7 +10,8 @@ namespace SpaceInvaders
 {
     public class TextService : Infrastructure.ObjectModel.Sprite
     {
-        private int m_SizeOfText = 14;
+        private int m_WidthOfText = 14;
+        private int m_HeightOfText = 18;
         private SpriteFont m_Font;
         private string m_TextToPrint;
         private bool m_IsShareSpriteBatch = true;
@@ -20,7 +21,7 @@ namespace SpaceInvaders
         {
             this.TintColor = i_ColorOfText;
             this.Position = i_Position;
-            this.Height = m_SizeOfText;
+            this.Height = m_HeightOfText;
             TextToPrint = i_AssetName;
         }
 
@@ -31,6 +32,10 @@ namespace SpaceInvaders
 
         public TextService(string i_AssetName, GameScreen i_GameScreen)
             : this(i_AssetName, i_GameScreen, Vector2.Zero, Color.White)
+        {
+        }
+
+        protected override void InitBounds()
         {
         }
 
@@ -47,10 +52,6 @@ namespace SpaceInvaders
                 }
             }
             
-        }
-
-        protected override void InitBounds()
-        {
         }
 
         public override void Draw(GameTime i_GameTime)
@@ -73,17 +74,25 @@ namespace SpaceInvaders
             set
             {
                 m_TextToPrint = value;
-                this.Width = m_SizeOfText * m_TextToPrint.Length;
+                this.Width = m_WidthOfText * m_TextToPrint.Length;
             }
         }
-        public int SizeOfText
+        public int WidthOfText
         {
-            get => m_SizeOfText;
+            get => m_WidthOfText;
             set
             {
-                m_SizeOfText = value;
-                this.Width = m_SizeOfText * m_TextToPrint.Length;
-                this.Height = m_SizeOfText;
+                m_WidthOfText = value;
+                this.Width = m_WidthOfText * m_TextToPrint.Length;
+            }
+        }
+        public int HeightOfText
+        {
+            get => m_HeightOfText;
+            set
+            {
+                m_WidthOfText = value;
+                this.Width = m_WidthOfText * m_TextToPrint.Length;
             }
         }
     }

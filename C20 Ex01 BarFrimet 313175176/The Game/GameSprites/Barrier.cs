@@ -49,7 +49,7 @@ namespace GameSprites
         public void InitForNextLevel()
         {
             setupNewVelocity();
-            m_Pixels = m_OriginPixels;
+            m_Pixels = (Color[]) m_OriginPixels.Clone();
             this.Texture.SetData(m_Pixels);
         }
 
@@ -105,6 +105,7 @@ namespace GameSprites
                 {
                     r_SoundManager.PlaySoundEffect(GameDefinitions.SoundNameForBarrierHit);
                 }
+
                 bullet.DisableBullet();
             }
         }

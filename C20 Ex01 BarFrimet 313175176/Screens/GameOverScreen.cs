@@ -53,9 +53,8 @@ press M for main menu");
             }
             else if(InputManager.KeyPressed(Keys.M))
             {
-                UserWantLeaveGame?.Invoke();
                 this.ExitScreen();
-                ScreensManager.SetCurrentScreen(new MainMenuScreen(this.Game));
+                UserWantLeaveGame?.Invoke();
             }
         }
     }

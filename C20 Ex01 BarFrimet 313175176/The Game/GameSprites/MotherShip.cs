@@ -21,7 +21,6 @@ namespace GameSprites
         private float m_TimeDeltaCounter = 0;
         private bool m_IsDying = false;
 
-
         public MotherShip(GameScreen i_GameScreen, string i_TexturePath, Color i_Tint) : base(i_TexturePath, i_GameScreen)
         {
             this.TintColor = i_Tint;
@@ -52,6 +51,9 @@ namespace GameSprites
         {
             m_RandomTimeToNextAppears = r_Random.Next(0, MotherShipMaxTimeToNextAppearsInSec);
             initPosition();
+            m_IsDying = false;
+            this.Animations["DyingMotherShip"].Reset();
+            this.Animations["DyingMotherShip"].Pause();
         }
 
         public override void Update(GameTime i_GameTime)

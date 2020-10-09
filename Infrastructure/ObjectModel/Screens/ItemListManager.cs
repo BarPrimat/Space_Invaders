@@ -54,7 +54,7 @@ namespace Infrastructure.ObjectModel.Screens
             {
                 selectGoingDownOrUp(!k_SelectIsGoingDown);
             }
-            else if(!isSpecialItem && !isRunAlreadyInThisTime && isUserWantEnterItem()
+            else if(!isSpecialItem && !isRunAlreadyInThisTime && isUserWantEnterItem())
             {
                 r_MenuItemsList[m_NumberOfItemThatSelect].ItemWasClick();
             }

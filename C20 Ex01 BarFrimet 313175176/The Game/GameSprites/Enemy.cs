@@ -37,31 +37,27 @@ namespace GameSprites
             r_NumberOfAssetChange = i_NumberOfAssetChange;
             r_RowIndexInPicture = i_RowIndexInPicture;
             r_ColumnIndexInPicture = i_ColumnIndexInPicture;
-            if (GameManager.CurrentLevel > 1 )
-            {
-                int o = 0;
-            }
             r_SoundManager = i_GameScreen.Game.Services.GetService(typeof(ISoundManager)) as ISoundManager;
+            if (this.Animations != null && m_IsInitialize)
+            {
+                Initialize();
+                InitBounds();
+            }
         }
 
-        public bool IsDying
+        public override void Initialize()
         {
-            get => m_IsDying;
-            set => m_IsDying = value;
-        }
-
-        public override void Update(GameTime gameTime)
-        {
-            base.Update(gameTime);
-            if (!m_IsInitialize)
+            base.Initialize();
+            m_IsInitialize = true;
+            if (r_Firearm != null)
             {
                 this.initAnimations();
-                m_IsInitialize = true;
             }
         }
 
         protected override void InitOrigins()
         {
+            base.InitOrigins();
             this.m_WidthBeforeScale = (int) GameDefinitions.EnemySize;
             this.m_HeightBeforeScale = (int) GameDefinitions.EnemySize;
             this.m_RotationOrigin = new Vector2(this.Width / 2, this.Height / 2);
@@ -71,7 +67,7 @@ namespace GameSprites
         {
             base.InitBounds();
             // The pulse 1 is to handle that in the texture there is 1 dummy pixel between every 2 enemies (that on purpose because of the crop defect)
-            this.SourceRectangle = new Rectangle(0, (int)(r_RowIndexInPicture * (GameDefinitions.EnemySize + 1)), (int) GameDefinitions.EnemySize, (int) GameDefinitions.EnemySize);
+            this.SourceRectangle = new Rectangle(0, (int)(r_RowIndexInPicture * (GameDefinitions.EnemySize + 1)), (int)GameDefinitions.EnemySize, (int)GameDefinitions.EnemySize);
         }
 
         public override void Collided(ICollidable i_Collidable)
@@ -96,7 +92,8 @@ namespace GameSprites
 
         protected override void OnPositionChanged()
         {
-            if(EnemyArmy.IsTimeBetweenJumpsChanged && m_IsInitialize)
+            base.OnPositionChanged();
+            if (EnemyArmy.IsTimeBetweenJumpsChanged && m_IsInitialize)
             {
                 m_EnemyCellAnimation.CellTime = TimeSpan.FromSeconds(EnemyArmy.TimeBetweenJumpsInSec);
             }
@@ -119,15 +116,33 @@ namespace GameSprites
 
         private void animations_Finished(object i_Sender, EventArgs i_EventArgs)
         {
-            RemoveComponent();
+            DisabledComponent();
+        }
+
+        public void DisabledComponent()
+        {
+            this.Visible = false;
+            this.Enabled = false;
+            EnemyIsKilled?.Invoke(this, EventArgs.Empty);
         }
 
         public void RemoveComponent()
         {
-            this.Visible = false;
-            this.Enabled = false;
+            DisabledComponent();
             this.RemoveComponentInGameAndGameScreen();
-            EnemyIsKilled?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void BackToLifeIfNeeded()
+        { 
+            this.Animations["DyingEnemy"].Reset();
+            this.Animations["DyingEnemy"].Pause();
+            m_EnemyCellAnimation.Reset();
+            m_EnemyCellAnimation.CellTime = TimeSpan.FromSeconds(EnemyArmy.TimeBetweenJumpsInSec);
+            m_EnemyCellAnimation.CurrCellIdx = r_ColumnIndexInPicture;
+            this.Visible = true;
+            this.Enabled = true;
+            m_IsDying = false;
+            r_Firearm.InitForNextLevel();
         }
 
         public void Shoot()
@@ -137,6 +152,18 @@ namespace GameSprites
                 Vector2 shootingPosition = new Vector2((this.Position.X + this.Width / 2), this.Position.Y + this.Height);
                 r_Firearm.Shoot(shootingPosition);
             }
+        }
+
+        public void InitForNextLevel()
+        {
+            r_Firearm.InitForNextLevel();
+            this.Animations["DyingEnemy"].Pause();
+        }
+
+        public bool IsDying
+        {
+            get => m_IsDying;
+            set => m_IsDying = value;
         }
     }
 }

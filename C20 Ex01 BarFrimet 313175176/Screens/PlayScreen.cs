@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using SpaceInvaders;
 using Microsoft.Xna.Framework.Graphics;
+using Screens.MainMenuScreens;
 
 
 namespace Screens
@@ -60,8 +61,8 @@ namespace Screens
                 this.ScreensManager.SetCurrentScreen(r_PauseScreenScreen);
             }
             else if(InputManager.KeyPressed(Keys.L))
-            { 
-                r_GameManager.DeleteAllEnemyAndGoToNextLevel();
+            {
+                r_GameManager.GoToNextLevel_AllEnemyAreDead();
             }
         }
 
@@ -91,6 +92,7 @@ namespace Screens
         private void exitScreen_UserWantLeaveGame()
         {
             this.ExitScreen();
+            ScreensManager.SetCurrentScreen(new MainMenuScreen(this.Game));
         }
 
         private void resetNewGame_UserWantNewGame()

@@ -60,6 +60,14 @@ namespace GameSprites
         public void InitForNextLevel()
         {
             r_LifeManager.InitForNextLevel();
+            r_Firearm.InitForNextLevel();
+            this.Animations["DyingSpaceship"].Reset();
+            this.Animations["DyingSpaceship"].Pause();
+            this.Animations["HittingSpaceship"].Reset();
+            this.Animations["HittingSpaceship"].Pause();
+            this.Visible = true;
+            this.Enabled = true;
+            m_IsDying = false;
             initPosition();
         }
 
@@ -94,7 +102,6 @@ namespace GameSprites
                     }
                     else
                     {
-                        m_IsDying = true;
                         this.Animations["HittingSpaceship"].Restart();
                     }
 
@@ -130,6 +137,7 @@ namespace GameSprites
         {
             this.Visible = false;
             this.Enabled = false;
+            m_IsDying = false;
             SpaceShipIsDead?.Invoke();
         }
 

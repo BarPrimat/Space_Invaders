@@ -1,26 +1,28 @@
-//*** Guy Ronen ? 2008-2011 ***//
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
-using Infrastructure.ServiceInterfaces;
+﻿ ///*** Guy Ronen © 2008-2011 ***//
 using System;
 using Infrastructure.ObjectModel.Screens;
+using Infrastructure.ServiceInterfaces;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 
-namespace Infrastructure.ObjectModel
+namespace Infrastructure
 {
     public abstract class LoadableDrawableComponent : DrawableGameComponent
     {
         public event EventHandler<EventArgs> Disposed;
+
         protected virtual void OnDisposed(object sender, EventArgs args)
         {
-            if (Disposed != null)
+            if (this.Disposed != null)
             {
-                Disposed.Invoke(sender, args);
+                this.Disposed.Invoke(sender, args);
             }
         }
+
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
-            OnDisposed(this, EventArgs.Empty);
+            this.OnDisposed(this, EventArgs.Empty);
         }
 
         protected string m_AssetName;
@@ -31,30 +33,30 @@ namespace Infrastructure.ObjectModel
             get { return this.Game.Content; }
         }
 
-        // TODO 11: Implement the PositionChanged event:
         public event EventHandler<EventArgs> PositionChanged;
+
         protected virtual void OnPositionChanged()
         {
-            if (PositionChanged != null)
+            if (this.PositionChanged != null)
             {
-                PositionChanged(this, EventArgs.Empty);
+                this.PositionChanged(this, EventArgs.Empty);
             }
         }
 
         public event EventHandler<EventArgs> SizeChanged;
+
         protected virtual void OnSizeChanged()
         {
-            if (SizeChanged != null)
+            if (this.SizeChanged != null)
             {
-                SizeChanged(this, EventArgs.Empty);
+                this.SizeChanged(this, EventArgs.Empty);
             }
         }
-        // -- end of TODO 11
 
         public string AssetName
         {
-            get { return m_AssetName; }
-            set { m_AssetName = value; }
+            get { return this.m_AssetName; }
+            set { this.m_AssetName = value; }
         }
 
         public LoadableDrawableComponent(
@@ -67,22 +69,26 @@ namespace Infrastructure.ObjectModel
 
             // register in the screen:
             i_GameScreen.Add(this);
-            // register in the game:
-            // this.Game.Components.Add(this);
+        }
+
+        //// composite member
+        public LoadableDrawableComponent(string i_AssetName, Game i_Game) : base(i_Game)
+        {
+            this.AssetName = i_AssetName;
         }
 
         public LoadableDrawableComponent(
             string i_AssetName,
-            GameScreen i_GameScreen,
+             GameScreen i_GameScreen,
             int i_CallsOrder)
             : this(i_AssetName, i_GameScreen, i_CallsOrder, i_CallsOrder)
-        { }
+        {
+        }
 
         public override void Initialize()
         {
             base.Initialize();
 
-            // TODO 12: Register in the collisions manager:
             if (this is ICollidable)
             {
                 ICollisionsManager collisionMgr =
@@ -94,14 +100,10 @@ namespace Infrastructure.ObjectModel
                     collisionMgr.AddObjectToMonitor(this as ICollidable);
                 }
             }
-            // -- end of TODO 12
 
-            // After everything is loaded and initialzied,
-            // lets init graphical aspects:
-            InitBounds();   // a call to an abstract method;
+            this.InitBounds(); 
         }
 
-        // TODO 02: Show/Hide Bounding box
 #if DEBUG
         protected bool m_ShowBoundingBox = true;
 #else
@@ -110,21 +112,18 @@ namespace Infrastructure.ObjectModel
 
         public bool ShowBoundingBox
         {
-            get { return m_ShowBoundingBox; }
-            set { m_ShowBoundingBox = value; }
+            get { return this.m_ShowBoundingBox; }
+            set { this.m_ShowBoundingBox = value; }
         }
-        // -- end of TODO 02
 
         protected abstract void InitBounds();
 
-        // TODO 03: enforce the logic of drawing the bounding box to the derivies:
         public override void Draw(GameTime gameTime)
         {
-            DrawBoundingBox();
+            this.DrawBoundingBox();
             base.Draw(gameTime);
         }
 
         protected abstract void DrawBoundingBox();
-        // -- end of TODO 03
     }
 }

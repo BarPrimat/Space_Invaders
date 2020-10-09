@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Eventing.Reader;
 using System.Text;
 using GameSprites;
+using Infrastructure;
 using Infrastructure.Managers;
 using Infrastructure.ObjectModel;
 using Infrastructure.ObjectModel.Screens;
@@ -19,7 +20,7 @@ namespace SpaceInvaders
         // It is not necessary to save the elements game but they may be used in the future
         private readonly Background r_Background;
         private readonly MotherShip r_MotherShip;
-        private EnemyArmy m_EnemyArmy;
+        private readonly EnemyArmy r_EnemyArmy;
         private readonly BarriersGroup r_BarriersGroup;
         private int m_EnemyThatLeftToFinishGame;
         private int m_NumberOfAlivePlayers;
@@ -32,16 +33,18 @@ namespace SpaceInvaders
 
         public GameManager(GameScreen i_GameScreen, int i_NumberOfPlayers) : base(i_GameScreen.Game)
         {
+            new CollisionsManager(i_GameScreen.Game);
             s_Level = k_StartLevel;
             r_GameScreen = i_GameScreen;
             // It is not necessary to save the elements game but they may be used in the future
             r_Background = new Background(i_GameScreen, SpritesDefinition.BackgroundAsset);
             r_MotherShip = new MotherShip(i_GameScreen, SpritesDefinition.MotherSpaceShipAsset, Color.Red);
-            m_EnemyArmy = new EnemyArmy(i_GameScreen);
-            m_EnemyArmy.AllEnemyAreDead += goToNextLevel_AllEnemyAreDead;
-            m_EnemyArmy.EnemyReachSpaceShip += gameIsOver_EnemyReachSpaceShip;
+            r_EnemyArmy = new EnemyArmy(i_GameScreen);
+            r_EnemyArmy.AllEnemyAreDead += GoToNextLevel_AllEnemyAreDead;
+            r_EnemyArmy.EnemyReachSpaceShip += gameIsOver_EnemyReachSpaceShip;
             r_BarriersGroup = new BarriersGroup(i_GameScreen, SpritesDefinition.BarrierAsset, GameDefinitions.NumberOfBarrier);
             s_PlayersList = new List<Player>();
+
             for (int i = 0; i < i_NumberOfPlayers; i++)
             {
                 string assetPath = i == 0 ? SpritesDefinition.SpaceshipUser1Asset : SpritesDefinition.SpaceshipUser2Asset;
@@ -59,10 +62,10 @@ namespace SpaceInvaders
 
         public void DeleteAllEnemyAndGoToNextLevel()
         {
-            m_EnemyArmy.DeleteAllEnemyAndGoToNextLevel();
+            // r_EnemyArmy.DeleteAllEnemyAndGoToNextLevel();
         }
 
-        private void goToNextLevel_AllEnemyAreDead()
+        public void GoToNextLevel_AllEnemyAreDead()
         {
             s_Level++;
             GoToNextLevel?.Invoke();
@@ -70,32 +73,40 @@ namespace SpaceInvaders
 
         public void InitForNextLevel()
         {
-            m_EnemyArmy = new EnemyArmy(r_GameScreen);
-            m_EnemyArmy.AllEnemyAreDead += goToNextLevel_AllEnemyAreDead;
-            m_EnemyArmy.EnemyReachSpaceShip += gameIsOver_EnemyReachSpaceShip;
-          //  r_EnemyArmy.InitForNextLevel();
-            r_BarriersGroup.InitForNextLevel();
-            r_MotherShip.InitForNextLevel();
             foreach (Player player in s_PlayersList)
             {
                 player.InitForNextLevel();
             }
 
-            Bullet.RemoveAllBulletsInGame();
+            m_NumberOfAlivePlayers = s_PlayersList.Count;
+            r_EnemyArmy.InitForNextLevel();
+            r_BarriersGroup.InitForNextLevel();
+            r_MotherShip.InitForNextLevel();
         }
 
         private void oneSpaceshipIsDead_SpaceShipIsDead()
         {
             m_NumberOfAlivePlayers--;
+
             if (m_NumberOfAlivePlayers == 0)
             {
-                GameIsOver?.Invoke();
+                GameIsOverAndRestGame();
             }
         }
 
         private void gameIsOver_EnemyReachSpaceShip()
         {
+            GameIsOverAndRestGame();
+        }
+
+        public void GameIsOverAndRestGame()
+        {
             s_Level = 1;
+            foreach (Player player in PlayersList)
+            {
+                player.CurrentScore = 0;
+            }
+
             GameIsOver?.Invoke();
         }
 

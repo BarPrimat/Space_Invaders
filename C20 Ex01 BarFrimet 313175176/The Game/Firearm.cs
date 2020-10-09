@@ -88,6 +88,14 @@ namespace SpaceInvaders
             }
         }
 
+        public void InitForNextLevel()
+        {
+            foreach(Bullet bullet in r_ListOfBullets)
+            {
+                bullet.DisableBullet();
+            }
+        }
+
         public int FirearmSerialNumber => r_FirearmSerialNumber;
     }
 }

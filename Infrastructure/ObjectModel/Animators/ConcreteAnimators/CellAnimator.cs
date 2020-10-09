@@ -41,6 +41,11 @@ namespace Infrastructure.ObjectModel.Animators.ConcreteAnimators
                 m_TimeLeftForCell = m_CellTime;
             }
         }
+        public int CurrCellIdx
+        {
+            get => m_CurrCellIdx;
+            set => m_CurrCellIdx = value;
+        }
 
         private void goToNextFrame()
         {

@@ -17,7 +17,6 @@ namespace GameSprites
         private readonly eBulletType r_eBulletType;
         private readonly int r_FirearmSerialNumber;
         private static readonly Random sr_Random = new Random();
-        private static readonly List<Bullet> sr_ListOfAlBulletsInGame = new List<Bullet>();
 
         public Bullet(GameScreen i_GameScreen, string i_TexturePath, Color i_Tint, Vector2 i_CurrentPosition, eBulletType i_eBulletType, int i_FirearmSerialNumber)
             : base(i_TexturePath, i_GameScreen)
@@ -28,7 +27,6 @@ namespace GameSprites
             this.Position = i_CurrentPosition;
             float velocityAxisY = GameDefinitions.BulletStartSpeedInSec * (i_eBulletType == eBulletType.EnemyBullet ? 1 : -1);
             this.Velocity = new Vector2(0, velocityAxisY);
-            sr_ListOfAlBulletsInGame.Add(this);
         }
 
         public override void Update(GameTime i_GameTime)
@@ -88,21 +86,6 @@ namespace GameSprites
         {
             DisableBullet();
             this.RemoveComponentInGameAndGameScreen();
-        }
-
-        public static void RemoveAllBulletsInGame()
-        {
-            foreach(Bullet bullet in sr_ListOfAlBulletsInGame)
-            {
-                if(bullet.eBulletType == eBulletType.EnemyBullet)
-                {
-                    bullet.RemoveComponent();
-                }
-                else if(bullet.eBulletType == eBulletType.SpaceShipBullet)
-                {
-                    bullet.DisableBullet();
-                }
-            }
         }
 
         public eBulletType eBulletType => r_eBulletType;

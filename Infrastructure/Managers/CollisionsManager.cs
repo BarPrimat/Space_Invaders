@@ -1,6 +1,7 @@
-//*** Guy Ronen � 2008-2011 ***//
+﻿//*** Guy Ronen © 2008-2011 ***//
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using Infrastructure.ObjectModel;
 using Microsoft.Xna.Framework;
 using Infrastructure.ServiceInterfaces;
@@ -52,6 +53,10 @@ namespace Infrastructure.Managers
 
         private void collidable_Changed(object sender, EventArgs e)
         {
+            if(sender is Barrier)
+            {
+                int i = 0;
+            }
             if (sender is ICollidable)
             {// to be on the safe side :)
                 checkCollision(sender as ICollidable);
