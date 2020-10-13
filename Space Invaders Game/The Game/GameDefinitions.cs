@@ -40,7 +40,7 @@ namespace SpaceInvaders
         private const string k_SoundNameForMenuMove = "MenuMove";
         private const string k_SoundNameForBGMusic = "BGMusic";
         // Sound Path
-        private const string k_SoundMainPath = @"c:\temp\XNA_Assets\Ex03\Sounds\";
+        private const string k_SoundMainPath = @"Sounds\";
         private const string k_SoundPathForSSGunShot = k_SoundMainPath + "SSGunShot";
         private const string k_SoundPathForEnemyGunShot = k_SoundMainPath + "EnemyGunShot";
         private const string k_SoundPathForEnemyKill = k_SoundMainPath + "EnemyKill";
