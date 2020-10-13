@@ -1,0 +1,10 @@
+==========================Exercise Checking Report==========================
+Exercise No...........: 3
+First Student Details.: 313175176 - Bar Frimet
+Second Student Details:
+Delivery Date.........: 13 - October - 2020
+Delivered In Delay....: No
+Delay Reason..........: <Delay Reason>
+Visual Studio Version.: 2019
+Comments..............: The two bonus are implemented and the right move button of player one is 'o' and not p because the button 'p' assigned to pause the game.
+=======================End Exercise Checking Report=========================

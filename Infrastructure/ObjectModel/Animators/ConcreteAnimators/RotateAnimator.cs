@@ -33,8 +33,9 @@ namespace Infrastructure.ObjectModel.Animators.ConcreteAnimators
 
         protected override void RevertToOriginal()
         {
-           this.BoundSprite.AngularVelocity = 0;
-           this.BoundSprite.Rotation = 0;
+           this.BoundSprite.AngularVelocity = m_OriginalSpriteInfo.AngularVelocity;
+           this.BoundSprite.Rotation = m_OriginalSpriteInfo.Rotation;
+           this.Pause();
         }
 
         protected override void DoFrame(GameTime i_GameTime)

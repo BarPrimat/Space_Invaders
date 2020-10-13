@@ -51,7 +51,6 @@ namespace SpaceInvaders
                     m_SpriteBatch = new SpriteBatch(this.Game.GraphicsDevice);
                 }
             }
-            
         }
 
         public override void Draw(GameTime i_GameTime)

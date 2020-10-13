@@ -18,7 +18,6 @@ namespace Infrastructure.ObjectModel.Screens
         protected readonly string r_MenuText;
         private string m_SoundPath;
         private bool m_IsActive = false;
-
         public event EventHandler ItemIsClicked;
 
         public MenuItem(string i_MenuText, GameScreen i_GameScreen, Vector2 i_Position)
@@ -46,7 +45,7 @@ namespace Infrastructure.ObjectModel.Screens
             this.Animations.Add(pulseAnimator);
         }
 
-        public virtual void ItemWasClick()
+        public virtual void OnClick()
         {
             if(ItemIsClicked != null)
             {

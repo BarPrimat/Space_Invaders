@@ -59,9 +59,9 @@ namespace Infrastructure.ObjectModel.Screens
             set => m_BooleanOption = value;
         }
 
-        public override void ItemWasClick()
+        public override void OnClick()
         {
-            base.ItemWasClick();
+            base.OnClick();
             if(m_BooleanOption)
             {
                 this.TextToPrint = this.r_MenuText + r_BooleanOption[1];
