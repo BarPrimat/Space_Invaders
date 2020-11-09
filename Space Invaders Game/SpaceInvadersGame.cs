@@ -67,7 +67,7 @@ namespace SpaceInvaders
         protected override void Update(GameTime i_GameTime)
         {
             base.Update(i_GameTime);
-            if(r_InputManager.KeyPressed(Keys.M))
+            if(r_InputManager.KeyPressed(Keys.N))
             {
                 r_SoundManager.ToggleSound();
             }
